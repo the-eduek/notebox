@@ -5,7 +5,12 @@ export default {
     "./components/**/*.{ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        newsreader: `Newsreader, serif`,
+        cerebri: `'Cerebri Sans', system-ui, Avenir, Helvetica, Arial, sans-serif`
+      }
+    },
   },
   plugins: [],
 }
