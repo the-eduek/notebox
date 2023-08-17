@@ -15,24 +15,8 @@
     font-display: swap;
     font-family: 'Cerebri Sans';
     font-style: normal;
-    font-weight: 400;
-    src: url(../assets/fonts/CerebriSans-Regular.woff2) format(woff2);
-  }
-
-  @font-face {
-    font-display: swap;
-    font-family: 'Cerebri Sans';
-    font-style: normal;
     font-weight: 500;
     src: url(../assets/fonts/CerebriSans-Medium.woff2) format(woff2);
-  }
-
-  @font-face {
-    font-display: swap;
-    font-family: 'Cerebri Sans';
-    font-style: normal;
-    font-weight: 600;
-    src: url(../assets/fonts/CerebriSans-SemiBold.woff2) format(woff2);
   }
 
   @font-face {
@@ -44,13 +28,13 @@
   }
 
   body {
-    @apply bg-neutral-100 font-cerebri font-light text-neutral-700;
+    @apply bg-neutral-50/80 font-cerebri font-light text-neutral-700;
   }
-  
+
   .prose p {
     padding: 0 0 1rem;
   }
-  
+
   .prose p:last-child {
     padding: 0 0 0;
   }

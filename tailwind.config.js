@@ -7,8 +7,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        newsreader: `Newsreader, serif`,
-        cerebri: `'Cerebri Sans', system-ui, Avenir, Helvetica, Arial, sans-serif`
+        bricolage: `'Bricolage Grotesque', sans-serif`,
+        cerebri: `'Cerebri Sans', system-ui, Avenir, Helvetica, Arial, sans-serif`,
+        newsreader: `Newsreader, serif`
       }
     },
   },
