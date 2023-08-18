@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import useResizeTextarea from '../hooks/useResizeTextarea';
 import NoteContext from '../context/NoteContext';
 import Note from "../types/classes/note";
 import Nav from '../components/NavComponet';
@@ -24,7 +23,6 @@ const NotePage: React.FC = () => {
   });
 
   let noteObj: Note;
-  
   if (note) {
     noteObj = new Note(
       note.createdAt,
@@ -34,7 +32,6 @@ const NotePage: React.FC = () => {
     );
   }
 
-  console.log
   const [ noteTitle, setNoteTitle ] = useState<string>(noteObj!.title ?? "");
 
   const handleTitleChange = (evt: React.KeyboardEvent<HTMLInputElement>) => {
@@ -45,6 +42,14 @@ const NotePage: React.FC = () => {
   const [ noteContent, setNoteContent ] = useState<string>(noteObj!.content);
   const textAreaRef =  useRef<HTMLTextAreaElement>(null);
   const formElt = useRef<HTMLFormElement | null>(null);
+  
+  // resize text area automatically
+  useEffect(() => {
+    if (textAreaRef) {
+      const scrollHeight: number | undefined = textAreaRef.current?.scrollHeight;
+      if (scrollHeight) textAreaRef.current?.style.setProperty('height', `${scrollHeight}px`);
+    }
+  }, [textAreaRef, noteContent]);
 
   const handleContentChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = evt.target.value;
@@ -127,8 +132,6 @@ const NotePage: React.FC = () => {
     if (pin) setIsPinned(true);
     else setIsPinned(false);
   };
-
-  useResizeTextarea(textAreaRef.current, noteContent);
 
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">

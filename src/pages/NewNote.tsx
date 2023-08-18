@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useResizeTextarea from '../hooks/useResizeTextarea';
 import Nav from '../components/NavComponet';
 import Note from '../types/classes/note';
 import NoteContext from '../context/NoteContext';
@@ -22,12 +21,18 @@ const NewNote: React.FC = () => {
   const [ noteContent, setNoteContent ] = useState<string>("");
   const textAreaRef =  useRef<HTMLTextAreaElement>(null);
 
-  useResizeTextarea(textAreaRef.current, noteContent);
-
   const handleContentChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = evt.target.value;
     setNoteContent(newText);
   };
+
+  // resize text area automatically
+  useEffect(() => {
+    if (textAreaRef) {
+      const scrollHeight: number | undefined = textAreaRef.current?.scrollHeight;
+      if (scrollHeight) textAreaRef.current?.style.setProperty('height', `${scrollHeight}px`);
+    }
+  }, [textAreaRef, noteContent]);
 
   // creating note object
   const immediateTime = new Date();
