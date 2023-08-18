@@ -5,6 +5,9 @@ import Nav from '../components/NavComponet';
 import Bin from '../components/images/Bin';
 import WritingHand from '../components/images/WritingHand';
 import { useNavigate, useParams } from 'react-router-dom';
+import DeleteModal from '../components/DeleteModal';
+
+type ModalAction = 0 | 1;
 
 const NotePage: React.FC = () => {
   const { noteId } = useParams();
@@ -13,7 +16,8 @@ const NotePage: React.FC = () => {
     allNotes,
     addNote,
     pinnedNotes,
-    pinNote
+    pinNote,
+    deleteNote
   } = useContext(NoteContext)
 
   const note = allNotes.find(note => {
@@ -92,10 +96,10 @@ const NotePage: React.FC = () => {
     noteObj.content = noteContent;
     noteObj.title = noteTitle;
     noteObj.tags = noteTags;
-  }, [ noteContent, noteTitle, noteTags ])
+  }, [ noteContent, noteTitle, noteTags, editing ])
   
   
-  // creating note  
+  // editing note  
   const navigate =  useNavigate();
 
   const triggerSubmit = (): void => {
@@ -103,15 +107,22 @@ const NotePage: React.FC = () => {
       bubbles: true
     });
     formElt.current?.dispatchEvent(submitEvt);
+  };
+
+  const triggerSubmitAndClose = (): void => {
+    triggerSubmit();
     navigate("/");
   };
 
   const handleFormSubmit = (evt: React.FormEvent): void => {
     evt.preventDefault();
+    
+    console.log(noteObj)
 
     if (noteObj.content) {
       const canUpdate = allNotes.find(note => note.createdAt === note.createdAt);
       
+      console.log(noteObj)
       if (!canUpdate) addNote(noteObj);
       else {
         const currentItemIndex: number = allNotes.indexOf(canUpdate);
@@ -133,12 +144,26 @@ const NotePage: React.FC = () => {
     else setIsPinned(false);
   };
 
+  const [ showModal, setShowModal ] = useState<boolean>(false);
+
+  const toggleModal = (): void => {
+    setShowModal(!showModal);
+  };
+
+  const setModalAction = (action: ModalAction): void => {
+    if (action === 0) toggleModal();
+    else {
+      deleteNote(noteObj);
+      navigate("/")
+    }
+  };
+
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">
       <div className="flex items-center pb-14 pt-12">
         <div className="flex-grow">
           <Nav 
-            triggerSubmit={triggerSubmit}
+            triggerSubmit={triggerSubmitAndClose}
             handlePinNote={handlePinNote}
             isPinned={isPinned}
           />
@@ -154,7 +179,8 @@ const NotePage: React.FC = () => {
         </button>
 
         <button 
-          className="h-7 ml-5 w-7"
+          className={`${ showModal && 'bg-neutral-500/[0.25]'}  h-10 ml-5 p-1.5 rounded-full transition w-10`}
+          onClick={toggleModal}
           title="Delete Note"
           type="button"
         >
@@ -219,6 +245,12 @@ const NotePage: React.FC = () => {
           />
         </div>
       </form>
+
+      { showModal &&
+          <DeleteModal 
+            setModalAction={setModalAction}
+          />
+      }
     </section>
   );
 };

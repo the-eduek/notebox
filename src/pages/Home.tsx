@@ -38,10 +38,10 @@ function Home () {
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16 md:pt-28">
       <div className="flex items-center justify-between">
-        <h1 className="flex font-bold font-bricolage text-2xl">
+        <h1 className="flex font-bold font-bricolage text-2xl lg:text-3xl">
           notebox 
           
-          <span className="h-6 ml-2 w-6">
+          <span className="h-6 md:h-7 ml-2 w-6 md:w-7">
             <Notepad />
           </span>
         </h1>

@@ -5,12 +5,14 @@ const NoteContext = createContext<{
   allNotes: Array<NoteItem>,
   addNote: (note: NoteItem) => void
   pinnedNotes: Array<NoteItem>,
-  pinNote: (note: NoteItem) => void
+  pinNote: (note: NoteItem) => void,
+  deleteNote: (note: NoteItem) => void
 }>({
     allNotes: [],
     addNote: () => {},
     pinnedNotes: [],
     pinNote: () => {},
+    deleteNote: () => {}
   });
 
 interface NoteProviderProps {
@@ -53,13 +55,22 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProv
     localStorage.setItem("localPinnedNotes", JSON.stringify(localPinnedNotes));
   };
 
+  const deleteNote = (noteParam: NoteItem) => {
+    const newAllNotes = allNotes.filter(note => {
+      return new Date(note.createdAt).getTime() !== new Date(noteParam.createdAt).getTime()
+    });
+    setAllNotes(newAllNotes);
+    localStorage.setItem("localNotes", JSON.stringify(newAllNotes));
+  };
+
   return (
     <NoteContext.Provider 
       value={{
         allNotes,
         pinnedNotes,
         addNote,
-        pinNote
+        pinNote,
+        deleteNote
       }}
     >
       { children }
