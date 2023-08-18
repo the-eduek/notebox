@@ -15,100 +15,6 @@ function Home () {
     else setNoteView('grid');
   };
 
-  const today = new Date();
-  const notesArray: Array<NoteItem> = [
-    {
-      content: "No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.",
-      contentHtml: "<p>No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.</p><p>No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.</p><p>Everyone has the right to freedom of thought, conscience and religion; this right includes freedom to change his religion or belief, and freedom, either alone or in community with others and in public or private, to manifest his religion or belief in teaching, practice, worship and observance.</p><p>Everyone has the right to freedom of opinion and expression; this right includes freedom to hold opinions without interference and to seek, receive and impart information and ideas through any media and regardless of frontiers.</p><p>Everyone has the right to rest and leisure, including reasonable limitation of working hours and periodic holidays with pay.</p>",
-      tags: ['lgbtqia', 'others'],
-      createdAt: today,
-      id: 1098767890
-    },
-    {
-      content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, ab laborum officia tenetur provident earum nobis quisquam beatae nulla odit?",
-      contentHtml: "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, ab laborum officia tenetur provident earum nobis quisquam beatae nulla odit?</p>",
-      createdAt: today,
-      id: 1098767890
-    },
-    {
-      title: "Human rights, bitch.",
-      content: "No one shall be subjected to arbitrary arrest, detention or exile.",
-      contentHtml: "<p>No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.</p><p>No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.</p><p>Everyone has the right to freedom of thought, conscience and religion; this right includes freedom to change his religion or belief, and freedom, either alone or in community with others and in public or private, to manifest his religion or belief in teaching, practice, worship and observance.</p><p>Everyone has the right to freedom of opinion and expression; this right includes freedom to hold opinions without interference and to seek, receive and impart information and ideas through any media and regardless of frontiers.</p><p>Everyone has the right to rest and leisure, including reasonable limitation of working hours and periodic holidays with pay.</p>",
-      tags: ['human rights', 'lgbtqia', 'others'],
-      createdAt: today,
-      id: 1098767890
-    },
-    {
-      title: "Human rights, bitch.",
-      content: "No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the  determination of his rights and obligations and of any criminal charge against him.",
-      contentHtml: "<p>No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.</p><p>No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.</p><p>Everyone has the right to freedom of thought, conscience and religion; this right includes freedom to change his religion or belief, and freedom, either alone or in community with others and in public or private, to manifest his religion or belief in teaching, practice, worship and observance.</p><p>Everyone has the right to freedom of opinion and expression; this right includes freedom to hold opinions without interference and to seek, receive and impart information and ideas through any media and regardless of frontiers.</p><p>Everyone has the right to rest and leisure, including reasonable limitation of working hours and periodic holidays with pay.</p>",
-      tags: ['human rights', 'lgbtqia', 'others', 'mahalia', 'november'],
-      createdAt: today,
-      id: 1098767890
-    },
-    {
-      title: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, cupiditate.",
-      content: "No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.",
-      contentHtml: "<p>No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.</p><p>No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.</p><p>Everyone has the right to freedom of thought, conscience and religion; this right includes freedom to change his religion or belief, and freedom, either alone or in community with others and in public or private, to manifest his religion or belief in teaching, practice, worship and observance.</p><p>Everyone has the right to freedom of opinion and expression; this right includes freedom to hold opinions without interference and to seek, receive and impart information and ideas through any media and regardless of frontiers.</p><p>Everyone has the right to rest and leisure, including reasonable limitation of working hours and periodic holidays with pay.</p>",
-      tags: ['human rights', 'lgbtqia', 'others'],
-      createdAt: today,
-      id: 1098767890
-    },
-    {
-      title: "Human rights, bitch.",
-      content: "No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.",
-      contentHtml: "<p>No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.</p><p>No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.</p><p>Everyone has the right to freedom of thought, conscience and religion; this right includes freedom to change his religion or belief, and freedom, either alone or in community with others and in public or private, to manifest his religion or belief in teaching, practice, worship and observance.</p><p>Everyone has the right to freedom of opinion and expression; this right includes freedom to hold opinions without interference and to seek, receive and impart information and ideas through any media and regardless of frontiers.</p><p>Everyone has the right to rest and leisure, including reasonable limitation of working hours and periodic holidays with pay.</p>",
-      tags: ['human rights', 'lgbtqia', 'others'],
-      createdAt: today,
-      id: 1098767890
-    },
-    {
-      title: "Human rights, bitch.",
-      content: "No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.",
-      contentHtml: "<p>No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.</p><p>No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.</p><p>Everyone has the right to freedom of thought, conscience and religion; this right includes freedom to change his religion or belief, and freedom, either alone or in community with others and in public or private, to manifest his religion or belief in teaching, practice, worship and observance.</p><p>Everyone has the right to freedom of opinion and expression; this right includes freedom to hold opinions without interference and to seek, receive and impart information and ideas through any media and regardless of frontiers.</p><p>Everyone has the right to rest and leisure, including reasonable limitation of working hours and periodic holidays with pay.</p>",
-      tags: ['human rights', 'lgbtqia', 'others'],
-      createdAt: today,
-      id: 1098767890
-    },
-    {
-      title: "Human rights, bitch.",
-      content: "No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.",
-      contentHtml: "<p>No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.</p><p>No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.</p><p>Everyone has the right to freedom of thought, conscience and religion; this right includes freedom to change his religion or belief, and freedom, either alone or in community with others and in public or private, to manifest his religion or belief in teaching, practice, worship and observance.</p><p>Everyone has the right to freedom of opinion and expression; this right includes freedom to hold opinions without interference and to seek, receive and impart information and ideas through any media and regardless of frontiers.</p><p>Everyone has the right to rest and leisure, including reasonable limitation of working hours and periodic holidays with pay.</p>",
-      createdAt: today,
-      id: 1098767890
-    },
-    {
-      title: "Human rights, bitch.",
-      content: "No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.",
-      contentHtml: "<p>No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.</p><p>No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.</p><p>Everyone has the right to freedom of thought, conscience and religion; this right includes freedom to change his religion or belief, and freedom, either alone or in community with others and in public or private, to manifest his religion or belief in teaching, practice, worship and observance.</p><p>Everyone has the right to freedom of opinion and expression; this right includes freedom to hold opinions without interference and to seek, receive and impart information and ideas through any media and regardless of frontiers.</p><p>Everyone has the right to rest and leisure, including reasonable limitation of working hours and periodic holidays with pay.</p>",
-      tags: ['human rights', 'lgbtqia', 'others'],
-      createdAt: today,
-      id: 1098767890
-    },
-    {
-      title: "Human rights, bitch.",
-      content: "No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.",
-      contentHtml: "<p>No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.</p><p>No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.</p><p>Everyone has the right to freedom of thought, conscience and religion; this right includes freedom to change his religion or belief, and freedom, either alone or in community with others and in public or private, to manifest his religion or belief in teaching, practice, worship and observance.</p><p>Everyone has the right to freedom of opinion and expression; this right includes freedom to hold opinions without interference and to seek, receive and impart information and ideas through any media and regardless of frontiers.</p><p>Everyone has the right to rest and leisure, including reasonable limitation of working hours and periodic holidays with pay.</p>",
-      tags: ['human rights', 'lgbtqia', 'others'],
-      createdAt: today,
-      id: 1098767890
-    },
-    {
-      title: "Human rights, bitch.",
-      content: "No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.",
-      contentHtml: "<p>No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.</p><p>No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.</p><p>Everyone has the right to freedom of thought, conscience and religion; this right includes freedom to change his religion or belief, and freedom, either alone or in community with others and in public or private, to manifest his religion or belief in teaching, practice, worship and observance.</p><p>Everyone has the right to freedom of opinion and expression; this right includes freedom to hold opinions without interference and to seek, receive and impart information and ideas through any media and regardless of frontiers.</p><p>Everyone has the right to rest and leisure, including reasonable limitation of working hours and periodic holidays with pay.</p>",
-      tags: ['human rights', 'lgbtqia', 'others'],
-      createdAt: today,
-      id: 1098767890
-    },
-    {
-      title: "Human rights, bitch.",
-      content: "No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.",
-      tags: ['human rights', 'lgbtqia', 'others'],
-      createdAt: today
-    }
-  ];
-
   return (
     <section className="min-h-screen pb-20 px-8 pt-16">
       <h1 className="flex font-bold font-bricolage text-2xl">
@@ -166,7 +72,7 @@ function Home () {
             </span> pinned notes
           </p>
 
-          <NotesList notesArray={notesArray.slice(0, 4)} />
+          <NotesList notesArray={[]} />
         </div>
 
         <div className="pb-16">
@@ -176,7 +82,7 @@ function Home () {
             </span> other notes
           </p>
 
-          <NotesList notesArray={notesArray.slice(4)} />
+          <NotesList notesArray={[]} />
         </div>
       </ViewContext.Provider>
     </section>

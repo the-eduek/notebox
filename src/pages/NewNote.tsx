@@ -1,16 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useResizeTextarea from '../hooks/useResizeTextarea';
 import Nav from '../components/NavComponet';
 import Note from '../types/classes/note';
-import useLocalStorage from '../hooks/useLocalStorage';
+import NoteContext from '../context/NoteContext';
 
 const NewNote: React.FC = () => {
+  const { 
+    allNotes, 
+    addNote,
+    pinnedNotes,
+    pinNote
+  } = useContext(NoteContext)
   const [ noteTitle, setNoteTitle ] = useState<string>("");
-
-  const handleSubmit = (evt: React.FormEvent): void => {
-    evt.preventDefault();
-    console.log(noteTitle, noteContent)
-  };
 
   const handleTitleChange = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (evt.key.toLowerCase() === "enter") textAreaRef.current?.focus();
@@ -39,10 +41,13 @@ const NewNote: React.FC = () => {
   // editing note tags
   const [ tagInput, setTagInput] = useState<string>('');
   const [ noteTags, setNoteTags ] = useState<Array<string>>(noteObj?.tags ?? []);
+  const navigate =  useNavigate();
+
+  const formElt = useRef<HTMLFormElement | null>(null);
 
   const hanldleTagSubmit = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
     const trimmedInput: string = tagInput.trim();
-    const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === "enter";
+    const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === "enter" || evt.key.toLowerCase() === 'tab';
 
     if (keyToCreate && trimmedInput.length > 2 && trimmedInput.length < 21 && !noteTags.includes(trimmedInput)) {
       evt.preventDefault();
@@ -59,27 +64,62 @@ const NewNote: React.FC = () => {
       setTagInput(poppedTag!);
     }
   };
-
+  
   useEffect(() => {
     noteObj.content = noteContent;
     noteObj.title = noteTitle;
     noteObj.tags = noteTags;
+  }, [ noteContent, noteTitle, noteTags ]);
 
-    return () => {
-      console.log(noteObj)
-    };
-  }, [ noteObj ]);
 
-  
-  useLocalStorage();
+  // creating note
+  const triggerSubmit = (): void => {
+    const submitEvt: Event = new Event('submit', {
+      bubbles: true
+    });
+    formElt.current?.dispatchEvent(submitEvt);
+    navigate("/");
+  };
+
+  const handleFormSubmit = (evt: React.FormEvent): void => {
+    evt.preventDefault();
+
+    if (noteObj.content) {
+      const canUpdate = allNotes.find(note => note.createdAt === note.createdAt);
+      
+      if (!canUpdate) addNote(noteObj);
+      else {
+        const currentItemIndex: number = allNotes.indexOf(canUpdate);
+        allNotes.splice(currentItemIndex, 1);
+        addNote(noteObj);
+      }
+    }
+  };
+
+  // pin note
+  const [ isPinned, setIsPinned ] = useState<boolean>(false);
+  const handlePinNote = () => {
+    pinNote(noteObj);
+
+    const pin = pinnedNotes.find(note => note.createdAt === note.createdAt);
+    if (pin) setIsPinned(true);
+    else setIsPinned(false);
+  };
 
   return (
     <section className="min-h-screen pb-16 px-8">
-      <div className="pb-14 pt-10">
-        <Nav />
+      <div className="pb-14 pt-12">
+        <Nav 
+          triggerSubmit={triggerSubmit}
+          handlePinNote={handlePinNote}
+          isPinned={isPinned}
+        />
       </div>
 
-      <form onSubmit={(evt: React.FormEvent<HTMLFormElement>) => handleSubmit(evt)}>
+      <form 
+        onSubmit={(evt: React.FormEvent<HTMLFormElement>) => handleFormSubmit(evt)}
+        ref={formElt}
+      >
         <div>
           <input 
             className="bg-transparent font-newsreader font-medium h-full outline-none text-3xl w-full"
@@ -126,7 +166,7 @@ const NewNote: React.FC = () => {
 
         <div className="flex pt-5">
           <textarea
-            className="bg-transparent break-words min-h-[calc(100vh-21rem)] outline-none overflow-hidden resize-none w-full"
+            className="bg-transparent break-words min-h-[calc(100vh-21.5rem)] outline-none overflow-hidden resize-none w-full"
             onChange={handleContentChange}
             placeholder="Enter Note"
             ref={textAreaRef}
