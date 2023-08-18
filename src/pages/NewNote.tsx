@@ -84,7 +84,7 @@ const NewNote: React.FC = () => {
 
   const handleFormSubmit = (evt: React.FormEvent): void => {
     evt.preventDefault();
-    if (noteObj.content) addNote(noteObj);
+    if (noteObj.content.trim()) addNote(noteObj);
   };
 
   // pin note

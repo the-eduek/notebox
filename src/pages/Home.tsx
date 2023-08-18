@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import ViewContext from "../context/ViewContext";
 import NoteContext from "../context/NoteContext";
-import { ViewType } from "../types";
+import { NoteItem, ViewType } from "../types";
 import NotesList from "../components/NotesList";
 import MainButton from "../components/MainButton";
 import Notepad from "../components/images/Notepad";
@@ -20,6 +20,20 @@ function Home () {
     if (noteView === 'grid') setNoteView('list');
     else setNoteView('grid');
   };
+
+  const sortedNotes: Array<NoteItem> = allNotes.sort((noteA, noteB) => {
+    const dateA = new Date(noteA.createdAt).getTime();
+    const dateB = new Date(noteB.createdAt).getTime();
+
+    return dateB - dateA
+  }).filter(note => !pinnedNotes.some(pinned => pinned.createdAt === note.createdAt));
+
+  const sortedPinnedNotes: Array<NoteItem> = pinnedNotes.sort((noteA, noteB) => {
+    const dateA = new Date(noteA.createdAt).getTime();
+    const dateB = new Date(noteB.createdAt).getTime();
+
+    return dateB - dateA
+  });
 
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16 md:pt-28">
@@ -81,7 +95,7 @@ function Home () {
             </span> pinned notes
           </p>
 
-          <NotesList notesArray={pinnedNotes} />
+          <NotesList notesArray={sortedPinnedNotes} />
         </div>
 
         <div className="pb-16">
@@ -91,7 +105,7 @@ function Home () {
             </span> other notes
           </p>
 
-          <NotesList notesArray={allNotes} />
+          <NotesList notesArray={sortedNotes} />
         </div>
       </ViewContext.Provider>
     </section>

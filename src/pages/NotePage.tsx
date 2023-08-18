@@ -34,6 +34,7 @@ const NotePage: React.FC = () => {
     );
   }
 
+  console.log
   const [ noteTitle, setNoteTitle ] = useState<string>(noteObj!.title ?? "");
 
   const handleTitleChange = (evt: React.KeyboardEvent<HTMLInputElement>) => {
@@ -44,8 +45,6 @@ const NotePage: React.FC = () => {
   const [ noteContent, setNoteContent ] = useState<string>(noteObj!.content);
   const textAreaRef =  useRef<HTMLTextAreaElement>(null);
   const formElt = useRef<HTMLFormElement | null>(null);
-
-  useResizeTextarea(textAreaRef.current, noteContent);
 
   const handleContentChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = evt.target.value;
@@ -118,15 +117,18 @@ const NotePage: React.FC = () => {
   }
 
   // pin note
-  const [ isPinned, setIsPinned ] = useState<boolean>(false);
+  const pin = pinnedNotes.find(note => note.createdAt === noteObj.createdAt);
+
+  const [ isPinned, setIsPinned ] = useState<boolean>(!!pin);
   const handlePinNote = () => {
     pinNote(noteObj);
 
-    const pin = pinnedNotes.find(note => note.createdAt === note.createdAt);
+    const pin = pinnedNotes.find(note => note.createdAt === noteObj.createdAt);
     if (pin) setIsPinned(true);
     else setIsPinned(false);
   };
 
+  useResizeTextarea(textAreaRef.current, noteContent);
 
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">

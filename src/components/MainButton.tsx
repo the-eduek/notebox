@@ -13,18 +13,18 @@ const MainButton: React.FC = () => {
           to="/new"
         >
           <span className="hidden md:inline-block md:mr-2">all tags</span>
-          <span className="h-7 w-7">
+          <span className="h-7 md:h-6 w-7 md:w-6">
             <Tag />
           </span>
         </Link>
 
         <Link
-          className="md:bg-[#ed4c5c] flex font-medium items-center justify-center ml-6 pb-6 px-6 md:px-4 pt-4 md:py-2 rounded-lg text-lg"
+          className="md:bg-[#ed4c5c] flex font-medium items-center justify-center ml-4 pb-6 px-6 md:px-4 pt-4 md:py-2 rounded-lg text-lg"
           title="New Note"
           to="/new"
         >
           <span className="hidden md:inline-block md:mr-2">new note</span>
-          <span className="h-7 md:h-5 w-7 md:w-5">
+          <span className="h-7 md:h-6 w-7 md:w-6">
             <WritingHand />
           </span>
         </Link>
