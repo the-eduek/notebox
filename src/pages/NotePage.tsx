@@ -34,14 +34,14 @@ const NotePage: React.FC = () => {
     );
   }
 
-  const [ noteTitle, setNoteTitle ] = useState<string>(noteObj.title ?? "");
+  const [ noteTitle, setNoteTitle ] = useState<string>(noteObj!.title ?? "");
 
   const handleTitleChange = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (evt.key.toLowerCase() === "enter") textAreaRef.current?.focus();
   };
 
   // note content
-  const [ noteContent, setNoteContent ] = useState<string>(noteObj.content);
+  const [ noteContent, setNoteContent ] = useState<string>(noteObj!.content);
   const textAreaRef =  useRef<HTMLTextAreaElement>(null);
   const formElt = useRef<HTMLFormElement | null>(null);
 
@@ -62,7 +62,7 @@ const NotePage: React.FC = () => {
 
   // editing note tags
   const [ tagInput, setTagInput] = useState<string>('');
-  const [ noteTags, setNoteTags ] = useState<Array<string>>(noteObj?.tags ?? []);
+  const [ noteTags, setNoteTags ] = useState<Array<string>>(noteObj!.tags ?? []);
 
   const hanldleTagSubmit = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
     const trimmedInput: string = tagInput.trim();
@@ -129,7 +129,7 @@ const NotePage: React.FC = () => {
 
 
   return (
-    <section className="min-h-screen pb-16 px-8">
+    <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">
       <div className="flex items-center pb-14 pt-12">
         <div className="flex-grow">
           <Nav 
@@ -173,7 +173,7 @@ const NotePage: React.FC = () => {
 
         <p className="pb-5 pt-3.5 text-neutral-500 text-sm">
           <span className="pr-1">🗓️</span>
-          { noteObj.dateString }
+          { noteObj!.dateString }
         </p>
 
         <div>
@@ -188,7 +188,7 @@ const NotePage: React.FC = () => {
               ))
             }
 
-            { noteObj.tags && editing &&
+            { noteObj!.tags && editing &&
                 <div className="flex flex-1 min-w-[5.5rem]">
                   <input 
                     className="bg-transparent h-full outline-none my-1 py-1 w-full"

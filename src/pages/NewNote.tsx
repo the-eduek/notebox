@@ -98,7 +98,7 @@ const NewNote: React.FC = () => {
   };
 
   return (
-    <section className="min-h-screen pb-16 px-8">
+    <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">
       <div className="pb-14 pt-12">
         <Nav 
           triggerSubmit={triggerSubmit}
