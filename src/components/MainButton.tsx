@@ -5,24 +5,26 @@ import Tag from "./images/Tag";
 
 const MainButton: React.FC = () => {
   return (
-    <section className="bg-[#ed4c5c] bottom-0 fixed  left-0 px-4 text-neutral-50 w-full">
-      <div className="flex justify-between  mx-auto  max-w-2xl w-full">
+    <section className="bg-[#ed4c5c] md:bg-transparent bottom-0 fixed md:relative left-0 px-4 md:px-0 text-neutral-50 w-full">
+      <div className="flex justify-between md:justify-end mx-auto max-w-2xl w-full">
         <Link
-          className="flex font-medium items-center justify-center pb-8 px-6 pt-6 text-lg"
+          className="md:bg-[#ed4c5c] flex font-medium items-center justify-center pb-6 px-6 md:px-4 pt-4 md:py-2 rounded-lg text-lg"
           title="New Note"
           to="/new"
         >
+          <span className="hidden md:inline-block md:mr-2">all tags</span>
           <span className="h-7 w-7">
             <Tag />
           </span>
         </Link>
 
         <Link
-          className="flex font-medium items-center justify-center pb-6 px-6 pt-4 text-lg"
+          className="md:bg-[#ed4c5c] flex font-medium items-center justify-center ml-6 pb-6 px-6 md:px-4 pt-4 md:py-2 rounded-lg text-lg"
           title="New Note"
           to="/new"
         >
-          <span className="h-7 w-7">
+          <span className="hidden md:inline-block md:mr-2">new note</span>
+          <span className="h-7 md:h-5 w-7 md:w-5">
             <WritingHand />
           </span>
         </Link>

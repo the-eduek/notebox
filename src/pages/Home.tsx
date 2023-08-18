@@ -23,18 +23,21 @@ function Home () {
 
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16 md:pt-28">
-      <h1 className="flex font-bold font-bricolage text-2xl">
-        notebox 
-        
-        <span className="h-6 ml-2 w-6">
-          <Notepad />
-        </span>
-      </h1>
+      <div className="flex items-center justify-between">
+        <h1 className="flex font-bold font-bricolage text-2xl">
+          notebox 
+          
+          <span className="h-6 ml-2 w-6">
+            <Notepad />
+          </span>
+        </h1>
 
-      <MainButton />
+        <MainButton />
+      </div>
+      
 
       <ViewContext.Provider value={noteView}>
-        <div className="flex py-6">
+        <div className="flex py-6 md:py-8">
           <div className="flex-grow relative">
             <input 
               className="bg-transparent border border-neutral-300 h-full outline-none focus:outline-blue-300 pl-10 pr-4 py-2.5 rounded-md w-full"
