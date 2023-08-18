@@ -6,18 +6,18 @@ interface NoteProps {
   note: NoteItem;
 }
 
-const Note: React.FC<NoteProps> = ({ note }: NoteProps) => {
+const NoteComponent: React.FC<NoteProps> = ({ note }: NoteProps) => {
   const contentElt = useRef<HTMLDivElement>(null);
 
   return (
-    <section className="{min-h-screen px-8 py-20">
+    <section className="min-h-screen px-8 py-20">
       <div>
         { note.title &&
             <h1 className="font-newsreader font-medium text-3xl">
               { note.title }
             </h1>
         }
-        
+
         <p className="pb-5 pt-3.5 text-neutral-500 text-sm">
           <span className="pr-1">🗓️</span>
           { Weekdays[note.createdAt.getDay()] }, 
@@ -45,4 +45,4 @@ const Note: React.FC<NoteProps> = ({ note }: NoteProps) => {
   );
 };
 
-export default Note;
+export default NoteComponent;

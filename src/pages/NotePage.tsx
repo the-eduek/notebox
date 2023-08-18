@@ -1,15 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 import useResizeTextarea from '../hooks/useResizeTextarea';
+import { NoteItem } from  "../types/index";
+import Note from "../types/classes/note";
 import Nav from '../components/NavComponet';
-import Note from '../types/classes/note';
-import useLocalStorage from '../hooks/useLocalStorage';
+import Bin from '../components/images/Bin';
+import WritingHand from '../components/images/WritingHand';
 
-const NewNote: React.FC = () => {
-  const [ noteTitle, setNoteTitle ] = useState<string>("");
+interface NoteProps {
+  note: NoteItem;
+}
+
+const NotePage: React.FC<NoteProps> = ({ note }: NoteProps) => {
+  const noteObj: Note = new Note(
+    note.createdAt,
+    note.content,
+    note.title,
+    note.tags
+  );
+
+  const [ noteTitle, setNoteTitle ] = useState<string>(noteObj.title ?? "");
 
   const handleSubmit = (evt: React.FormEvent): void => {
     evt.preventDefault();
-    console.log(noteTitle, noteContent)
   };
 
   const handleTitleChange = (evt: React.KeyboardEvent<HTMLInputElement>) => {
@@ -17,7 +29,7 @@ const NewNote: React.FC = () => {
   };
 
   // note content
-  const [ noteContent, setNoteContent ] = useState<string>("");
+  const [ noteContent, setNoteContent ] = useState<string>(noteObj.content);
   const textAreaRef =  useRef<HTMLTextAreaElement>(null);
 
   useResizeTextarea(textAreaRef.current, noteContent);
@@ -27,15 +39,14 @@ const NewNote: React.FC = () => {
     setNoteContent(newText);
   };
 
-  // creating note object
-  const immediateTime = new Date();
+  // allow page editing
+  const [ editing, setEditing ] = useState<boolean>(false);
 
-  const noteObj = new Note(
-    immediateTime,
-    noteContent,
-    noteTitle,
-  );
-  
+  const editPage = (): void => {
+    setEditing(!editing);
+    if (!editing) textAreaRef.current?.focus();
+  };
+
   // editing note tags
   const [ tagInput, setTagInput] = useState<string>('');
   const [ noteTags, setNoteTags ] = useState<Array<string>>(noteObj?.tags ?? []);
@@ -64,31 +75,45 @@ const NewNote: React.FC = () => {
     noteObj.content = noteContent;
     noteObj.title = noteTitle;
     noteObj.tags = noteTags;
-
-    return () => {
-      console.log(noteObj)
-    };
-  }, [ noteObj ]);
-
+  }, [ noteContent, noteTitle, noteTags ])
   
-  useLocalStorage();
 
   return (
     <section className="min-h-screen pb-16 px-8">
-      <div className="pb-14 pt-10">
-        <Nav />
+      <div className="flex items-center pb-14 pt-10">
+        <div className="flex-grow">
+          <Nav />
+        </div>
+
+        <button 
+          className={`${ editing && 'bg-neutral-500/[0.25]'}  h-10 ml-5 p-1.5 rounded-full transition w-10`}
+          onClick={editPage}
+          title="Edit Note"
+          type="button"
+        >
+          <WritingHand />
+        </button>
+
+        <button 
+          className="h-7 ml-5 w-7"
+          title="Delete Note"
+          type="button"
+        >
+          <Bin />
+        </button>
       </div>
 
       <form onSubmit={(evt: React.FormEvent<HTMLFormElement>) => handleSubmit(evt)}>
         <div>
           <input 
             className="bg-transparent font-newsreader font-medium h-full outline-none text-3xl w-full"
-            onChange={(evt) => setNoteTitle(evt.target.value)}
+            onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setNoteTitle(evt.target.value)}
             onKeyDown={handleTitleChange}
             placeholder="Enter note tile"
             title="Note Title"
             type="text"
             value={noteTitle}
+            readOnly={!editing}
           />
         </div>
 
@@ -109,17 +134,17 @@ const NewNote: React.FC = () => {
               ))
             }
 
-            { noteObj.tags &&
-              <div className="flex flex-1 min-w-[5.5rem]">
-                 <input 
-                  className="bg-transparent h-full outline-none my-1 py-1 w-full"
-                  onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setTagInput(evt.target.value)}
-                  onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) => hanldleTagSubmit(evt)}
-                  placeholder="Enter a tag"
-                  type="text"
-                  value={tagInput}
-                />                
-              </div>
+            { noteObj.tags && editing &&
+                <div className="flex flex-1 min-w-[5.5rem]">
+                  <input 
+                    className="bg-transparent h-full outline-none my-1 py-1 w-full"
+                    onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setTagInput(evt.target.value)}
+                    onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) => hanldleTagSubmit(evt)}
+                    placeholder="Enter a tag"
+                    type="text"
+                    value={tagInput}
+                  />                
+                </div>
             }            
           </ul>
         </div>
@@ -130,12 +155,13 @@ const NewNote: React.FC = () => {
             onChange={handleContentChange}
             placeholder="Enter Note"
             ref={textAreaRef}
+            readOnly={!editing}
             value={noteContent}
           />
         </div>
       </form>
     </section>
   );
-}
+};
 
-export default NewNote;
+export default NotePage;
