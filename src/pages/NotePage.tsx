@@ -1,28 +1,40 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import useResizeTextarea from '../hooks/useResizeTextarea';
-import { NoteItem } from  "../types/index";
+import NoteContext from '../context/NoteContext';
 import Note from "../types/classes/note";
 import Nav from '../components/NavComponet';
 import Bin from '../components/images/Bin';
 import WritingHand from '../components/images/WritingHand';
+import { useNavigate, useParams } from 'react-router-dom';
 
-interface NoteProps {
-  note: NoteItem;
-}
+const NotePage: React.FC = () => {
+  const { noteId } = useParams();
 
-const NotePage: React.FC<NoteProps> = ({ note }: NoteProps) => {
-  const noteObj: Note = new Note(
-    note.createdAt,
-    note.content,
-    note.title,
-    note.tags
-  );
+  const {
+    allNotes,
+    addNote,
+    pinnedNotes,
+    pinNote
+  } = useContext(NoteContext)
+
+  const note = allNotes.find(note => {
+    if (noteId) {
+      return Number(noteId) === new Date(note.createdAt).getTime();
+    }
+  });
+
+  let noteObj: Note;
+  
+  if (note) {
+    noteObj = new Note(
+      note.createdAt,
+      note.content,
+      note.title,
+      note.tags
+    );
+  }
 
   const [ noteTitle, setNoteTitle ] = useState<string>(noteObj.title ?? "");
-
-  const handleSubmit = (evt: React.FormEvent): void => {
-    evt.preventDefault();
-  };
 
   const handleTitleChange = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (evt.key.toLowerCase() === "enter") textAreaRef.current?.focus();
@@ -31,6 +43,7 @@ const NotePage: React.FC<NoteProps> = ({ note }: NoteProps) => {
   // note content
   const [ noteContent, setNoteContent ] = useState<string>(noteObj.content);
   const textAreaRef =  useRef<HTMLTextAreaElement>(null);
+  const formElt = useRef<HTMLFormElement | null>(null);
 
   useResizeTextarea(textAreaRef.current, noteContent);
 
@@ -53,7 +66,7 @@ const NotePage: React.FC<NoteProps> = ({ note }: NoteProps) => {
 
   const hanldleTagSubmit = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
     const trimmedInput: string = tagInput.trim();
-    const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === "enter";
+    const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === "enter" || evt.key.toLowerCase() === 'tab';
 
     if (keyToCreate && trimmedInput.length > 2 && trimmedInput.length < 21 && !noteTags.includes(trimmedInput)) {
       evt.preventDefault();
@@ -77,12 +90,53 @@ const NotePage: React.FC<NoteProps> = ({ note }: NoteProps) => {
     noteObj.tags = noteTags;
   }, [ noteContent, noteTitle, noteTags ])
   
+  
+  // creating note  
+  const navigate =  useNavigate();
+
+  const triggerSubmit = (): void => {
+    const submitEvt: Event = new Event('submit', {
+      bubbles: true
+    });
+    formElt.current?.dispatchEvent(submitEvt);
+    navigate("/");
+  };
+
+  const handleFormSubmit = (evt: React.FormEvent): void => {
+    evt.preventDefault();
+
+    if (noteObj.content) {
+      const canUpdate = allNotes.find(note => note.createdAt === note.createdAt);
+      
+      if (!canUpdate) addNote(noteObj);
+      else {
+        const currentItemIndex: number = allNotes.indexOf(canUpdate);
+        allNotes.splice(currentItemIndex, 1);
+        addNote(noteObj);
+      }
+    }
+  }
+
+  // pin note
+  const [ isPinned, setIsPinned ] = useState<boolean>(false);
+  const handlePinNote = () => {
+    pinNote(noteObj);
+
+    const pin = pinnedNotes.find(note => note.createdAt === note.createdAt);
+    if (pin) setIsPinned(true);
+    else setIsPinned(false);
+  };
+
 
   return (
     <section className="min-h-screen pb-16 px-8">
-      <div className="flex items-center pb-14 pt-10">
+      <div className="flex items-center pb-14 pt-12">
         <div className="flex-grow">
-          <Nav />
+          <Nav 
+            triggerSubmit={triggerSubmit}
+            handlePinNote={handlePinNote}
+            isPinned={isPinned}
+          />
         </div>
 
         <button 
@@ -103,7 +157,7 @@ const NotePage: React.FC<NoteProps> = ({ note }: NoteProps) => {
         </button>
       </div>
 
-      <form onSubmit={(evt: React.FormEvent<HTMLFormElement>) => handleSubmit(evt)}>
+      <form onSubmit={(evt: React.FormEvent<HTMLFormElement>) => handleFormSubmit(evt)}>
         <div>
           <input 
             className="bg-transparent font-newsreader font-medium h-full outline-none text-3xl w-full"
@@ -151,7 +205,7 @@ const NotePage: React.FC<NoteProps> = ({ note }: NoteProps) => {
 
         <div className="flex pt-5">
           <textarea
-            className="bg-transparent break-words min-h-[calc(100vh-21rem)] outline-none overflow-hidden resize-none w-full"
+            className="bg-transparent break-words min-h-[calc(100vh-21.5rem)] outline-none overflow-hidden resize-none w-full"
             onChange={handleContentChange}
             placeholder="Enter Note"
             ref={textAreaRef}

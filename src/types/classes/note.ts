@@ -6,6 +6,7 @@ class Note implements NoteItem {
   title?: string;
   tags?: Array<string>;
   readonly createdAt: Date;
+  readonly id: number;
 
   constructor (
     createdAt: Date,
@@ -13,8 +14,9 @@ class Note implements NoteItem {
     title?: string,
     tags?: Array<string>
   ) {
-    this.createdAt = createdAt;
+    this.createdAt = new Date(createdAt);
     this.content = content;
+    this.id = this.createdAt.getTime();
     this.title = title ?? "";
     this.tags = tags ?? [];
   }
@@ -22,10 +24,6 @@ class Note implements NoteItem {
   get dateString(): string {
     const date: Date = new Date(this.createdAt);
     return `${Weekdays[date.getDay()]}, ${date.toDateString().substring(3)}`;
-  }
-
-  get id(): number {
-    return this.createdAt.valueOf();
   }
 }
 

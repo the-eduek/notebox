@@ -1,22 +1,31 @@
 
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { RouterType } from "./router.types";
 import NewNote from "../pages/NewNote";
 import Home from "../pages/Home";
+import NotePage from "../pages/NotePage";
 
 const Router: React.FC = () => {
-  const allPages: Array<RouterType> = [
+  const allPages: Array<{
+    element: React.JSX.Element;
+    path: string;
+    title: string;
+  }> = [
     {
-      path: "/",
       element: <Home />,
+      path: "/",
+      title: "home"
+    },
+    { 
+      element: <NewNote />,
+      path: "/new",
       title: "home"
     },
     {
-      path: "/new",
-      element: <NewNote />,
-      title: "home"
-    },
+      element: <NotePage />,
+      path: "/notes/:noteId",
+      title: "note"
+    }
   ];
 
   return (
