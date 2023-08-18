@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { ViewContext } from "../context/ViewContext";
-import { NoteItem, ViewType } from "../types";
+import { useContext, useState } from "react";
+import ViewContext from "../context/ViewContext";
+import NoteContext from "../context/NoteContext";
+import { ViewType } from "../types";
 import NotesList from "../components/NotesList";
 import MainButton from "../components/MainButton";
 import Notepad from "../components/images/Notepad";
@@ -8,6 +9,11 @@ import PushPin from "../components/images/PushPin";
 import Folder from "../components/images/Folder";
 
 function Home () {
+  const {
+    allNotes,
+    pinnedNotes
+  } = useContext(NoteContext)
+
   const [ noteView, setNoteView ] = useState<ViewType>("list");
 
   const changeView = (): void => {
@@ -72,7 +78,7 @@ function Home () {
             </span> pinned notes
           </p>
 
-          <NotesList notesArray={[]} />
+          <NotesList notesArray={pinnedNotes} />
         </div>
 
         <div className="pb-16">
@@ -82,7 +88,7 @@ function Home () {
             </span> other notes
           </p>
 
-          <NotesList notesArray={[]} />
+          <NotesList notesArray={allNotes} />
         </div>
       </ViewContext.Provider>
     </section>

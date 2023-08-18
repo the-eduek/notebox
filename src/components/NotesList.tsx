@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { NoteItem, ViewType } from "../types";
-import { ViewContext } from "../context/ViewContext";
+import ViewContext from "../context/ViewContext";
 import NotePreview from "./NotePreview";
 
 interface NotesListProps {

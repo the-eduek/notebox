@@ -38,4 +38,10 @@
   .prose p:last-child {
     padding: 0 0 0;
   }
+
+  @media (min-width: 1024px) {
+    html {
+      font-size: 18px;
+    }
+  }
 }

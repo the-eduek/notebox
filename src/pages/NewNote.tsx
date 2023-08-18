@@ -6,12 +6,12 @@ import Note from '../types/classes/note';
 import NoteContext from '../context/NoteContext';
 
 const NewNote: React.FC = () => {
-  const { 
-    allNotes, 
+  const {
     addNote,
     pinnedNotes,
     pinNote
   } = useContext(NoteContext)
+
   const [ noteTitle, setNoteTitle ] = useState<string>("");
 
   const handleTitleChange = (evt: React.KeyboardEvent<HTMLInputElement>) => {
@@ -41,7 +41,6 @@ const NewNote: React.FC = () => {
   // editing note tags
   const [ tagInput, setTagInput] = useState<string>('');
   const [ noteTags, setNoteTags ] = useState<Array<string>>(noteObj?.tags ?? []);
-  const navigate =  useNavigate();
 
   const formElt = useRef<HTMLFormElement | null>(null);
 
@@ -72,7 +71,9 @@ const NewNote: React.FC = () => {
   }, [ noteContent, noteTitle, noteTags ]);
 
 
-  // creating note
+  // creating note  
+  const navigate =  useNavigate();
+
   const triggerSubmit = (): void => {
     const submitEvt: Event = new Event('submit', {
       bubbles: true
@@ -83,17 +84,7 @@ const NewNote: React.FC = () => {
 
   const handleFormSubmit = (evt: React.FormEvent): void => {
     evt.preventDefault();
-
-    if (noteObj.content) {
-      const canUpdate = allNotes.find(note => note.createdAt === note.createdAt);
-      
-      if (!canUpdate) addNote(noteObj);
-      else {
-        const currentItemIndex: number = allNotes.indexOf(canUpdate);
-        allNotes.splice(currentItemIndex, 1);
-        addNote(noteObj);
-      }
-    }
+    if (noteObj.content) addNote(noteObj);
   };
 
   // pin note

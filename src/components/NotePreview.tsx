@@ -22,7 +22,7 @@ const NotePreview: React.FC<NoteProps> = ({ note }: NoteProps) => {
         to={`notes/${noteObj.id}`}
       >
         { note.title && 
-          <h1 className="font-newsreader font-medium pb-1 text-lg">
+          <h1 className="break-words font-newsreader font-medium pb-1 text-lg">
             { note.title.length > 21 ? `${note.title.slice(0, 21)}...` : note.title }
           </h1>
         }
