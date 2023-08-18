@@ -1,27 +1,37 @@
-# React + TypeScript + Vite
+# notebox
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### about this project
 
-Currently, two official plugins are available:
+   notebox is a user-friendly note-taking web application.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**live:**
+   [mynotebox.netlify.app](https://mynotebox.netlify.app/)
 
-## Expanding the ESLint configuration
+**core features:**
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- creating and editing notes
+- deleting notes
+- tagging notes
+- searching by tags
+- sorting by newly created
 
-- Configure the top-level `parserOptions` property like this:
+**additional Features**
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+- [x]  **user-friendly ui**: Prioritize an aesthetically pleasing and user-friendly design. A clean and intuitive interface enhances the user experience.
+- [x]  **responsive design**: Ensure the app is fully responsive to various screen sizes, from desktops to mobile devices.
+- [x]  **localstorage**: Implement the use of local storage to save notes locally in the browser. This provides a seamless experience even if the user refreshes the page.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+**guidelines:**
+
+- [x]  code structure, quality and organization; best practices, modular component-based structure
+- [x]  appealing and responsive design.
+- [x]  state management using context api
+- [x]  granular, regualar commits
+- [x]  proper documentation, readme file should contain live link
+- [ ]  implementation of the required features
+- [x]  aesthetic design and user experience
+- [x]  cross-browser compatibility
+
+**stack:**
+
+react (context api for state management), typescript, tailwind css.
