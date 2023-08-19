@@ -1,6 +1,5 @@
 import React from "react";
-
-type ModalAction = 0 | 1;
+import { ModalAction } from "../types";
 
 interface DeleteModalProps {
   setModalAction: (action: ModalAction) => void

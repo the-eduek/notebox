@@ -1,9 +1,9 @@
 import React from "react";
-import Router from "./router";
+import AllRoutes from "./router";
 
 const App: React.FC = () => {
   return (
-    <Router />
+    <AllRoutes />
   );
 };
 

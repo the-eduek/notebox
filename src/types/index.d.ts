@@ -8,3 +8,5 @@ export interface NoteItem {
 }
 
 export type ViewType = 'grid' | 'list';
+
+export type ModalAction = 0 | 1;

@@ -6,20 +6,24 @@ const NoteContext = createContext<{
   addNote: (note: NoteItem, pinAction?: boolean) => void
   pinnedNotes: Array<number>,
   togglePinNote: (note: NoteItem, pin: boolean) => void,
-  deleteNote: (note: NoteItem) => void
+  editNote: (note: NoteItem) => void,
+  deleteNote: (note: NoteItem) => void,
+  allTags: Array<string>
 }>({
-    allNotes: [],
-    addNote: () => {},
-    pinnedNotes: [],
-    togglePinNote: () => {},
-    deleteNote: () => {}
-  });
+  allNotes: [],
+  addNote: () => {},
+  pinnedNotes: [],
+  togglePinNote: () => {},
+  editNote: () => {},
+  deleteNote: () => {},
+  allTags: []
+});
 
 interface NoteProviderProps {
   children: React.ReactNode
 }
 
-function createLocalArray<Type>(
+function createLocalArray<Type> (
   localName: string,
 ): Array<Type> {
   const local: string | null = localStorage.getItem(localName);
@@ -34,6 +38,13 @@ function createLocalArray<Type>(
   return localArray;
 }
 
+function setLocalArray<Type> (
+  variableName: string,
+  newValue: Array<Type>
+): void {
+  localStorage.setItem(variableName, JSON.stringify(newValue));
+}
+
 export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProviderProps) => {
   // all notes
   const localNotes: Array<NoteItem> = createLocalArray<NoteItem>('localNotes');
@@ -43,9 +54,7 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProv
   const addNote = (noteParam: NoteItem): void => {
     const newAllNotes = [...allNotes, noteParam];
     setAllNotes(newAllNotes);
-    localStorage.setItem("localNotes", JSON.stringify(newAllNotes));
-
-    console.log(noteParam, noteParam.id)
+    setLocalArray<NoteItem>("localNotes", newAllNotes);
   };
 
   // pinning notes
@@ -57,8 +66,6 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProv
     // do not process pining if not isn't created, i.e. in new note page
     if (!note.content && !allNotes.find(noteParam => noteParam.id === note.id)) return;
 
-    console.log("hello")
-
     // toggle pinning
     let newPinnedNotes: Array<number>;
 
@@ -66,7 +73,19 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProv
     else newPinnedNotes = [...pinnedNotes, note.id]
   
     setPinnedNotes(newPinnedNotes);
-    localStorage.setItem("localPinnedNotes", JSON.stringify(newPinnedNotes));
+    setLocalArray<number>("localPinnedNotes", newPinnedNotes);
+  };
+  
+  // editing note
+  const editNote = (note: NoteItem): void => {
+    const canEditIndex: number = allNotes.findIndex(noteParam => noteParam.id === note.id);
+
+    if (canEditIndex !== -1) {
+      const newAllNotes = [...allNotes.filter((noteParam) => noteParam.id !== note.id), note]
+
+      setAllNotes(newAllNotes);
+      setLocalArray<NoteItem>("localNotes", newAllNotes);
+    }
   };
 
   // deleting notes
@@ -79,6 +98,11 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProv
     localStorage.setItem("localNotes", JSON.stringify(newAllNotes));
   };
 
+  // all tags
+  const allTags = allNotes.map(note => note.tags ?? [])  
+      .flat()
+      .filter((tag, index, tagsArray) => tagsArray.indexOf(tag) === index);
+
   return (
     <NoteContext.Provider 
       value={{
@@ -86,7 +110,9 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProv
         pinnedNotes,
         addNote,
         togglePinNote,
-        deleteNote
+        editNote,
+        deleteNote,
+        allTags
       }}
     >
       { children }

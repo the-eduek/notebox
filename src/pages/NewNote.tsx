@@ -52,7 +52,7 @@ const NewNote: React.FC = () => {
     const trimmedInput: string = tagInput.trim();
     const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === "enter" || evt.key.toLowerCase() === 'tab';
 
-    if (keyToCreate && trimmedInput.length > 2 && trimmedInput.length < 21 && !noteTags.includes(trimmedInput)) {
+    if (keyToCreate && trimmedInput.length > 1 && trimmedInput.length < 21 && !noteTags.includes(trimmedInput)) {
       evt.preventDefault();
       setNoteTags(prevState => [...prevState, trimmedInput]);
       setTagInput("");
@@ -72,7 +72,7 @@ const NewNote: React.FC = () => {
     evt.preventDefault();
 
     const newNoteTags: Array<string> = [...noteTags.filter(tagParam => tagParam !== tag)];
-    setNoteTags(newNoteTags)
+    setNoteTags(newNoteTags);
   };
   
   useEffect(() => {
@@ -92,17 +92,17 @@ const NewNote: React.FC = () => {
     formElt.current?.dispatchEvent(submitEvt);
   };
 
+  const handleFormSubmit = (evt: React.FormEvent<HTMLFormElement>): void => {
+    evt.preventDefault();
+    if (noteObj.content.trim()) addNote(noteObj);
+  };
+
   const setSubmitAction = (checkPinned?: boolean): void => {
     triggerSubmit();
 
     // pin note if pin was clicked
     if (checkPinned) togglePinNote(noteObj, false);
     navigate("/");
-  };
-
-  const handleFormSubmit = (evt: React.FormEvent): void => {
-    evt.preventDefault();
-    if (noteObj.content.trim()) addNote(noteObj);
   };
 
   return (
@@ -145,15 +145,13 @@ const NewNote: React.FC = () => {
                   <span className="text-neutral-500/80">#</span>
                   <span>{tag}</span>
                   <button
-                    className="bg-white inline-flex h-4 items-center justify-center ml-1 rounded-full text-red-500 w-4"
+                    className="bg-white inline-flex h-4 items-center justify-center ml-1 rotate-45 rounded-full text-red-500 w-4"
                     onClick={(evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => deleteTag(evt, tag)}
                     title="Delete Tag"
                     type="button"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <g stroke="currentColor" strokeLinecap="round" strokeWidth={2.25}>
-                        <path d="m14.5 9.5-5 5m0-5 5 5M7 3.338A9.954 9.954 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/>
-                      </g>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-full w-full">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.25} d="M8 12h8m-4-4v8m9-4a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                     </svg>
                   </button>
                 </li>

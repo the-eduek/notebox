@@ -5,7 +5,7 @@ import NewNote from "../pages/NewNote";
 import Home from "../pages/Home";
 import NotePage from "../pages/NotePage";
 
-const Router: React.FC = () => {
+const AllRoutes: React.FC = () => {
   const allPages: Array<{
     element: React.JSX.Element;
     path: string;
@@ -42,4 +42,4 @@ const Router: React.FC = () => {
   );
 };
 
-export default Router;
+export default AllRoutes;
