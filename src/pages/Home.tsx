@@ -1,5 +1,6 @@
-import { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { NoteItem, ViewType } from "../types";
+import { Link } from "react-router-dom";
 import ViewContext from "../context/ViewContext";
 import NoteContext from "../context/NoteContext";
 import MainButton from "../components/MainButton";
@@ -7,7 +8,7 @@ import NotesList from "../components/NotesList";
 import Notepad from "../components/images/Notepad";
 import TagsModal from "../components/TagsModal";
 
-function Home () {
+const Home: React.FC = () => {
   const {
     allNotes,
     pinnedNotes
@@ -22,25 +23,48 @@ function Home () {
   };
 
   // searching and sorting
-  let sortedNotes: Array<NoteItem> = allNotes.filter(note => !pinnedNotes.some(pinnedNoteId => pinnedNoteId === note.id))
-    .sort((noteA, noteB) => noteB.id - noteA.id);
+  const searchRef = useRef<HTMLInputElement | null>(null);
 
-  let sortedPinnedNotes: Array<NoteItem> = allNotes.filter(note => pinnedNotes.find(noteId => noteId === note.id))
-    .sort((noteA, noteB) => noteB.id - noteA.id);
+  const notes: Array<NoteItem> = allNotes.filter(note => !pinnedNotes.some(pinnedNoteId => pinnedNoteId === note.id))
+    .sort((noteX, noteY) => noteY.id - noteX.id);
 
+  const pinned: Array<NoteItem> = allNotes.filter(note => pinnedNotes.filter(noteId => noteId === note.id)[0])
+    .sort((noteX, noteY) => noteY.id - noteX.id);
       
   const [ searchText, setSearchText ] = useState<string>("");
-
+  const [ notesArray, setNotesArray ] = useState<Array<NoteItem>>(notes);
+  const [ pinnedNotesArray, setPinnedNotesArray ] = useState<Array<NoteItem>>(pinned);
 
   const handleSearch = (evt: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchText(evt.target.value);
 
-    sortedNotes = sortedNotes.filter(note => {
-      let sPlaceholder: string = searchText.trim();
-      if (sPlaceholder.startsWith('#')) sPlaceholder = sPlaceholder.slice(1);
+    const currentInput: string = evt.target.value.trim();
 
-      console.log(sPlaceholder)
-      return note.tags?.some(tag => tag.includes(sPlaceholder))
+    if (currentInput.startsWith("#")) {
+      const newNotesArray: Array<NoteItem> = notes.filter(note => {
+        return !!(note.tags?.filter(tag => tag.includes(currentInput.slice(1))).length)
+      });
+      setNotesArray(newNotesArray);
+
+      const newPinnedNotesArray: Array<NoteItem> = pinned.filter(note => {
+        return !!(note.tags?.filter(tag => tag.includes(currentInput.slice(1))).length)
+      });
+      setPinnedNotesArray(newPinnedNotesArray);
+    } else {
+      const newNotesArray: Array<NoteItem> = searchFn(currentInput, notes);
+      setNotesArray(newNotesArray);
+      const newPinnedNotesArray: Array<NoteItem> = searchFn(currentInput, pinned);
+      setPinnedNotesArray(newPinnedNotesArray);
+    }
+  };
+
+  const searchFn = (input: string, searchArray: Array<NoteItem>): Array<NoteItem> => {
+    return searchArray.filter(note => {
+      const matchBody: boolean = note.content.includes(input);
+      const matchTitle: boolean = !!(note.title?.includes(input));
+      const matchTags: boolean = !!(note.tags?.filter(tag => tag.includes(input)).length);
+      
+      return matchBody || matchTitle || matchTags;
     });
   };
 
@@ -48,41 +72,20 @@ function Home () {
   const [ showModal, setShowModal ] = useState<boolean>(false);
 
   const toggleModal = (): void => {
-    // setShowModal(!showModal);
+    setShowModal(!showModal);
 
-    // if (!showModal) document.body.classList.add('overflow-hidden');
-    // else document.body.classList.remove('overflow-hidden');
+    if (!showModal) document.body.classList.add('overflow-hidden');
+    else document.body.classList.remove('overflow-hidden');
   };
 
-  const setModalAction = (action: ModalAction): void => {
-    console.log(action)
-    if (action === 0) toggleModal();
-    // else {
-    //   deleteNote(noteObj);
-    // }
+  const triggerTagSearch = (tag: string): void => {
+    if (searchRef.current) {
+      searchRef.current.value = `#${tag}`;
+      handleSearch({
+        target: searchRef.current
+      } as React.ChangeEvent<HTMLInputElement> );
+    }
   };
-
-  // const setModalAction = (action: ModalAction): void => {
-    
-  // };
-
-
-
-
-
-    // if (filterProp.value === 'all') {
-    //   filteredCoins.value = coins.value.filter(coin => { 
-    //     return coin.name.toLowerCase().includes(searchText.value.toLowerCase()) || coin.symbol.toLowerCase().includes(searchText.value.toLowerCase())
-    //   });
-    // } else if (filterProp.value === 'gainers') {
-    //   filteredCoins.value = coins.value.filter(coin => coin.percentage > 0).filter(coin => { 
-    //     return coin.name.toLowerCase().includes(searchText.value.toLowerCase()) || coin.symbol.toLowerCase().includes(searchText.value.toLowerCase())
-    //   }).sort((firstCoin, secondCoin) => secondCoin.percentage - firstCoin.percentage);
-    // } else if (filterProp.value === 'losers') {
-    //   filteredCoins.value = coins.value.filter(coin => coin.percentage < 0).filter(coin => { 
-    //     return coin.name.toLowerCase().includes(searchText.value.toLowerCase()) || coin.symbol.toLowerCase().includes(searchText.value.toLowerCase())
-    //   }).sort((firstCoin, secondCoin) =>  firstCoin.percentage - secondCoin.percentage);
-    // }
 
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16 md:pt-28">
@@ -109,6 +112,7 @@ function Home () {
               id="searchInput"
               onChange={(evt: React.ChangeEvent<HTMLInputElement>) => handleSearch(evt)}
               placeholder="search notes"
+              ref={searchRef}
               title="Search Notes"
               value={searchText}
             />
@@ -141,34 +145,50 @@ function Home () {
         </div>
 
         
-        { !!(sortedPinnedNotes.length) && 
+        { !!(pinnedNotesArray.length) && 
             <div className="pb-10">
               <p className="flex font-medium items-center pb-4">📌 pinned notes</p>
 
-              <NotesList notesArray={sortedPinnedNotes} />
+              <NotesList notesArray={pinnedNotesArray} />
             </div>
         }
 
         <div className="pb-16">
-          { !!(sortedPinnedNotes.length) && 
+          { !!(pinned.length && notesArray.length)  && 
               <p className="flex font-medium items-center pb-4">📁 other notes</p>
           }
 
-          <NotesList notesArray={sortedNotes} />
+          <NotesList notesArray={notesArray} />
         </div>
       </ViewContext.Provider>
 
-      { !(allNotes.length) && 
-          <p className="font-medium text-center text-neutral-500 text-lg">no notes in your notebox yet✍🏾</p>
+      { !(allNotes.length) &&
+          <div className="md:flex md:justify-center">
+            <p className="font-medium text-center text-neutral-500 text-lg">no notes in your notebox yet,</p>
+            <p className="font-medium text-center text-neutral-500 text-lg">
+              <Link
+                className="border-b border-transparent hover:border-[#ed4c5c] mx-1 text-[#ed4c5c] transition"
+                to={'/new'}
+              >
+                click here
+              </Link>
+               to start writing ✍🏾
+            </p>
+          </div>
+      }
+
+      { !(notesArray.length) && !(pinnedNotesArray.length) && 
+          <p className="font-medium items-center py-16 text-center text-neutral-500 md:text-lg">no notes found 😕</p>
       }
 
       { showModal &&
           <TagsModal
-            setModalAction={setModalAction}
+            toggleModal={toggleModal}
+            triggerTagSearch={triggerTagSearch}
           />
       }
     </section>
   )
-}
+};
 
 export default Home;

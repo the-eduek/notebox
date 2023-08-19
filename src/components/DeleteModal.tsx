@@ -2,16 +2,14 @@ import React from "react";
 import { ModalAction } from "../types";
 
 interface DeleteModalProps {
-  setModalAction: (action: ModalAction) => void
+  setModalAction: (action?: ModalAction) => void
 }
 
 const DeleteModal: React.FC<DeleteModalProps> = ({ setModalAction }: DeleteModalProps) => {
   const handleClose = (evt: React.MouseEvent<HTMLElement>) => {
     evt.preventDefault();
     
-    if (evt.target === evt.currentTarget){
-      setModalAction(0)
-    }
+    if (evt.target === evt.currentTarget) setModalAction()
   };
 
   return (
@@ -22,7 +20,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ setModalAction }: DeleteModal
         <div className="flex items-center justify-between">
           <button
             className="bg-neutral-800 border border-neutral-300 font-medium mr-3 px-6 md:px-10 py-3 md:py-4 outline-none focus:outline-neutral-500 hover:outline-neutral-500 rounded-full text-neutral-50 transition"
-            onClick={() => setModalAction(0)}
+            onClick={() => setModalAction()}
             title="Cancel Delete"
             type="button"
           >

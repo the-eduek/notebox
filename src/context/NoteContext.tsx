@@ -64,7 +64,7 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProv
 
   const togglePinNote = (note: NoteItem, pin: boolean): void => {
     // do not process pining if not isn't created, i.e. in new note page
-    if (!note.content && !allNotes.find(noteParam => noteParam.id === note.id)) return;
+    if (!note.content && allNotes.filter(noteParam => noteParam.id === note.id).length === 0) return;
 
     // toggle pinning
     let newPinnedNotes: Array<number>;

@@ -49,7 +49,9 @@ const NewNote: React.FC = () => {
   const formElt = useRef<HTMLFormElement | null>(null);
 
   const hanldleTagSubmit = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
-    const trimmedInput: string = tagInput.trim();
+    let trimmedInput: string = tagInput.trim();
+    if (trimmedInput.startsWith('#')) trimmedInput = trimmedInput.slice(1);
+
     const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === "enter" || evt.key.toLowerCase() === 'tab';
 
     if (keyToCreate && trimmedInput.length > 1 && trimmedInput.length < 21 && !noteTags.includes(trimmedInput)) {
@@ -139,20 +141,21 @@ const NewNote: React.FC = () => {
           <ul className="flex flex-wrap items-center">
             { noteTags.map((tag: string, index: number) => (
                 <li
-                  className="bg-neutral-200/70 font-medium inline-flex items-center mr-2 last:mr-0 my-1 px-2 py-1 rounded-full text-sm text-neutral-600" 
+                  className="bg-neutral-200/60 font-medium inline-flex items-center mr-2 last:mr-0 my-1 px-2 py-1 rounded-full text-sm text-neutral-600" 
                   key={index}
                 >
-                  <span className="text-neutral-500/80">#</span>
+                  <span className="text-neutral-500">#</span>
                   <span>{tag}</span>
                   <button
-                    className="bg-white inline-flex h-4 items-center justify-center ml-1 rotate-45 rounded-full text-red-500 w-4"
+                    className="bg-neutral-500/25 inline-flex h-4 items-center justify-center ml-2 p-0.5 rounded-full w-4"
                     onClick={(evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => deleteTag(evt, tag)}
                     title="Delete Tag"
                     type="button"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-full w-full">
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.25} d="M8 12h8m-4-4v8m9-4a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#636363" className="w-full h-full">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
+
                   </button>
                 </li>
               ))
