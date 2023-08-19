@@ -60,12 +60,19 @@ const NewNote: React.FC = () => {
 
     if (evt.key.toLowerCase() === "backspace" && !tagInput.length && noteTags.length) {
       evt.preventDefault();
-      const tagsCopy: Array<string> = [...noteTags];
-      const poppedTag = tagsCopy.pop();
+      const newNoteTag: Array<string> = [...noteTags];
+      const poppedTag = newNoteTag.pop();
   
-      setNoteTags(tagsCopy);
+      setNoteTags(newNoteTag);
       setTagInput(poppedTag!);
     }
+  };
+
+  const deleteTag = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>, tag: string): void => {
+    evt.preventDefault();
+
+    const newNoteTags: Array<string> = [...noteTags.filter(tagParam => tagParam !== tag)];
+    setNoteTags(newNoteTags)
   };
   
   useEffect(() => {
@@ -100,14 +107,14 @@ const NewNote: React.FC = () => {
 
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">
-      <div className="pb-14 pt-12">
+      <div className="pb-14 pt-4 md:pt-12">
         <Nav 
           triggerSubmit={setSubmitAction}
           currentNote={noteObj}
         />
       </div>
 
-      <form 
+      <form
         onSubmit={(evt: React.FormEvent<HTMLFormElement>) => handleFormSubmit(evt)}
         ref={formElt}
       >
@@ -132,10 +139,23 @@ const NewNote: React.FC = () => {
           <ul className="flex flex-wrap items-center">
             { noteTags.map((tag: string, index: number) => (
                 <li
-                  className="bg-neutral-200/70 font-medium mr-2 last:mr-0 my-1 px-2 py-1 rounded-full text-sm text-neutral-600" 
+                  className="bg-neutral-200/70 font-medium inline-flex items-center mr-2 last:mr-0 my-1 px-2 py-1 rounded-full text-sm text-neutral-600" 
                   key={index}
                 >
-                  <span className="text-neutral-500/80">#</span>{tag}
+                  <span className="text-neutral-500/80">#</span>
+                  <span>{tag}</span>
+                  <button
+                    className="bg-white inline-flex h-4 items-center justify-center ml-1 rounded-full text-red-500 w-4"
+                    onClick={(evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => deleteTag(evt, tag)}
+                    title="Delete Tag"
+                    type="button"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <g stroke="currentColor" strokeLinecap="round" strokeWidth={2.25}>
+                        <path d="m14.5 9.5-5 5m0-5 5 5M7 3.338A9.954 9.954 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/>
+                      </g>
+                    </svg>
+                  </button>
                 </li>
               ))
             }
