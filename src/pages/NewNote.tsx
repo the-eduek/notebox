@@ -52,7 +52,7 @@ const NewNote: React.FC = () => {
     let trimmedInput: string = tagInput.trim();
     if (trimmedInput.startsWith('#')) trimmedInput = trimmedInput.slice(1);
 
-    const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === "enter" || evt.key.toLowerCase() === 'tab';
+    const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === "enter" || evt.key.toLowerCase() === 'tab' || evt.key  === " ";
 
     if (keyToCreate && trimmedInput.length > 1 && trimmedInput.length < 21 && !noteTags.includes(trimmedInput)) {
       evt.preventDefault();
