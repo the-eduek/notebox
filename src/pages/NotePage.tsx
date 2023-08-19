@@ -36,27 +36,36 @@ const NotePage: React.FC = () => {
   // note title
   const [ noteTitle, setNoteTitle ] = useState<string>(noteObj!.title ?? "");
 
-  const handleTitleChange = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleTitleChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
+    const newTitle = evt.target.value;
+    noteObj.title = newTitle.trim();
+    setNoteTitle(newTitle);
+    if (editing === true) triggerSubmit();
+  };
+
+  const handleTitleComplete = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
     if (evt.key.toLowerCase() === "enter") textAreaRef.current?.focus();
   };
 
   // note content
   const [ noteContent, setNoteContent ] = useState<string>(noteObj!.content);
   
-  const handleContentChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleContentChange = (evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const newText = evt.target.value;
+    noteObj.content = newText;
     setNoteContent(newText);
+    if (editing === true) triggerSubmit();
   };
 
   // note tags
-  const [ tagInput, setTagInput] = useState<string>('');
+  const [ tagInput, setTagInput] = useState<string>("");
   const [ noteTags, setNoteTags ] = useState<Array<string>>(noteObj!.tags ?? []);
 
   const hanldleTagSubmit = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
     let trimmedInput: string = tagInput.trim();
     if (trimmedInput.startsWith('#')) trimmedInput = trimmedInput.slice(1);
 
-    const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === "enter" || evt.key.toLowerCase() === 'tab';
+    const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === 'enter' || evt.key.toLowerCase() === 'tab' || evt.key === ' ';
 
     if (keyToCreate && trimmedInput.length > 1 && trimmedInput.length < 21 && !noteTags.includes(trimmedInput)) {
       evt.preventDefault();
@@ -72,6 +81,9 @@ const NotePage: React.FC = () => {
       setNoteTags(tagsCopy);
       setTagInput(poppedTag!);
     }
+
+    noteObj.tags = noteTags;
+    if (editing === true) triggerSubmit();
   };
 
   const deleteTag = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>, tag: string): void => {
@@ -79,12 +91,13 @@ const NotePage: React.FC = () => {
 
     if (editing) {
       const newNoteTags: Array<string> = [...noteTags.filter(tagParam => tagParam !== tag)];
-      setNoteTags(newNoteTags)
+      setNoteTags(newNoteTags);
+      triggerSubmit();
     }
   };
 
   // resize text area automatically
-  const textAreaRef =  useRef<HTMLTextAreaElement>(null);
+  const textAreaRef =  useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     if (textAreaRef) {
@@ -107,7 +120,7 @@ const NotePage: React.FC = () => {
     if (action === 1) {
       document.body.classList.remove('overflow-hidden');
       deleteNote(noteObj);
-      navigate("/")
+      navigate("/");
     } else toggleModal();
   };
 
@@ -139,14 +152,6 @@ const NotePage: React.FC = () => {
     evt.preventDefault();
     editNote(noteObj);
   };
-
-  useEffect(() => {
-    noteObj.content = noteContent;
-    noteObj.title = noteTitle;
-    noteObj.tags = noteTags;
-
-    if (editing === true) triggerSubmit();
-  }, [ noteContent, noteTitle, noteTags, editing ])
 
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">
@@ -184,8 +189,8 @@ const NotePage: React.FC = () => {
         <div>
           <input 
             className="bg-transparent font-newsreader font-medium h-full outline-none text-3xl md:text-4xl w-full"
-            onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setNoteTitle(evt.target.value)}
-            onKeyDown={handleTitleChange}
+            onChange={(evt: React.ChangeEvent<HTMLInputElement>) => handleTitleChange(evt)}
+            onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) => handleTitleComplete(evt)}
             placeholder="Enter note tile"
             title="Note Title"
             type="text"
@@ -231,7 +236,7 @@ const NotePage: React.FC = () => {
                     placeholder="Enter a tag"
                     type="text"
                     value={tagInput}
-                  />                
+                  />
                 </div>
             }            
           </ul>

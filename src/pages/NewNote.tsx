@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import Nav from '../components/NavComponet';
 import Note from '../types/classes/note';
 import NoteContext from '../context/NoteContext';
@@ -12,7 +12,13 @@ const NewNote: React.FC = () => {
 
   const [ noteTitle, setNoteTitle ] = useState<string>("");
 
-  const handleTitleChange = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleTitleChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
+    const newTitle = evt.target.value;
+    noteObj.title = newTitle.trim();
+    setNoteTitle(newTitle);
+  };
+
+  const handleTitleComplete = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
     if (evt.key.toLowerCase() === "enter") textAreaRef.current?.focus();
   };
 
@@ -22,6 +28,7 @@ const NewNote: React.FC = () => {
 
   const handleContentChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = evt.target.value;
+    noteObj.content = newText;
     setNoteContent(newText);
   };
 
@@ -39,12 +46,13 @@ const NewNote: React.FC = () => {
   const noteObj = new Note(
     immediateTime,
     noteContent,
-    noteTitle
+    noteTitle,
+    []
   );
   
   // editing note tags
-  const [ tagInput, setTagInput] = useState<string>('');
-  const [ noteTags, setNoteTags ] = useState<Array<string>>(noteObj?.tags ?? []);
+  const [ tagInput, setTagInput] = useState<string>("");
+  const [ noteTags, setNoteTags ] = useState<Array<string>>([]);
 
   const formElt = useRef<HTMLFormElement | null>(null);
 
@@ -52,9 +60,9 @@ const NewNote: React.FC = () => {
     let trimmedInput: string = tagInput.trim();
     if (trimmedInput.startsWith('#')) trimmedInput = trimmedInput.slice(1);
 
-    const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === "enter" || evt.key.toLowerCase() === 'tab' || evt.key  === " ";
+    const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === 'enter' || evt.key.toLowerCase() === 'tab' || evt.key === ' ';
 
-    if (keyToCreate && trimmedInput.length > 1 && trimmedInput.length < 21 && !noteTags.includes(trimmedInput)) {
+    if (keyToCreate && trimmedInput.length > 1 && trimmedInput.length < 21 && !(noteTags.includes(trimmedInput))) {
       evt.preventDefault();
       setNoteTags(prevState => [...prevState, trimmedInput]);
       setTagInput("");
@@ -68,6 +76,8 @@ const NewNote: React.FC = () => {
       setNoteTags(newNoteTag);
       setTagInput(poppedTag!);
     }
+
+    noteObj.tags = noteTags;
   };
 
   const deleteTag = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>, tag: string): void => {
@@ -75,17 +85,11 @@ const NewNote: React.FC = () => {
 
     const newNoteTags: Array<string> = [...noteTags.filter(tagParam => tagParam !== tag)];
     setNoteTags(newNoteTags);
+    noteObj.tags = newNoteTags;
   };
-  
-  useEffect(() => {
-    noteObj.content = noteContent;
-    noteObj.title = noteTitle;
-    noteObj.tags = noteTags;
-  }, [ noteContent, noteTitle, noteTags ]);
-
 
   // creating note  
-  const navigate =  useNavigate();
+  const navigate: NavigateFunction =  useNavigate();
 
   const triggerSubmit = (): void => {
     const submitEvt: Event = new Event('submit', {
@@ -123,8 +127,8 @@ const NewNote: React.FC = () => {
         <div>
           <input 
             className="bg-transparent font-newsreader font-medium h-full outline-none text-3xl w-full"
-            onChange={(evt) => setNoteTitle(evt.target.value)}
-            onKeyDown={handleTitleChange}
+            onChange={(evt: React.ChangeEvent<HTMLInputElement>) => handleTitleChange(evt)}
+            onKeyDown={handleTitleComplete}
             placeholder="Enter note tile"
             title="Note Title"
             type="text"
