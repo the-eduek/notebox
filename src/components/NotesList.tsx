@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { NoteItem, ViewType } from "../types";
+import { NoteItem } from "../types";
 import ViewContext from "../context/ViewContext";
 import NotePreview from "./NotePreview";
 
@@ -8,11 +8,13 @@ interface NotesListProps {
 }
 
 const NotesList: React.FC<NotesListProps> = ({ notesArray }: NotesListProps) => {
-  const noteView: ViewType = useContext(ViewContext);
+  const {
+    notesView
+  } = useContext(ViewContext);
 
   return (
     <>
-      { noteView === "grid"
+      { notesView === "grid"
         ? <div className="gap-4 grid grid-cols-[repeat(2,minmax(0,1fr))]">
             <div>
               { notesArray.filter((_, index) => (index % 2 === 0)).map((note, index) => (

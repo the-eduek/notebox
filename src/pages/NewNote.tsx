@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
+import NoteContext from '../context/NoteContext';
 import Nav from '../components/NavComponet';
 import Note from '../types/classes/note';
-import NoteContext from '../context/NoteContext';
 
 const NewNote: React.FC = () => {
   const {
@@ -38,7 +38,7 @@ const NewNote: React.FC = () => {
       const scrollHeight: number | undefined = textAreaRef.current?.scrollHeight;
       if (scrollHeight) textAreaRef.current?.style.setProperty('height', `${scrollHeight}px`);
     }
-  }, [textAreaRef, noteContent]);
+  }, [ noteContent ]);
 
   // creating note object
   const immediateTime = new Date();
@@ -56,7 +56,7 @@ const NewNote: React.FC = () => {
 
   const formElt = useRef<HTMLFormElement | null>(null);
 
-  const hanldleTagSubmit = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
+  const handleTagSubmit = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
     let trimmedInput: string = tagInput.trim();
     if (trimmedInput.startsWith('#')) trimmedInput = trimmedInput.slice(1);
 
@@ -84,8 +84,8 @@ const NewNote: React.FC = () => {
     evt.preventDefault();
 
     const newNoteTags: Array<string> = [...noteTags.filter(tagParam => tagParam !== tag)];
-    setNoteTags(newNoteTags);
     noteObj.tags = newNoteTags;
+    setNoteTags(newNoteTags);
   };
 
   // creating note  
@@ -169,7 +169,7 @@ const NewNote: React.FC = () => {
                  <input 
                   className="bg-transparent h-full outline-none my-1 py-1 w-full"
                   onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setTagInput(evt.target.value)}
-                  onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) => hanldleTagSubmit(evt)}
+                  onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) => handleTagSubmit(evt)}
                   placeholder="Enter a tag"
                   type="text"
                   value={tagInput}
@@ -191,6 +191,6 @@ const NewNote: React.FC = () => {
       </form>
     </section>
   );
-}
+};
 
 export default NewNote;
