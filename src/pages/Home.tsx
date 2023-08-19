@@ -37,7 +37,6 @@ const Home: React.FC = () => {
 
   const handleSearch = (evt: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchText(evt.target.value);
-
     const currentInput: string = evt.target.value.trim();
 
     if (currentInput.startsWith("#")) {
@@ -143,7 +142,6 @@ const Home: React.FC = () => {
             }
           </button>
         </div>
-
         
         { !!(pinnedNotesArray.length) && 
             <div className="pb-10">
@@ -177,8 +175,8 @@ const Home: React.FC = () => {
           </div>
       }
 
-      { !(notesArray.length) && !(pinnedNotesArray.length) && 
-          <p className="font-medium items-center py-16 text-center text-neutral-500 md:text-lg">no notes found 😕</p>
+      { !!(allNotes.length) && !(notesArray.length) && !(pinnedNotesArray.length) && 
+          <p className="font-medium items-center py-16 text-center text-neutral-500 md:text-lg">no note found 😕</p>
       }
 
       { showModal &&
