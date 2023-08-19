@@ -39,12 +39,8 @@
     @apply bg-neutral-50/50 font-cerebri font-light text-neutral-700;
   }
 
-  .prose p {
-    padding: 0 0 1rem;
-  }
-
-  .prose p:last-child {
-    padding: 0 0 0;
+  input[type="search"] {
+    -webkit-appearance: none;
   }
 
   @media (min-width: 1024px) {

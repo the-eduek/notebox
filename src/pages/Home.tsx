@@ -89,10 +89,10 @@ const Home: React.FC = () => {
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16 md:pt-28">
       <div className="flex items-center justify-between">
-        <h1 className="flex font-bold font-bricolage text-2xl lg:text-3xl">
+        <h1 className="flex font-bold font-bricolage text-3xl lg:text-4xl">
           notebox 
           
-          <span className="h-6 md:h-7 ml-2 w-6 md:w-7">
+          <span className="h-7 md:h-8 ml-2 w-7 md:w-8">
             <Notepad />
           </span>
         </h1>
@@ -103,7 +103,7 @@ const Home: React.FC = () => {
       </div>
 
       <ViewContext.Provider value={noteView}>
-        <div className="flex py-6 md:py-8">
+        <div className="flex py-8 md:py-10">
           <div className="flex-grow relative">
             <input 
               className="bg-transparent border border-neutral-300 h-full outline-none focus:outline-blue-300 pl-10 pr-4 py-2.5 rounded-md transition w-full"
@@ -127,17 +127,21 @@ const Home: React.FC = () => {
           </div>
 
           <button
-            className="border border-neutral-300 flex items-center ml-2 outline-none focus:outline-blue-300 p-2 rounded-md transition"
+            className="border border-neutral-300 flex items-center ml-2.5 outline-none focus:outline-blue-300 p-1.5 rounded-md transition"
             onClick={changeView}
             title={ noteView === 'grid' ? 'List View' : 'Grid View' }
             type="button"            
           >
             { noteView === 'grid'
-              ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-[1.375rem] w-[1.375rem]">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 20.5h3.5v-7h-17v7H12m-6-17H3.5v7h17v-7H11"/>
-                </svg>
-              : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-[1.375rem] w-[1.375rem]">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 13.5H3.5v7h7v-7H9M13.5 5V3.5h7v7h-7V9m-10-5.5h7v7h-7v-7Zm10 10h7v7h-7v-7Z"/>
+              ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-8 w-8">
+              <g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}>
+                <path d="M3.5 20.5v-7h17v7h-17ZM3.5 10.5v-7h17v7h-17Z"/>
+              </g>
+            </svg>
+              : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-8 w-8">
+                  <g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}>
+                    <path d="M3.5 3.5h7v7h-7v-7ZM3.5 13.5h7v7h-7v-7ZM13.5 3.5h7v7h-7v-7ZM13.5 13.5h7v7h-7v-7Z"/>
+                  </g>
                 </svg>
             }
           </button>

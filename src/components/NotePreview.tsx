@@ -27,7 +27,7 @@ const NotePreview: React.FC<NoteProps> = ({ note }: NoteProps) => {
           </h1>
         }
 
-        <p className="break-words text-sm">
+        <p className="break-words">
           { note.content.length > 151 ? `${note.content.slice(0, 151)}...` : note.content }
         </p>
 
@@ -36,7 +36,7 @@ const NotePreview: React.FC<NoteProps> = ({ note }: NoteProps) => {
               { note.tags.slice(0, 2).map((tag: string, index: number) => (
                   <li 
                     key={index}
-                    className="bg-neutral-200/80 break-all flex font-medium mr-2 last:mr-0 my-1 px-2 py-1.5 rounded-full text-xs text-neutral-600/[0.8625]" 
+                    className="bg-neutral-200/80 break-all flex font-medium mr-2 last:mr-0 my-1 px-2 py-1.5 rounded-full text-sm text-neutral-600/[0.8625]" 
                   >
                     <span className="text-neutral-600/80">#</span>
                     <span>{ tag }</span>
@@ -44,7 +44,7 @@ const NotePreview: React.FC<NoteProps> = ({ note }: NoteProps) => {
                 ))
               }
               { note.tags.slice(2).length > 0 &&
-                  <li className="bg-neutral-200/80 flex font-bold items-center my-1 px-2 py-1.5 rounded-full text-xs text-neutral-600/80">
+                  <li className="bg-neutral-200/80 flex font-bold items-center my-1 px-2 py-1.5 rounded-full text-sm text-neutral-600/80">
                     <span>+{ note.tags.slice(2).length }</span>
                   </li>
               } 
