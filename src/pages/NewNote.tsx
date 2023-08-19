@@ -132,7 +132,7 @@ const NewNote: React.FC = () => {
           />
         </div>
 
-        <p className="pb-5 pt-3.5 text-neutral-500 text-sm">
+        <p className="pb-5 pt-3.5 text-neutral-500">
           <span className="pr-1">🗓️</span>
           { noteObj.dateString }
         </p>
@@ -141,13 +141,13 @@ const NewNote: React.FC = () => {
           <ul className="flex flex-wrap items-center">
             { noteTags.map((tag: string, index: number) => (
                 <li
-                  className="bg-neutral-200/60 font-medium inline-flex items-center mr-2 last:mr-0 my-1 px-2 py-1 rounded-full text-sm text-neutral-600" 
+                  className="bg-neutral-200/60 font-medium inline-flex items-center mr-2 last:mr-0 my-1 px-2 py-1 rounded-full text-neutral-600" 
                   key={index}
                 >
                   <span className="text-neutral-500">#</span>
                   <span>{tag}</span>
                   <button
-                    className="bg-neutral-500/25 inline-flex h-4 items-center justify-center ml-2 p-0.5 rounded-full w-4"
+                    className="bg-neutral-500/25 inline-flex h-5 items-center justify-center ml-2 p-[3px] rounded-full w-45"
                     onClick={(evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => deleteTag(evt, tag)}
                     title="Delete Tag"
                     type="button"
@@ -155,7 +155,6 @@ const NewNote: React.FC = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="#636363" className="w-full h-full">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-
                   </button>
                 </li>
               ))
@@ -178,7 +177,7 @@ const NewNote: React.FC = () => {
 
         <div className="flex pt-5">
           <textarea
-            className="bg-transparent break-words min-h-[calc(100vh-21.5rem)] outline-none overflow-hidden resize-none w-full"
+            className="bg-transparent break-words min-h-[calc(100vh-21.5rem)] outline-none overflow-hidden resize-none text-lg w-full"
             onChange={handleContentChange}
             placeholder="Enter Note"
             ref={textAreaRef}

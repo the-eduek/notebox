@@ -89,10 +89,10 @@ const Home: React.FC = () => {
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16 md:pt-28">
       <div className="flex items-center justify-between">
-        <h1 className="flex font-bold font-bricolage text-3xl lg:text-4xl">
+        <h1 className="flex font-bold font-bricolage text-2xl lg:text-3xl">
           notebox 
           
-          <span className="h-7 md:h-8 ml-2 w-7 md:w-8">
+          <span className="h-6 md:h-7 ml-2 w-6 md:w-7">
             <Notepad />
           </span>
         </h1>
@@ -134,12 +134,12 @@ const Home: React.FC = () => {
           >
             { noteView === 'grid'
               ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-8 w-8">
-              <g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}>
+              <g stroke="#5d5d5d" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}>
                 <path d="M3.5 20.5v-7h17v7h-17ZM3.5 10.5v-7h17v7h-17Z"/>
               </g>
             </svg>
               : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-8 w-8">
-                  <g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}>
+                  <g stroke="#5d5d5d" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}>
                     <path d="M3.5 3.5h7v7h-7v-7ZM3.5 13.5h7v7h-7v-7ZM13.5 3.5h7v7h-7v-7ZM13.5 13.5h7v7h-7v-7Z"/>
                   </g>
                 </svg>
