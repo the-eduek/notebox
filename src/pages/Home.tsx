@@ -20,20 +20,18 @@ function Home () {
     if (noteView === 'grid') setNoteView('list');
     else setNoteView('grid');
   };
+  
+  const [ searchText, setSearchText ] = useState<string>("");
 
-  const sortedNotes: Array<NoteItem> = allNotes.sort((noteA, noteB) => {
-    const dateA = new Date(noteA.createdAt).getTime();
-    const dateB = new Date(noteB.createdAt).getTime();
+  const handleSearch = (evt: React.ChangeEvent<HTMLInputElement>): void => {
+    setSearchText(evt.target.value);
+  };
 
-    return dateB - dateA
-  }).filter(note => !pinnedNotes.some(pinned => pinned.createdAt === note.createdAt));
+  const sortedNotes: Array<NoteItem> = allNotes.filter(note => !pinnedNotes.some(pinnedNoteId => pinnedNoteId === note.id))
+    .sort((noteA, noteB) => noteB.id - noteA.id);
 
-  const sortedPinnedNotes: Array<NoteItem> = pinnedNotes.sort((noteA, noteB) => {
-    const dateA = new Date(noteA.createdAt).getTime();
-    const dateB = new Date(noteB.createdAt).getTime();
-
-    return dateB - dateA
-  });
+  const sortedPinnedNotes: Array<NoteItem> = allNotes.filter(note => pinnedNotes.find(noteId => noteId === note.id))
+    .sort((noteA, noteB) => noteB.id - noteA.id);
 
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16 md:pt-28">
@@ -48,7 +46,6 @@ function Home () {
 
         <MainButton />
       </div>
-      
 
       <ViewContext.Provider value={noteView}>
         <div className="flex py-6 md:py-8">
@@ -57,8 +54,10 @@ function Home () {
               className="bg-transparent border border-neutral-300 h-full outline-none focus:outline-blue-300 pl-10 pr-4 py-2.5 rounded-md w-full"
               type="search"
               id="searchInput"
+              onChange={(evt: React.ChangeEvent<HTMLInputElement>) => handleSearch(evt)}
               placeholder="search notes"
               title="Search Notes"
+              value={searchText}
             />
 
             <label 
@@ -88,26 +87,35 @@ function Home () {
           </button>
         </div>
 
-        <div className="pb-10">
-          <p className="flex font-medium items-center pb-4">
-            <span className="h-5 mr-1 w-5">
-              <PushPin />
-            </span> pinned notes
-          </p>
+        
+        { !!(sortedPinnedNotes.length) && 
+            <div className="pb-10">
+              <p className="flex font-medium items-center pb-4">
+                <span className="h-5 mr-1 w-5">
+                  <PushPin />
+                </span> pinned notes
+              </p>
 
-          <NotesList notesArray={sortedPinnedNotes} />
-        </div>
+              <NotesList notesArray={sortedPinnedNotes} />
+            </div>
+        }
 
         <div className="pb-16">
-          <p className="flex font-medium items-center pb-4">
-            <span className="h-5 mr-1 w-5">
-              <Folder />
-            </span> other notes
-          </p>
+          { !!(sortedPinnedNotes.length) && 
+              <p className="flex font-medium items-center pb-4">
+                <span className="h-5 mr-1 w-5">
+                  <Folder />
+                </span> other notes
+              </p>
+          }
 
           <NotesList notesArray={sortedNotes} />
         </div>
       </ViewContext.Provider>
+
+      { !(allNotes.length) && 
+          <p className="font-medium text-center text-neutral-500 text-lg">no notes in your notebox yet✍🏾</p>
+      }
     </section>
   )
 }

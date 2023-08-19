@@ -7,8 +7,7 @@ import NoteContext from '../context/NoteContext';
 const NewNote: React.FC = () => {
   const {
     addNote,
-    pinnedNotes,
-    pinNote
+    togglePinNote
   } = useContext(NoteContext)
 
   const [ noteTitle, setNoteTitle ] = useState<string>("");
@@ -40,7 +39,7 @@ const NewNote: React.FC = () => {
   const noteObj = new Note(
     immediateTime,
     noteContent,
-    noteTitle,
+    noteTitle
   );
   
   // editing note tags
@@ -84,6 +83,13 @@ const NewNote: React.FC = () => {
       bubbles: true
     });
     formElt.current?.dispatchEvent(submitEvt);
+  };
+
+  const setSubmitAction = (checkPinned?: boolean): void => {
+    triggerSubmit();
+
+    // pin note if pin was clicked
+    if (checkPinned) togglePinNote(noteObj, false);
     navigate("/");
   };
 
@@ -92,23 +98,12 @@ const NewNote: React.FC = () => {
     if (noteObj.content.trim()) addNote(noteObj);
   };
 
-  // pin note
-  const [ isPinned, setIsPinned ] = useState<boolean>(false);
-  const handlePinNote = () => {
-    pinNote(noteObj);
-
-    const pin = pinnedNotes.find(note => note.createdAt === note.createdAt);
-    if (pin) setIsPinned(true);
-    else setIsPinned(false);
-  };
-
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">
       <div className="pb-14 pt-12">
         <Nav 
-          triggerSubmit={triggerSubmit}
-          handlePinNote={handlePinNote}
-          isPinned={isPinned}
+          triggerSubmit={setSubmitAction}
+          currentNote={noteObj}
         />
       </div>
 

@@ -15,15 +15,11 @@ const NotePage: React.FC = () => {
   const {
     allNotes,
     addNote,
-    pinnedNotes,
-    pinNote,
     deleteNote
   } = useContext(NoteContext)
 
-  const note = allNotes.find(note => {
-    if (noteId) {
-      return Number(noteId) === new Date(note.createdAt).getTime();
-    }
+  const note = allNotes.find(noteParam => {
+    if (noteId) return Number(noteId) === noteParam.id;
   });
 
   let noteObj: Note;
@@ -120,7 +116,7 @@ const NotePage: React.FC = () => {
     console.log(noteObj)
 
     if (noteObj.content) {
-      const canUpdate = allNotes.find(note => note.createdAt === note.createdAt);
+      const canUpdate = allNotes.find(note => note.id === note.id);
       
       console.log(noteObj)
       if (!canUpdate) addNote(noteObj);
@@ -132,18 +128,7 @@ const NotePage: React.FC = () => {
     }
   }
 
-  // pin note
-  const pin = pinnedNotes.find(note => note.createdAt === noteObj.createdAt);
-
-  const [ isPinned, setIsPinned ] = useState<boolean>(!!pin);
-  const handlePinNote = () => {
-    pinNote(noteObj);
-
-    const pin = pinnedNotes.find(note => note.createdAt === noteObj.createdAt);
-    if (pin) setIsPinned(true);
-    else setIsPinned(false);
-  };
-
+  // show delete modal
   const [ showModal, setShowModal ] = useState<boolean>(false);
 
   const toggleModal = (): void => {
@@ -164,13 +149,12 @@ const NotePage: React.FC = () => {
         <div className="flex-grow">
           <Nav 
             triggerSubmit={triggerSubmitAndClose}
-            handlePinNote={handlePinNote}
-            isPinned={isPinned}
+            currentNote={noteObj!}
           />
         </div>
 
         <button 
-          className={`${ editing && 'bg-neutral-500/[0.25]'}  h-10 ml-5 p-1.5 rounded-full transition w-10`}
+          className={`${ editing && 'bg-neutral-500/[0.25]'} h-10 ml-5 p-1.5 rounded-full transition w-10`}
           onClick={editPage}
           title="Edit Note"
           type="button"
@@ -179,7 +163,7 @@ const NotePage: React.FC = () => {
         </button>
 
         <button 
-          className={`${ showModal && 'bg-neutral-500/[0.25]'}  h-10 ml-5 p-1.5 rounded-full transition w-10`}
+          className={`${ showModal && 'bg-neutral-500/[0.25]'} h-10 ml-5 p-1.5 rounded-full transition w-10`}
           onClick={toggleModal}
           title="Delete Note"
           type="button"

@@ -4,6 +4,7 @@ export interface NoteItem {
   title?: string;
 
   readonly createdAt: Date;
+  readonly id: number;
 }
 
 export type ViewType = 'grid' | 'list';
