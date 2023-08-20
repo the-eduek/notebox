@@ -64,9 +64,9 @@ const NotePage: React.FC = () => {
   const handleTagSubmit = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
     let trimmedInput: string = tagInput.trim();
     let newTagsArray: Array<string> = noteObj.tags!;
-    if (trimmedInput.startsWith('#')) trimmedInput = trimmedInput.slice(1);
-
     const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === 'enter' || evt.key.toLowerCase() === 'tab' || evt.key === ' ';
+
+    if (trimmedInput.startsWith('#')) trimmedInput = trimmedInput.slice(1);
 
     if (keyToCreate && trimmedInput.length > 1 && trimmedInput.length < 21 && !noteTags.includes(trimmedInput)) {
       newTagsArray = [...noteObj.tags!.concat(trimmedInput)];
@@ -102,7 +102,7 @@ const NotePage: React.FC = () => {
       const scrollHeight: number | undefined = textAreaRef.current?.scrollHeight;
       if (scrollHeight) textAreaRef.current?.style.setProperty('height', `${scrollHeight}px`);
     }
-  }, [textAreaRef, noteContent]);
+  }, [ noteContent ]);
 
   // delete note
   const [ showModal, setShowModal ] = useState<boolean>(false);

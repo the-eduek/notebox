@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
+import Note from '../types/classes/note';
 import NoteContext from '../context/NoteContext';
 import Nav from '../components/NavComponet';
-import Note from '../types/classes/note';
 
 const NewNote: React.FC = () => {
   const {
@@ -10,6 +10,7 @@ const NewNote: React.FC = () => {
     togglePinNote
   } = useContext(NoteContext)
 
+  // note title
   const [ noteTitle, setNoteTitle ] = useState<string>("");
 
   const handleTitleChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
@@ -40,15 +41,6 @@ const NewNote: React.FC = () => {
     }
   }, [ noteContent ]);
 
-  // creating note object
-  const immediateTime = new Date();
-
-  const noteObj = new Note(
-    immediateTime,
-    noteContent,
-    noteTitle,
-    []
-  );
   
   // editing note tags
   const [ tagInput, setTagInput] = useState<string>("");
@@ -57,27 +49,24 @@ const NewNote: React.FC = () => {
   const formElt = useRef<HTMLFormElement | null>(null);
 
   const handleTagSubmit = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
-    let trimmedInput: string = tagInput.trim();
-    if (trimmedInput.startsWith('#')) trimmedInput = trimmedInput.slice(1);
-
+    let trimmedInput: string = tagInput.trim();    
+    let newTagsArray: Array<string> = noteObj.tags!;
     const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === 'enter' || evt.key.toLowerCase() === 'tab' || evt.key === ' ';
 
+    if (trimmedInput.startsWith('#')) trimmedInput = trimmedInput.slice(1);
+
     if (keyToCreate && trimmedInput.length > 1 && trimmedInput.length < 21 && !(noteTags.includes(trimmedInput))) {
-      evt.preventDefault();
-      setNoteTags(prevState => [...prevState, trimmedInput]);
+      newTagsArray = [...noteObj.tags!.concat(trimmedInput)];
       setTagInput("");
     }
 
     if (evt.key.toLowerCase() === "backspace" && !tagInput.length && noteTags.length) {
-      evt.preventDefault();
-      const newNoteTag: Array<string> = [...noteTags];
-      const poppedTag = newNoteTag.pop();
-  
-      setNoteTags(newNoteTag);
-      setTagInput(poppedTag!);
+      newTagsArray = [...noteObj.tags!];
+      setTagInput(newTagsArray.pop()!);
     }
 
-    noteObj.tags = noteTags;
+    noteObj.tags = newTagsArray;
+    setNoteTags(newTagsArray);
   };
 
   const deleteTag = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>, tag: string): void => {
@@ -87,8 +76,16 @@ const NewNote: React.FC = () => {
     noteObj.tags = newNoteTags;
     setNoteTags(newNoteTags);
   };
+  
+  // creating note and note object
+  const immediateTime = new Date();
 
-  // creating note  
+  const noteObj = new Note(
+    immediateTime,
+    noteContent,
+    noteTitle,
+    noteTags
+  );
   const navigate: NavigateFunction =  useNavigate();
 
   const triggerSubmit = (): void => {
@@ -148,10 +145,10 @@ const NewNote: React.FC = () => {
                   className="bg-neutral-200/60 font-medium inline-flex items-center mr-2 last:mr-0 my-1 px-2 py-1 rounded-full text-neutral-600" 
                   key={index}
                 >
-                  <span className="text-neutral-500">#</span>
+                  <span className="text-neutral-500/80">#</span>
                   <span>{tag}</span>
                   <button
-                    className="bg-neutral-500/25 inline-flex h-5 items-center justify-center ml-2 p-[3px] rounded-full w-45"
+                    className="bg-neutral-500/25 inline-flex h-5 items-center justify-center ml-2 p-[3px] rounded-full w-5"
                     onClick={(evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => deleteTag(evt, tag)}
                     title="Delete Tag"
                     type="button"
