@@ -61,6 +61,7 @@ const NewNote: React.FC = () => {
   const formElt = useRef<HTMLFormElement | null>(null);
 
   const handleTagInput = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
+    evt.preventDefault();
     let currentText = evt.currentTarget.value.trim();
     let newTagsArray: Array<string> = noteObj.tags!;
 
@@ -177,7 +178,7 @@ const NewNote: React.FC = () => {
               <li className="flex flex-1 min-w-[5.5rem]">
                  <input 
                   className="bg-transparent h-full outline-none my-1 py-1 w-full"
-                  onInput={(evt: React.FormEvent<HTMLInputElement>) => setTagInput(evt.currentTarget.value)}
+                  onInput={(evt: React.FormEvent<HTMLInputElement>) => setTagInput(evt.currentTarget.value.trim())}
                   onKeyUp={handleTagInput}
                   placeholder="Enter a tag"
                   title="Note Tags"
