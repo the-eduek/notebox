@@ -79,7 +79,6 @@ const NotePage: React.FC = () => {
   const keysToCreate: Array<string> = [ ",", "tab", "enter", " " ];
 
   const handleTagInput = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
-    evt.preventDefault();
     let currentText = evt.currentTarget.value.trim();
     let newTagsArray: Array<string> = noteObj.tags!;
 
@@ -90,9 +89,7 @@ const NotePage: React.FC = () => {
       evt.preventDefault();
       newTagsArray = [...noteObj.tags!.concat(currentText)];
       setTagInput("");
-    }
-
-    if (evt.key.toLowerCase() === "backspace" && !tagInput.length && noteTags.length) {
+    } else if (evt.key.toLowerCase() === "backspace" && !tagInput.length && noteTags.length) {
       evt.preventDefault();
       newTagsArray = [...noteObj.tags!];
       setTagInput(newTagsArray.pop()!);

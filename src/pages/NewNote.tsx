@@ -61,7 +61,7 @@ const NewNote: React.FC = () => {
   const formElt = useRef<HTMLFormElement | null>(null);
 
   const handleTagInput = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
-    let currentText = evt.currentTarget.value.trim();
+    let currentText = evt.currentTarget.value;
     let newTagsArray: Array<string> = noteObj.tags!;
 
     if (currentText.startsWith('#')) currentText = currentText.slice(1);
@@ -71,9 +71,7 @@ const NewNote: React.FC = () => {
       evt.preventDefault();
       newTagsArray = [...noteObj.tags!.concat(currentText)];
       setTagInput("");
-    }
-
-    if (evt.key.toLowerCase() === "backspace" && !tagInput.length && noteTags.length) {
+    } else if (evt.key === "Backspace" && !tagInput.length && noteTags.length) {
       evt.preventDefault();
       newTagsArray = [...noteObj.tags!];
       setTagInput(newTagsArray.pop()!);
@@ -179,7 +177,7 @@ const NewNote: React.FC = () => {
               <li className="flex flex-1 min-w-[5.5rem]">
                  <input 
                   className="bg-transparent h-full outline-none my-1 py-1 w-full"
-                  onInput={(evt: React.FormEvent<HTMLInputElement>) => setTagInput(evt.currentTarget.value.trim())}
+                  onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setTagInput(evt.target.value.trim())}
                   onKeyDown={handleTagInput}
                   placeholder="Enter a tag"
                   title="Note Tags"
