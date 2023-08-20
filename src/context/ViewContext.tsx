@@ -17,7 +17,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }: ViewProv
   let localView: ViewType;
   const isLocal: string | null = localStorage.getItem("localView");
 
-  if (!isLocal) localView = "list";
+  if (!isLocal || !['grid', 'list'].includes(isLocal)) localView = "list";
   else localView = isLocal as ViewType;
 
   const [ notesView, setNotesView ] = useState<ViewType>(localView);
