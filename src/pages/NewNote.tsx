@@ -137,7 +137,7 @@ const NewNote: React.FC = () => {
           <textarea 
             className="bg-transparent font-newsreader font-medium h-full outline-none overflow-hidden resize-none text-3xl md:text-4xl w-full"
             onChange={handleTitleChange}
-            onKeyDown={handleTitleComplete}
+            onKeyUp={handleTitleComplete}
             placeholder="Note title"
             ref={noteTitleRef}
             title="Note Title"
@@ -178,7 +178,7 @@ const NewNote: React.FC = () => {
                  <input 
                   className="bg-transparent h-full outline-none my-1 py-1 w-full"
                   onInput={(evt: React.FormEvent<HTMLInputElement>) => setTagInput(evt.currentTarget.value)}
-                  onKeyDown={handleTagInput}
+                  onKeyUp={handleTagInput}
                   placeholder="Enter a tag"
                   title="Note Tags"
                   type="text"
