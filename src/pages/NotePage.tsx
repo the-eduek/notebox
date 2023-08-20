@@ -17,6 +17,7 @@ const NotePage: React.FC = () => {
 
   // get current note
   const { noteId } = useParams();
+  const navigate =  useNavigate();
 
   const note = allNotes.filter(noteParam => {
     if (noteId) return Number(noteId) === noteParam.id;
@@ -31,7 +32,7 @@ const NotePage: React.FC = () => {
       note.title,
       note.tags
     );
-  }
+  } else navigate("/");
 
   // note title
   const [ noteTitle, setNoteTitle ] = useState<string>(noteObj!.title ?? "");
@@ -75,16 +76,17 @@ const NotePage: React.FC = () => {
   // note tags
   const [ tagInput, setTagInput] = useState<string>("");
   const [ noteTags, setNoteTags ] = useState<Array<string>>(noteObj!.tags ?? []);
+  const keysToCreate: Array<string> = [ ",", "tab", "enter", " " ];
 
-  const handleTagSubmit = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
-    let trimmedInput: string = tagInput.trim();
+  const handleTagInput = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
+    let currentText = evt.currentTarget.value.trim();
     let newTagsArray: Array<string> = noteObj.tags!;
-    const keyToCreate: boolean = evt.key === ',' || evt.key.toLowerCase() === 'enter' || evt.key.toLowerCase() === 'tab' || evt.key === ' ';
 
-    if (trimmedInput.startsWith('#')) trimmedInput = trimmedInput.slice(1);
+    if (currentText.startsWith('#')) currentText = currentText.slice(1);
+    const canCreate: boolean = keysToCreate.includes(evt.key.toLowerCase());
 
-    if (keyToCreate && trimmedInput.length > 1 && trimmedInput.length < 21 && !noteTags.includes(trimmedInput)) {
-      newTagsArray = [...noteObj.tags!.concat(trimmedInput)];
+    if (canCreate && currentText.length > 1 && currentText.length < 21 && !(noteTags.includes(currentText))) {
+      newTagsArray = [...noteObj.tags!.concat(currentText)];
       setTagInput("");
     }
 
@@ -142,8 +144,7 @@ const NotePage: React.FC = () => {
     if (!editing) noteContentRef.current?.focus();
   };
 
-  // editing note  
-  const navigate =  useNavigate();
+  // editing note
   const formElt = useRef<HTMLFormElement | null>(null);
 
   const triggerSubmit = (): void => {
@@ -238,17 +239,17 @@ const NotePage: React.FC = () => {
             }
 
             { noteObj!.tags && editing &&
-                <div className="flex flex-1 min-w-[5.5rem]">
+                <li className="flex flex-1 min-w-[5.5rem]">
                   <input 
                     className="bg-transparent h-full outline-none my-1 py-1 w-full"
-                    onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setTagInput(evt.target.value)}
-                    onKeyDown={handleTagSubmit}
+                    onInput={(evt: React.FormEvent<HTMLInputElement>) => setTagInput(evt.currentTarget.value)}
+                    onKeyDown={handleTagInput}
                     placeholder="Enter a tag"
                     title="Note Tags"
                     type="text"
                     value={tagInput}
                   />
-                </div>
+                </li>
             }            
           </ul>
         </div>
