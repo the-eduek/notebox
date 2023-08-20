@@ -35,21 +35,36 @@ const NotePage: React.FC = () => {
 
   // note title
   const [ noteTitle, setNoteTitle ] = useState<string>(noteObj!.title ?? "");
+  const noteTitleRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const handleTitleChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    const newTitle = evt.target.value;
-    noteObj.title = newTitle.trim();
+  const handleTitleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    let newTitle = evt.target.value;
+    if ((noteTitle.charAt(noteTitle.length - 1) === ' ') && (newTitle.charAt(newTitle.length - 1) === ' ')) {
+      newTitle = noteTitle
+    }
+    if (newTitle.length > 100) newTitle = newTitle.slice(0, 101);
+    noteObj.title = newTitle;
     setNoteTitle(newTitle);
+
     if (editing === true) triggerSubmit();
   };
 
-  const handleTitleComplete = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (evt.key.toLowerCase() === "enter") textAreaRef.current?.focus();
+  const handleTitleComplete = (evt: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (evt.key.toLowerCase() === "enter") noteContentRef.current?.focus();
   };
 
+  useEffect(() => {
+    if (noteTitleRef.current) {
+      noteTitleRef.current.style.height = `0px`;
+      const scrollHeight: number = noteTitleRef.current.scrollHeight;
+      if (scrollHeight) noteTitleRef.current.style.setProperty('height', `${scrollHeight}px`);
+    }
+  }, [ noteTitle ]);
+
   // note content
-  const [ noteContent, setNoteContent ] = useState<string>(noteObj!.content);
-  
+  const [ noteContent, setNoteContent ] = useState<string>(noteObj!.content);  
+  const noteContentRef =  useRef<HTMLTextAreaElement | null>(null);
+
   const handleContentChange = (evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const newText = evt.target.value;
     noteObj.content = newText;
@@ -94,13 +109,10 @@ const NotePage: React.FC = () => {
     }
   };
 
-  // resize text area automatically
-  const textAreaRef =  useRef<HTMLTextAreaElement | null>(null);
-
   useEffect(() => {
-    if (textAreaRef) {
-      const scrollHeight: number | undefined = textAreaRef.current?.scrollHeight;
-      if (scrollHeight) textAreaRef.current?.style.setProperty('height', `${scrollHeight}px`);
+    if (noteContentRef) {
+      const scrollHeight: number | undefined = noteContentRef.current?.scrollHeight;
+      if (scrollHeight) noteContentRef.current?.style.setProperty('height', `${scrollHeight}px`);
     }
   }, [ noteContent ]);
 
@@ -127,7 +139,7 @@ const NotePage: React.FC = () => {
 
   const editPage = (): void => {
     setEditing(!editing);
-    if (!editing) textAreaRef.current?.focus();
+    if (!editing) noteContentRef.current?.focus();
   };
 
   // editing note  
@@ -185,13 +197,13 @@ const NotePage: React.FC = () => {
         ref={formElt}
       >
         <div>
-          <input 
-            className="bg-transparent font-newsreader font-medium h-full outline-none text-3xl md:text-4xl w-full"
-            onChange={(evt: React.ChangeEvent<HTMLInputElement>) => handleTitleChange(evt)}
-            onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) => handleTitleComplete(evt)}
+          <textarea 
+            className="bg-transparent font-newsreader font-medium h-full outline-none overflow-hidden resize-none text-3xl md:text-4xl w-full"
+            onChange={handleTitleChange}
+            onKeyDown={handleTitleComplete}
             placeholder="Note title"
+            ref={noteTitleRef}
             title="Note Title"
-            type="text"
             value={noteTitle}
             readOnly={!editing}
           />
@@ -230,8 +242,9 @@ const NotePage: React.FC = () => {
                   <input 
                     className="bg-transparent h-full outline-none my-1 py-1 w-full"
                     onChange={(evt: React.ChangeEvent<HTMLInputElement>) => setTagInput(evt.target.value)}
-                    onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) => handleTagSubmit(evt)}
+                    onKeyDown={handleTagSubmit}
                     placeholder="Enter a tag"
+                    title="Note Tags"
                     type="text"
                     value={tagInput}
                   />
@@ -245,8 +258,9 @@ const NotePage: React.FC = () => {
             className="bg-transparent break-words min-h-[calc(100vh-21.5rem)] outline-none overflow-hidden resize-none text-lg w-full"
             onChange={handleContentChange}
             placeholder="Type Note"
-            ref={textAreaRef}
+            ref={noteContentRef}
             readOnly={!editing}
+            title="Note Content"
             value={noteContent}
           />
         </div>
