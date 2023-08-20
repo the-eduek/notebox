@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import Note from '../types/classes/note';
 import NoteContext from '../context/NoteContext';
-import Nav from '../components/NavComponet';
+import Nav from '../components/NavComponent';
 
 const NewNote: React.FC = () => {
   const {
@@ -78,6 +78,7 @@ const NewNote: React.FC = () => {
   };
   
   // creating note and note object
+  const navigate: NavigateFunction = useNavigate();
   const immediateTime = new Date();
 
   const noteObj = new Note(
@@ -86,7 +87,6 @@ const NewNote: React.FC = () => {
     noteTitle,
     noteTags
   );
-  const navigate: NavigateFunction =  useNavigate();
 
   const triggerSubmit = (): void => {
     const submitEvt: Event = new Event('submit', {
@@ -126,7 +126,7 @@ const NewNote: React.FC = () => {
             className="bg-transparent font-newsreader font-medium h-full outline-none text-3xl w-full"
             onChange={(evt: React.ChangeEvent<HTMLInputElement>) => handleTitleChange(evt)}
             onKeyDown={handleTitleComplete}
-            placeholder="Enter note tile"
+            placeholder="Note title"
             title="Note Title"
             type="text"
             value={noteTitle}
@@ -180,7 +180,7 @@ const NewNote: React.FC = () => {
           <textarea
             className="bg-transparent break-words min-h-[calc(100vh-21.5rem)] outline-none overflow-hidden resize-none text-lg w-full"
             onChange={handleContentChange}
-            placeholder="Enter Note"
+            placeholder="Type Note"
             ref={textAreaRef}
             value={noteContent}
           />

@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ModalAction } from "../types";
-import NoteContext from '../context/NoteContext';
 import Note from "../types/classes/note";
-import Nav from '../components/NavComponet';
+import NoteContext from '../context/NoteContext';
 import Bin from '../components/images/Bin';
-import WritingHand from '../components/images/WritingHand';
 import DeleteModal from '../components/DeleteModal';
+import Nav from '../components/NavComponent';
+import WritingHand from '../components/images/WritingHand';
 
 const NotePage: React.FC = () => {
   const {
@@ -189,7 +189,7 @@ const NotePage: React.FC = () => {
             className="bg-transparent font-newsreader font-medium h-full outline-none text-3xl md:text-4xl w-full"
             onChange={(evt: React.ChangeEvent<HTMLInputElement>) => handleTitleChange(evt)}
             onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) => handleTitleComplete(evt)}
-            placeholder="Enter note tile"
+            placeholder="Note title"
             title="Note Title"
             type="text"
             value={noteTitle}
@@ -244,7 +244,7 @@ const NotePage: React.FC = () => {
           <textarea
             className="bg-transparent break-words min-h-[calc(100vh-21.5rem)] outline-none overflow-hidden resize-none text-lg w-full"
             onChange={handleContentChange}
-            placeholder="Enter Note"
+            placeholder="Type Note"
             ref={textAreaRef}
             readOnly={!editing}
             value={noteContent}
