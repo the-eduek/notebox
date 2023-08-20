@@ -61,7 +61,6 @@ const NewNote: React.FC = () => {
   const formElt = useRef<HTMLFormElement | null>(null);
 
   const handleTagInput = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
-    evt.preventDefault();
     let currentText = evt.currentTarget.value.trim();
     let newTagsArray: Array<string> = noteObj.tags!;
 
@@ -69,11 +68,13 @@ const NewNote: React.FC = () => {
     const canCreate: boolean = keysToCreate.includes(evt.key.toLowerCase());
 
     if (canCreate && currentText.length > 1 && currentText.length < 21 && !(noteTags.includes(currentText))) {
+      evt.preventDefault();
       newTagsArray = [...noteObj.tags!.concat(currentText)];
       setTagInput("");
     }
 
     if (evt.key.toLowerCase() === "backspace" && !tagInput.length && noteTags.length) {
+      evt.preventDefault();
       newTagsArray = [...noteObj.tags!];
       setTagInput(newTagsArray.pop()!);
     }
@@ -138,7 +139,7 @@ const NewNote: React.FC = () => {
           <textarea 
             className="bg-transparent font-newsreader font-medium h-full outline-none overflow-hidden resize-none text-3xl md:text-4xl w-full"
             onChange={handleTitleChange}
-            onKeyUp={handleTitleComplete}
+            onKeyDown={handleTitleComplete}
             placeholder="Note title"
             ref={noteTitleRef}
             title="Note Title"
@@ -179,7 +180,7 @@ const NewNote: React.FC = () => {
                  <input 
                   className="bg-transparent h-full outline-none my-1 py-1 w-full"
                   onInput={(evt: React.FormEvent<HTMLInputElement>) => setTagInput(evt.currentTarget.value.trim())}
-                  onKeyUp={handleTagInput}
+                  onKeyDown={handleTagInput}
                   placeholder="Enter a tag"
                   title="Note Tags"
                   type="text"
