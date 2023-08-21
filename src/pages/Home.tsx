@@ -86,8 +86,8 @@ const Home: React.FC = () => {
 
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16 md:pt-28">
-      <div className="flex items-center justify-between">
-        <h1 className="flex font-bold font-bricolage text-2xl lg:text-3xl">
+      <div className="flex items-center md:items-end justify-between">
+        <h1 className="flex font-bold font-bricolage md:my-[13.5px] text-2xl md:text-[2rem]">
           notebox 
           
           <span className="h-6 md:h-7 ml-2 w-6 md:w-7">

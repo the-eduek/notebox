@@ -42,7 +42,7 @@ const TagsModal: React.FC<TagsModalProps> = ({ toggleModal, triggerTagSearch }: 
         <div className="overflow-y-scroll sm:w-3/5 md:h-4/5 md:rounded">
           <div className="bg-neutral-50 flex-col min-h-full px-8 sm:px-12 py-16 sm:py-20 md:pt-32 md:rounded-lg">
             <div className="flex items-center justify-between pb-8 md:pb-14">
-              <h1 className="flex font-bold font-bricolage text-2xl lg:text-3xl">all tags</h1>
+              <h1 className="flex font-bold font-bricolage text-2xl md:text-[2rem]">all tags</h1>
 
               <button
                 className="border border-neutral-300 h-8 p-1.5 rounded-full text-red-500 w-8"
