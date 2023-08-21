@@ -3,10 +3,11 @@ import { NoteItem } from "../types";
 import { Link } from "react-router-dom";
 import ViewContext from "../context/ViewContext";
 import NoteContext from "../context/NoteContext";
-import MainButton from "../components/MainButton";
+import BottomNav from "../components/BottomNav";
 import NotesList from "../components/NotesList";
 import Notepad from "../components/images/Notepad";
 import TagsModal from "../components/TagsModal";
+import SearchComponent from "../components/SearchComponent";
 
 const Home: React.FC = () => {
   const {
@@ -20,37 +21,34 @@ const Home: React.FC = () => {
     updateView
   } = useContext(ViewContext);
 
-  // searching and sorting
-  const searchRef = useRef<HTMLInputElement | null>(null);
-
+  // sorting
   const notes: Array<NoteItem> = allNotes.filter(note => !pinnedNotes.some(pinnedNoteId => pinnedNoteId === note.id))
     .sort((noteX, noteY) => noteY.id - noteX.id);
 
   const pinned: Array<NoteItem> = allNotes.filter(note => pinnedNotes.filter(noteId => noteId === note.id)[0])
     .sort((noteX, noteY) => noteY.id - noteX.id);
       
-  const [ searchText, setSearchText ] = useState<string>("");
+  // const [ searchText, setSearchText ] = useState<string>("");
   const [ notesArray, setNotesArray ] = useState<Array<NoteItem>>(notes);
   const [ pinnedNotesArray, setPinnedNotesArray ] = useState<Array<NoteItem>>(pinned);
 
-  const handleSearch = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    setSearchText(evt.target.value);
-    const currentInput: string = evt.target.value.trim();
+  const handleSearch = (searchText: string): void => {
+    searchText = searchText.trim();
 
-    if (currentInput.startsWith("#")) {
+    if (searchText.startsWith("#")) {
       const newNotesArray: Array<NoteItem> = notes.filter(note => {
-        return !!(note.tags?.filter(tag => tag.includes(currentInput.slice(1))).length)
+        return !!(note.tags?.filter(tag => tag.includes(searchText.slice(1))).length)
       });
       setNotesArray(newNotesArray);
 
       const newPinnedNotesArray: Array<NoteItem> = pinned.filter(note => {
-        return !!(note.tags?.filter(tag => tag.includes(currentInput.slice(1))).length)
+        return !!(note.tags?.filter(tag => tag.includes(searchText.slice(1))).length)
       });
       setPinnedNotesArray(newPinnedNotesArray);
     } else {
-      const newNotesArray: Array<NoteItem> = searchFn(currentInput, notes);
+      const newNotesArray: Array<NoteItem> = searchFn(searchText, notes);
       setNotesArray(newNotesArray);
-      const newPinnedNotesArray: Array<NoteItem> = searchFn(currentInput, pinned);
+      const newPinnedNotesArray: Array<NoteItem> = searchFn(searchText, pinned);
       setPinnedNotesArray(newPinnedNotesArray);
     }
   };
@@ -67,6 +65,7 @@ const Home: React.FC = () => {
 
   // all tags modal
   const [ showModal, setShowModal ] = useState<boolean>(false);
+  const searchRef = useRef<HTMLInputElement | null>(null);
 
   const toggleModal = (): void => {
     setShowModal(!showModal);
@@ -76,11 +75,14 @@ const Home: React.FC = () => {
   };
 
   const triggerTagSearch = (tag: string): void => {
-    if (searchRef.current) {
+    if (searchRef.current) {      
       searchRef.current.value = `#${tag}`;
-      handleSearch({
-        target: searchRef.current
-      } as React.ChangeEvent<HTMLInputElement> );
+      const inputEvt: InputEvent = new InputEvent("input", {
+        bubbles: true,
+      });
+
+      searchRef.current.dispatchEvent(inputEvt);
+      searchRef.current.focus();
     }
   };
 
@@ -95,33 +97,16 @@ const Home: React.FC = () => {
           </span>
         </h1>
 
-        <MainButton 
+        <BottomNav 
           triggerTagsModal={toggleModal}
         />
       </div>
 
       <div className="flex py-8 md:py-10">
-        <div className="flex-grow relative">
-          <input 
-            className="bg-transparent border border-neutral-300 h-full outline-none focus:outline-blue-300 pl-10 pr-4 py-2.5 rounded-md transition w-full"
-            type="search"
-            id="searchInput"
-            onChange={(evt: React.ChangeEvent<HTMLInputElement>) => handleSearch(evt)}
-            placeholder="search notes"
-            ref={searchRef}
-            title="Search Notes"
-            value={searchText}
-          />
-
-          <label 
-            htmlFor="searchInput"
-            className="absolute left-3 top-[calc(50%-0.65rem)]"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-            </svg>
-          </label>
-        </div>
+        <SearchComponent 
+          handleSearch={handleSearch}
+          ref={searchRef}
+        />
 
         <button
           className="border border-neutral-300 flex items-center ml-2.5 outline-none focus:outline-blue-300 p-1.5 rounded-md transition"
