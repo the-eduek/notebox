@@ -112,7 +112,8 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProv
     const canEditIndex: number = allNotes.findIndex(noteParam => noteParam.id === note.id);
 
     if (canEditIndex !== -1) {
-      const newAllNotes = [...allNotes.filter((noteParam) => noteParam.id !== note.id), note]
+      const newAllNotes = [...allNotes];
+      newAllNotes.splice(canEditIndex, 1, note);
 
       setAllNotes(newAllNotes);
       setLocalArray<NoteItem>("localNotes", newAllNotes);
@@ -130,9 +131,7 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProv
   };
 
   // all tags
-  const allTags = allNotes.map(note => note.tags ?? [])  
-      .flat()
-      .filter((tag, index, tagsArray) => tagsArray.indexOf(tag) === index);
+  const allTags = [...new Set(allNotes.flatMap(note => note.tags ?? []))];
 
   return (
     <NoteContext.Provider 
