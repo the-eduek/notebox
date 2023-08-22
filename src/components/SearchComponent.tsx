@@ -18,7 +18,7 @@ const SearchComponent = forwardRef<HTMLInputElement, SearchComponentProps>(
     return (
       <div className="flex-grow min-h-full relative">
         <input
-          className={`bg-transparent border border-neutral-300 h-full outline-none focus:outline-blue-300 pl-10 pr-4 py-2.5 rounded-md transition w-full ${ className }`}
+          className={`bg-transparent border border-neutral-300 h-full outline-none focus:outline-blue-300 pl-10 pr-4 py-2.5 lg:py-[16px] rounded-md transition lg:text-lg w-full ${ className }`}
           type="search"
           id="searchInput"
           onInput={updateSearchText}

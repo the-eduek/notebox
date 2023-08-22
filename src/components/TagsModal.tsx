@@ -57,7 +57,7 @@ const TagsModal: React.FC<TagsModalProps> = ({ toggleModal, triggerTagSearch }: 
 
             <SearchComponent 
               handleSearch={handleSearch}
-              className="font-normal py-[15px]"
+              className="font-normal py-[15px] text-lg"
             />
             
             <ul className="h-full items-center justify-center mt-5">

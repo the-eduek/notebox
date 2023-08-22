@@ -9,7 +9,7 @@ import Notepad from "../components/images/Notepad";
 import TagsModal from "../components/TagsModal";
 import SearchComponent from "../components/SearchComponent";
 
-const Home: React.FC = () => {
+const HomePage: React.FC = () => {
   const {
     allNotes,
     pinnedNotes
@@ -115,13 +115,13 @@ const Home: React.FC = () => {
           type="button"            
         >
           { notesView === 'grid'
-            ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-8 w-8">
-                <g stroke="#5d5d5d" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}>
+            ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-8 lg:h-9 w-8 lg:w-9">
+                <g stroke="#737373" strokeLinecap="round" strokeLinejoin="round" strokeWidth={0.75}>
                   <path d="M3.5 20.5v-7h17v7h-17ZM3.5 10.5v-7h17v7h-17Z"/>
                 </g>
-          </svg>
-            : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-8 w-8">
-                <g stroke="#5d5d5d" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}>
+              </svg>
+            : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="h-8 lg:h-9 w-8 lg:w-9">
+                <g stroke="#737373" strokeLinecap="round" strokeLinejoin="round" strokeWidth={0.75}>
                   <path d="M3.5 3.5h7v7h-7v-7ZM3.5 13.5h7v7h-7v-7ZM13.5 3.5h7v7h-7v-7ZM13.5 13.5h7v7h-7v-7Z"/>
                 </g>
               </svg>
@@ -160,7 +160,7 @@ const Home: React.FC = () => {
           </div>
       }
 
-      { !!(allNotes.length) && !(notesArray.length) && !(pinnedNotesArray.length) && 
+      { !(notesArray.length) && !(pinnedNotesArray.length) && !!(allNotes.length) && 
           <p className="font-medium items-center py-16 text-center text-neutral-500 md:text-lg">no note found 😕</p>
       }
 
@@ -174,4 +174,4 @@ const Home: React.FC = () => {
   )
 };
 
-export default Home;
+export default HomePage;

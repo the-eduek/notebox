@@ -19,7 +19,7 @@ const NotePreview: React.FC<NoteProps> = ({ note }: NoteProps) => {
     <section>
       <Link
         className="bg-neutral-100/50 border border-neutral-300 flex flex-col p-3 rounded-lg self-start"
-        to={`notes/${noteObj.id}`}
+        to={`/notes/${noteObj.id}`}
       >
         { note.title && 
           <h1 className="break-words font-newsreader font-medium pb-1 text-lg">

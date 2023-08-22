@@ -13,34 +13,15 @@ const NotePage: React.FC = () => {
     allNotes,
     editNote,
     deleteNote
-  } = useContext(NoteContext)
-
-  // get current note
-  const { noteId } = useParams();
-  const navigate =  useNavigate();
-
-  const note = allNotes.filter(noteParam => {
-    if (noteId) return Number(noteId) === noteParam.id;
-  })[0];
-
-  let noteObj: Note;
-
-  if (note) {
-    noteObj = new Note(
-      note.createdAt,
-      note.content,
-      note.title,
-      note.tags
-    );
-  } else navigate("/");
+  } = useContext(NoteContext);
 
   // note title
-  const [ noteTitle, setNoteTitle ] = useState<string>(noteObj!.title ?? "");
+  const [ noteTitle, setNoteTitle ] = useState<string>("");
   const noteTitleRef = useRef<HTMLTextAreaElement | null>(null);
 
   const handleTitleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
     let newTitle = evt.target.value;
-    if ((noteTitle.charAt(noteTitle.length - 1) === ' ') && (newTitle.charAt(newTitle.length - 1) === ' ')) {
+    if ((noteTitle.charAt(noteTitle.length - 1) === " ") && (newTitle.charAt(newTitle.length - 1) === " ")) {
       newTitle = noteTitle
     }
     if (newTitle.length > 100) newTitle = newTitle.slice(0, 101);
@@ -63,7 +44,7 @@ const NotePage: React.FC = () => {
   }, [ noteTitle ]);
 
   // note content
-  const [ noteContent, setNoteContent ] = useState<string>(noteObj!.content);  
+  const [ noteContent, setNoteContent ] = useState<string>("");  
   const noteContentRef =  useRef<HTMLTextAreaElement | null>(null);
 
   const handleContentChange = (evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -73,9 +54,17 @@ const NotePage: React.FC = () => {
     if (editing === true) triggerSubmit();
   };
 
+  useEffect(() => {
+    if (noteContentRef) {
+      const scrollHeight: number | undefined = noteContentRef.current?.scrollHeight;
+      if (scrollHeight) noteContentRef.current?.style.setProperty('height', `${scrollHeight}px`);
+    }
+  }, [ noteContent ]);
+  
   // note tags
   const [ tagInput, setTagInput] = useState<string>("");
-  const [ noteTags, setNoteTags ] = useState<Array<string>>(noteObj!.tags ?? []);
+  const [ noteTags, setNoteTags ] = useState<Array<string>>([]);
+
   const keysToCreate: Array<string> = [ ",", "tab", "enter", " " ];
 
   const handleTagInput = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
@@ -111,13 +100,6 @@ const NotePage: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (noteContentRef) {
-      const scrollHeight: number | undefined = noteContentRef.current?.scrollHeight;
-      if (scrollHeight) noteContentRef.current?.style.setProperty('height', `${scrollHeight}px`);
-    }
-  }, [ noteContent ]);
-
   // delete note
   const [ showModal, setShowModal ] = useState<boolean>(false);
 
@@ -136,15 +118,15 @@ const NotePage: React.FC = () => {
     } else toggleModal();
   };
 
-  // open page editing
+  // toggle editing state
   const [ editing, setEditing ] = useState<boolean>(false);
 
   const editPage = (): void => {
     setEditing(!editing);
-    if (!editing) noteContentRef.current?.focus();
+    if (!editing) noteTitleRef.current?.focus();
   };
 
-  // editing note
+  // edit note
   const formElt = useRef<HTMLFormElement | null>(null);
 
   const triggerSubmit = (): void => {
@@ -164,13 +146,38 @@ const NotePage: React.FC = () => {
     editNote(noteObj);
   };
 
+  // get current note
+  const { noteId } = useParams();
+  const navigate =  useNavigate();
+
+  const note = allNotes.find(noteParam => Number(noteId) === noteParam.id);
+
+  useEffect(() => {
+    if (!note) navigate("/notes/error");
+    else {
+      setNoteTitle(noteObj.title!);
+      setNoteContent(noteObj.content);
+      setNoteTags(noteObj.tags!)
+    }
+  }, [ note ]);
+
+  if (!note) return null;
+
+  // note object
+  const noteObj: Note = new Note(
+    note.createdAt,
+    note.content,
+    note.title,
+    note.tags
+  );
+
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">
       <div className="flex items-center pb-14 pt-6 md:pt-12">
         <div className="flex-grow">
           <Nav 
             triggerSubmit={triggerSubmitAndClose}
-            currentNote={noteObj!}
+            currentNote={noteObj}
           />
         </div>
 
@@ -212,7 +219,7 @@ const NotePage: React.FC = () => {
 
         <p className="pb-5 pt-3.5 text-neutral-500">
           <span className="pr-1">🗓️</span>
-          { noteObj!.dateString }
+          { noteObj.dateString }
         </p>
 
         <div>
@@ -238,7 +245,7 @@ const NotePage: React.FC = () => {
               ))
             }
 
-            { noteObj!.tags && editing &&
+            { noteObj.tags && editing &&
                 <li className="flex flex-1 min-w-[5.5rem]">
                   <input 
                     className="bg-transparent h-full outline-none my-1 py-1 w-full"
