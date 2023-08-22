@@ -25,7 +25,7 @@ const HomePage: React.FC = () => {
   const notes: Array<NoteItem> = allNotes.filter(note => !pinnedNotes.some(pinnedNoteId => pinnedNoteId === note.id))
     .sort((noteX, noteY) => noteY.id - noteX.id);
 
-  const pinned: Array<NoteItem> = allNotes.filter(note => pinnedNotes.filter(noteId => noteId === note.id)[0])
+  const pinned: Array<NoteItem> = allNotes.filter(note => pinnedNotes.find(noteId => noteId === note.id))
     .sort((noteX, noteY) => noteY.id - noteX.id);
       
   // const [ searchText, setSearchText ] = useState<string>("");

@@ -74,9 +74,17 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProv
   const localNotes: Array<NoteItem> = createLocalArray<NoteItem>('localNotes');
   let validatedLocalNotes: Array<NoteItem> = [];
 
-  if (localNotes.length) { /** validate local storage data */
+  const localPinnedNotes: Array<number> = createLocalArray<number>('localPinnedNotes');
+  let validatedPinnedNotes: Array<number> = [];
+
+  if (localNotes.length) {
     validatedLocalNotes = localNotes.filter(note => validateNoteItem(note));
-    setLocalArray<NoteItem>('localNotes', validatedLocalNotes );
+    setLocalArray<NoteItem>('localNotes', validatedLocalNotes);
+
+    validatedPinnedNotes = localPinnedNotes.filter(noteId => {
+      return validatedLocalNotes.find(note => note.id === noteId);
+    });
+    setLocalArray<number>('localPinnedNotes', validatedPinnedNotes);
   }
 
   // all notes
@@ -89,9 +97,7 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProv
   };
 
   // pinning notes
-  const localPinnedNotes: Array<number> = createLocalArray<number>('localPinnedNotes');
-
-  const [ pinnedNotes, setPinnedNotes ] = useState<Array<number>>(localPinnedNotes);
+  const [ pinnedNotes, setPinnedNotes ] = useState<Array<number>>(validatedPinnedNotes);
 
   const togglePinNote = (note: NoteItem, pin: boolean): void => {
     // do not process pining if not isn't created, i.e. in new note page
