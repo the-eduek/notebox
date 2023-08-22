@@ -10,12 +10,7 @@ const TagInput: React.FC<TagInputProps> = ({ canEdit = true, tags, updateTags }:
   const [ tagInput, setTagInput ] = useState<string>("");
   const keysToCreate: Array<string> = [ ",", "tab", "enter", " " ];
 
-  const createTag = (
-    tagText: string, 
-    currentKey: string, 
-    canCreate: boolean,
-    tagHook?: () => Array<string> | undefined
-  ): void => {
+  const createTag = (tagText: string, canCreate: boolean, tagHook?: () => Array<string> | undefined): void => {
     let newTagsArray: Array<string> = tags;
 
     if (tagText.trim().startsWith('#')) tagText = tagText.slice(1);
@@ -45,9 +40,10 @@ const TagInput: React.FC<TagInputProps> = ({ canEdit = true, tags, updateTags }:
     const currentKey: string = currentText.charAt(currentText.length - 1);
     const canCreate: boolean = keysToCreate.includes(currentKey.toLowerCase());
 
-    if (currentText.charAt(currentText.length - 1) === ",") currentText = currentText.slice(0, currentText.length - 1)
+    if (currentKey === ",") currentText = currentText.slice(0, currentText.length - 1);
+
     setTagInput(currentText.trim());
-    createTag(currentText, currentKey, canCreate);
+    createTag(currentText, canCreate);
   };
 
   const handleTagKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
@@ -57,7 +53,6 @@ const TagInput: React.FC<TagInputProps> = ({ canEdit = true, tags, updateTags }:
    
     createTag (
       currentText, 
-      currentKey, 
       canCreate, 
       (): Array<string> | undefined => {
         if (currentKey === "backspace" && tags.length && !(tagInput.length)) {

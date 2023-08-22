@@ -45,11 +45,42 @@ function setLocalArray<Type> (
   localStorage.setItem(variableName, JSON.stringify(newValue));
 }
 
-export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProviderProps) => {
-  // all notes
-  const localNotes: Array<NoteItem> = createLocalArray<NoteItem>('localNotes');
+function validateNoteItem(noteParam: NoteItem): boolean {
+  if (
+    'content' in noteParam && 
+    typeof noteParam.content === 'string' &&
 
-  const [ allNotes, setAllNotes ] = useState<Array<NoteItem>>(localNotes);
+    'createdAt' in noteParam && 
+    new Date(noteParam.createdAt) instanceof Date &&
+
+    'id' in noteParam &&
+    typeof noteParam.id === 'number' &&
+
+    'tags' in noteParam &&
+    Array.isArray(noteParam.tags) &&
+    noteParam.tags.every((tag: string) => typeof tag === 'string') &&
+
+    'title' in noteParam &&
+    typeof noteParam.title === 'string'
+  ) {
+    if (new Date(noteParam.createdAt).getTime() === noteParam.id) return true;
+    else return false;
+  }
+  else return false;
+}
+
+export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProviderProps) => {
+  // get and validate notes
+  const localNotes: Array<NoteItem> = createLocalArray<NoteItem>('localNotes');
+  let validatedLocalNotes: Array<NoteItem> = [];
+
+  if (localNotes.length) { /** validate local storage data */
+    validatedLocalNotes = localNotes.filter(note => validateNoteItem(note));
+    setLocalArray<NoteItem>('localNotes', validatedLocalNotes );
+  }
+
+  // all notes
+  const [ allNotes, setAllNotes ] = useState<Array<NoteItem>>(validatedLocalNotes);
 
   const addNote = (noteParam: NoteItem): void => {
     const newAllNotes = [...allNotes, noteParam];
