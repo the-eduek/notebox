@@ -67,7 +67,7 @@ const NotePage: React.FC = () => {
 
   const keysToCreate: Array<string> = [ ",", "tab", "enter", " " ];
 
-  const handleTagInput = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
+  const handleTagKey = (evt: React.KeyboardEvent<HTMLInputElement>): void => {
     let currentText = evt.currentTarget.value.trim();
     let newTagsArray: Array<string> = noteObj.tags!;
 
@@ -79,6 +79,30 @@ const NotePage: React.FC = () => {
       newTagsArray = [...noteObj.tags!.concat(currentText)];
       setTagInput("");
     } else if (evt.key.toLowerCase() === "backspace" && !tagInput.length && noteTags.length) {
+      evt.preventDefault();
+      newTagsArray = [...noteObj.tags!];
+      setTagInput(newTagsArray.pop()!);
+    }
+
+    noteObj.tags = newTagsArray;
+    setNoteTags(newTagsArray);
+    if (editing === true) triggerSubmit();
+  };
+
+  const handleTagInput = (evt: React.FormEvent<HTMLInputElement>): void => {
+    let currentText = evt.currentTarget.value;
+    let newTagsArray: Array<string> = noteObj.tags!;
+    const currentKey = currentText.charAt(currentText.length - 1);
+    setTagInput(currentText.trim());
+
+    if (currentText.trim().startsWith('#')) currentText = currentText.slice(1);
+    const canCreate: boolean = keysToCreate.includes(currentKey.toLowerCase());
+
+    if (canCreate && currentText.length > 1 && currentText.length < 21 && !(noteTags.includes(currentText))) {
+      evt.preventDefault();
+      newTagsArray = [...noteObj.tags!.concat(currentText)];
+      setTagInput("");
+    } else if (currentKey.toLowerCase() === "backspace" && !tagInput.length && noteTags.length) {
       evt.preventDefault();
       newTagsArray = [...noteObj.tags!];
       setTagInput(newTagsArray.pop()!);
@@ -249,8 +273,8 @@ const NotePage: React.FC = () => {
                 <li className="flex flex-1 min-w-[5.5rem]">
                   <input 
                     className="bg-transparent h-full outline-none my-1 py-1 w-full"
-                    onInput={(evt: React.FormEvent<HTMLInputElement>) => setTagInput(evt.currentTarget.value.trim())}
-                    onKeyDown={handleTagInput}
+                    onInput={(evt: React.FormEvent<HTMLInputElement>) => handleTagInput(evt)}
+                    onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) => handleTagKey(evt)}
                     placeholder="Enter a tag"
                     title="Note Tags"
                     type="text"

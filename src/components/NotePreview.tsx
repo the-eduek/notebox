@@ -43,7 +43,7 @@ const NotePreview: React.FC<NoteProps> = ({ note }: NoteProps) => {
                     key={index}
                     className="bg-neutral-200/80 break-all flex font-medium mr-2 last:mr-0 my-1 px-2 py-1.5 rounded-full text-sm text-neutral-600/[0.8625]" 
                   >
-                    <span className="text-neutral-600/80">#</span>
+                    <span className="text-neutral-600/60">#</span>
                     <span>{ tag }</span>
                   </li>
                 ))
@@ -56,7 +56,7 @@ const NotePreview: React.FC<NoteProps> = ({ note }: NoteProps) => {
                       </li>
                     )
                   : ( <li className="bg-neutral-200/80 break-all flex font-medium mr-2 last:mr-0 my-1 px-2 py-1.5 rounded-full text-sm text-neutral-600/[0.8625]">
-                        <span className="text-neutral-600/80">#</span>
+                        <span className="text-neutral-600/60">#</span>
                         <span>{ note.tags.slice(2)[0] } </span>
                       </li>
                     )    
