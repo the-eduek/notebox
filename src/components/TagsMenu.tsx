@@ -2,12 +2,12 @@ import React, { useContext, useState } from "react";
 import NoteContext from "../context/NoteContext";
 import SearchComponent from "./SearchComponent";
 
-interface TagsModalProps {
+interface TagsMenuProps {
   toggleModal: () => void,
   triggerTagSearch: (tag: string) => void
 }
 
-const TagsModal: React.FC<TagsModalProps> = ({ toggleModal, triggerTagSearch }: TagsModalProps) => {
+const TagsMenu: React.FC<TagsMenuProps> = ({ toggleModal, triggerTagSearch }: TagsMenuProps) => {
   const {
     allTags
   } = useContext(NoteContext);
@@ -90,4 +90,4 @@ const TagsModal: React.FC<TagsModalProps> = ({ toggleModal, triggerTagSearch }: 
   );
 };
 
-export default TagsModal;
+export default TagsMenu;

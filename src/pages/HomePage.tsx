@@ -6,7 +6,7 @@ import NoteContext from "../context/NoteContext";
 import BottomNav from "../components/BottomNav";
 import NotesList from "../components/NotesList";
 import Notepad from "../components/images/Notepad";
-import TagsModal from "../components/TagsModal";
+import TagsMenu from "../components/TagsMenu";
 import SearchComponent from "../components/SearchComponent";
 
 const HomePage: React.FC = () => {
@@ -42,7 +42,7 @@ const HomePage: React.FC = () => {
       setNotesArray(newNotesArray);
 
       const newPinnedNotesArray: Array<NoteItem> = pinned.filter(note => {
-        return !!(note.tags?.filter(tag => tag.includes(searchText.slice(1))).length)
+        return !!(note.tags?.find(tag => tag.includes(searchText.slice(1))))
       });
       setPinnedNotesArray(newPinnedNotesArray);
     } else {
@@ -57,7 +57,7 @@ const HomePage: React.FC = () => {
     return searchArray.filter(note => {
       const matchBody: boolean = note.content.includes(input);
       const matchTitle: boolean = !!(note.title?.includes(input));
-      const matchTags: boolean = !!(note.tags?.filter(tag => tag.includes(input)).length);
+      const matchTags: boolean = !!(note.tags?.find(tag => tag.includes(input)));
       
       return matchBody || matchTitle || matchTags;
     });
@@ -75,7 +75,7 @@ const HomePage: React.FC = () => {
   };
 
   const triggerTagSearch = (tag: string): void => {
-    if (searchRef.current) {      
+    if (searchRef.current) {
       searchRef.current.value = `#${tag}`;
       const inputEvt: InputEvent = new InputEvent("input", {
         bubbles: true,
@@ -147,15 +147,16 @@ const HomePage: React.FC = () => {
 
       { !(allNotes.length) &&
           <div className="md:flex md:justify-center">
-            <p className="font-medium text-center text-neutral-500 text-lg">no notes in your notebox yet,</p>
+            <p className="font-medium text-center text-neutral-500 text-lg">no notes in your notebox yet
+              <span className="hidden md:inline">,</span>
+            </p>
             <p className="font-medium text-center text-neutral-500 text-lg">
               <Link
                 className="border-b border-transparent hover:border-[#ed4c5c] mx-1 text-[#ed4c5c] transition"
                 to={'/new'}
               >
                 click here
-              </Link>
-               to start writing ✍🏾
+              </Link> to start writing ✍🏾
             </p>
           </div>
       }
@@ -165,7 +166,7 @@ const HomePage: React.FC = () => {
       }
 
       { showModal &&
-          <TagsModal
+          <TagsMenu
             toggleModal={toggleModal}
             triggerTagSearch={triggerTagSearch}
           />
