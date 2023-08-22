@@ -31,7 +31,7 @@ const NotePreview: React.FC<NoteProps> = ({ note }: NoteProps) => {
           { !(note.content.length)
               ? ( <span className="font-regular text-neutral-400">Empty note</span>)
               : note.content.length > 151
-              ? `${note.content.slice(0, 201)}...` 
+              ? `${note.content.slice(0, 160)}...` 
               : note.content 
           }
         </p>
