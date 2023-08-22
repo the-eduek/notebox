@@ -82,7 +82,7 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({ children }: NoteProv
     setLocalArray<NoteItem>('localNotes', validatedLocalNotes);
 
     validatedPinnedNotes = localPinnedNotes.filter(noteId => {
-      return validatedLocalNotes.find(note => note.id === noteId);
+      if (typeof noteId === 'number') return validatedLocalNotes.find(note => note.id === noteId);
     });
     setLocalArray<number>('localPinnedNotes', validatedPinnedNotes);
   }
