@@ -27,17 +27,29 @@ const HomePage: React.FC = () => {
 
   const pinned: Array<NoteItem> = allNotes.filter(note => pinnedNotes.find(noteId => noteId === note.id))
     .sort((noteX, noteY) => noteY.id - noteX.id);
-      
-  // const [ searchText, setSearchText ] = useState<string>("");
+
   const [ notesArray, setNotesArray ] = useState<Array<NoteItem>>(notes);
   const [ pinnedNotesArray, setPinnedNotesArray ] = useState<Array<NoteItem>>(pinned);
+
+  // searching  
+  const searchRef = useRef<HTMLInputElement | null>(null);
+
+  const searchFn = (input: string, searchArray: Array<NoteItem>): Array<NoteItem> => {
+    return searchArray.filter(note => {
+      const matchBody: boolean = note.content.includes(input);
+      const matchTitle: boolean = !!(note.title?.includes(input));
+      const matchTags: boolean = !!(note.tags?.find(tag => tag.includes(input)));
+      
+      return matchBody || matchTitle || matchTags;
+    });
+  };
 
   const handleSearch = (searchText: string): void => {
     searchText = searchText.trim();
 
     if (searchText.startsWith("#")) {
       const newNotesArray: Array<NoteItem> = notes.filter(note => {
-        return !!(note.tags?.filter(tag => tag.includes(searchText.slice(1))).length)
+        return !!(note.tags?.filter(tag => tag.includes(searchText.slice(1))).length);
       });
       setNotesArray(newNotesArray);
 
@@ -53,28 +65,7 @@ const HomePage: React.FC = () => {
     }
   };
 
-  const searchFn = (input: string, searchArray: Array<NoteItem>): Array<NoteItem> => {
-    return searchArray.filter(note => {
-      const matchBody: boolean = note.content.includes(input);
-      const matchTitle: boolean = !!(note.title?.includes(input));
-      const matchTags: boolean = !!(note.tags?.find(tag => tag.includes(input)));
-      
-      return matchBody || matchTitle || matchTags;
-    });
-  };
-
-  // all tags modal
-  const [ showModal, setShowModal ] = useState<boolean>(false);
-  const searchRef = useRef<HTMLInputElement | null>(null);
-
-  const toggleModal = (): void => {
-    setShowModal(!showModal);
-
-    if (!showModal) document.body.classList.add('overflow-hidden');
-    else document.body.classList.remove('overflow-hidden');
-  };
-
-  const triggerTagSearch = (tag: string): void => {
+  const searchByTag = (tag: string): void => {
     if (searchRef.current) {
       searchRef.current.value = `#${tag}`;
       const inputEvt: InputEvent = new InputEvent("input", {
@@ -84,6 +75,16 @@ const HomePage: React.FC = () => {
       searchRef.current.dispatchEvent(inputEvt);
       searchRef.current.focus();
     }
+  };
+
+  // all tags modal
+  const [ showModal, setShowModal ] = useState<boolean>(false);
+
+  const toggleModal = (): void => {
+    setShowModal(!showModal);
+
+    if (!showModal) document.body.classList.add('overflow-hidden');
+    else document.body.classList.remove('overflow-hidden');
   };
 
   return (
@@ -168,7 +169,7 @@ const HomePage: React.FC = () => {
       { showModal &&
           <TagsMenu
             toggleModal={toggleModal}
-            triggerTagSearch={triggerTagSearch}
+            triggerTagSearch={searchByTag}
           />
       }
     </section>
