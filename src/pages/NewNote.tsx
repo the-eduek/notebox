@@ -76,7 +76,12 @@ const NewNote: React.FC = () => {
 
   const handleFormSubmit = (evt: React.FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
-    if (noteObj.content.trim()) addNote(noteObj);
+
+    if (noteObj.content.trim()) {
+      noteObj.title = noteObj.title?.trim();
+      noteObj.content = noteObj.content.trimEnd();
+      addNote(noteObj);
+    }
   };
 
   const triggerSubmit = (): void => {

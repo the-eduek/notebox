@@ -115,6 +115,9 @@ const NotePage: React.FC = () => {
 
   const handleFormSubmit = (evt: React.FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
+    
+    noteObj.title = noteObj.title?.trim();
+    noteObj.content = noteObj.content.trimEnd();
     editNote(noteObj);
   };
 
