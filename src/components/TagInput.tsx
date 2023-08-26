@@ -10,7 +10,11 @@ const TagInput: React.FC<TagInputProps> = ({ canEdit = true, tags, updateTags }:
   const [ tagInput, setTagInput ] = useState<string>("");
   const keysToCreate: Array<string> = [ ",", "tab", "enter", " " ];
 
-  const createTag = (tagText: string, canCreate: boolean, tagHook?: () => Array<string> | undefined): void => {
+  const createTag = (
+    tagText: string, 
+    canCreate: boolean, 
+    tagHook?: () => Array<string> | undefined
+  ): void => {
     let newTagsArray: Array<string> = tags;
 
     if (tagText.trim().startsWith('#')) tagText = tagText.slice(1);
@@ -65,6 +69,13 @@ const TagInput: React.FC<TagInputProps> = ({ canEdit = true, tags, updateTags }:
     );
   };
 
+  const handleBlur = (evt: React.FocusEvent<HTMLInputElement, HTMLInputElement>) => {    
+    const currentText: string = evt.target.value;
+
+    createTag(currentText, true);
+    setTagInput("");
+  };
+
   return (
     <div>
       <ul className="flex flex-wrap items-center">
@@ -93,9 +104,10 @@ const TagInput: React.FC<TagInputProps> = ({ canEdit = true, tags, updateTags }:
             <li className="flex flex-1 min-w-[5.5rem]">
               <input 
                 className="bg-transparent h-full outline-none my-1 py-1 w-full"
+                onBlur={handleBlur}
                 onInput={handleTagInput}
                 onKeyDown={handleTagKeyDown}
-                placeholder="Enter a tag"
+                placeholder="Tags"
                 title="Note Tags"
                 type="text"
                 value={tagInput}
