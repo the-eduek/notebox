@@ -4,7 +4,7 @@ import Tag from "./images/Tag";
 import WritingHand from "./images/WritingHand";
 
 interface MainButtonProps {
-  triggerTagsModal(): void,
+  triggerTagsModal(): void;
 }
 
 const MainButton: React.FC<MainButtonProps> = ({ triggerTagsModal }: MainButtonProps) => {

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "../pages/HomePage";
@@ -17,45 +16,44 @@ const AllRoutes: React.FC = () => {
     {
       element: <HomePage />,
       path: "/",
-      title: "home"
+      title: "home",
     },
     {
       element: <Navigate to="/" />,
       path: "/notes",
-      title: "home"
+      title: "home",
     },
-    { 
+    {
       element: <NewNote />,
       path: "/new",
-      title: "new"
+      title: "new",
     },
     {
       element: <NotePage />,
       path: "/notes/:noteId",
-      title: "note"
+      title: "note",
     },
     {
       element: <ErrorPage />,
       path: "/notes/error",
-      title: "noteError"
+      title: "noteError",
     },
     {
       element: <ErrorPage />,
       path: "/*",
-      title: "notFound"
-    }
+      title: "notFound",
+    },
   ];
 
   return (
     <Routes>
-      { allPages.map(page => (
-          <Route
-            path={page.path}
-            key={page.title}
-            element={page.element}
-          />
-        )) 
-      }
+      {allPages.map((page) => (
+        <Route
+          path={page.path}
+          key={page.title}
+          element={page.element}
+        />
+      ))}
     </Routes>
   );
 };

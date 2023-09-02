@@ -1,12 +1,12 @@
-import './styles/index.css';
-import App from './App.tsx';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import { NoteProvider } from './context/NoteContext.tsx';
+import "./styles/index.css";
+import App from "./App.tsx";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import { NoteProvider } from "./context/NoteContext.tsx";
 import { ViewProvider } from "./context/ViewContext.tsx";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <NoteProvider>
@@ -15,5 +15,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </ViewProvider>
       </NoteProvider>
     </BrowserRouter>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

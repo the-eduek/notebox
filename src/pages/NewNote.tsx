@@ -1,31 +1,32 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
-import Note from '../types/classes/note';
-import NoteContext from '../context/NoteContext';
-import Nav from '../components/NavComponent';
-import TagInput from '../components/TagInput';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import Note from "../types/classes/note";
+import NoteContext from "../context/NoteContext";
+import Nav from "../components/NavComponent";
+import TagInput from "../components/TagInput";
 
 const NewNote: React.FC = () => {
-  const {
-    addNote,
-    togglePinNote
-  } = useContext(NoteContext)
+  const { addNote, togglePinNote } = useContext(NoteContext);
 
   // note title
-  const [ noteTitle, setNoteTitle ] = useState<string>("");
+  const [noteTitle, setNoteTitle] = useState<string>("");
   const noteTitleRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const handleTitleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    let newTitle = evt.target.value;
-    if ((noteTitle.charAt(noteTitle.length - 1) === ' ') && (newTitle.charAt(newTitle.length - 1) === ' ')) {
-      newTitle = noteTitle
+  const handleTitleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
+    let newTitle: string = evt.target.value;
+    if (
+      noteTitle.charAt(noteTitle.length - 1) === " " &&
+      newTitle.charAt(newTitle.length - 1) === " "
+    ) {
+      newTitle = noteTitle;
     }
+
     if (newTitle.length > 100) newTitle = newTitle.slice(0, 101);
     noteObj.title = newTitle;
     setNoteTitle(newTitle);
   };
 
-  const handleTitleComplete = (evt: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+  const handleTitleComplete: React.KeyboardEventHandler<HTMLTextAreaElement> = (evt) => {
     if (evt.key.toLowerCase() === "enter") noteContentRef.current?.focus();
   };
 
@@ -33,16 +34,17 @@ const NewNote: React.FC = () => {
     if (noteTitleRef.current) {
       noteTitleRef.current.style.height = `0px`;
       const scrollHeight: number = noteTitleRef.current.scrollHeight;
-      if (scrollHeight) noteTitleRef.current.style.setProperty('height', `${scrollHeight}px`);
+      if (scrollHeight)
+        noteTitleRef.current.style.setProperty("height", `${scrollHeight}px`);
     }
-  }, [ noteTitle ]);
+  }, [noteTitle]);
 
   // note content
-  const [ noteContent, setNoteContent ] = useState<string>("");
-  const noteContentRef =  useRef<HTMLTextAreaElement>(null);
+  const [noteContent, setNoteContent] = useState<string>("");
+  const noteContentRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleContentChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newText = evt.target.value;
+  const handleContentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
+    const newText: string = evt.target.value;
     noteObj.content = newText;
     setNoteContent(newText);
   };
@@ -50,12 +52,13 @@ const NewNote: React.FC = () => {
   useEffect(() => {
     if (noteContentRef.current) {
       const scrollHeight: number = noteContentRef.current.scrollHeight;
-      if (scrollHeight) noteContentRef.current.style.setProperty('height', `${scrollHeight}px`);
+      if (scrollHeight)
+        noteContentRef.current.style.setProperty("height", `${scrollHeight}px`);
     }
-  }, [ noteContent ]);
+  }, [noteContent]);
 
   // note tags
-  const [ noteTags, setNoteTags ] = useState<Array<string>>([]);
+  const [noteTags, setNoteTags] = useState<Array<string>>([]);
 
   const updateNoteTags = (newNoteTags: Array<string>) => {
     noteObj.tags = newNoteTags;
@@ -65,16 +68,11 @@ const NewNote: React.FC = () => {
   // creating note and note object
   const formElt = useRef<HTMLFormElement | null>(null);
   const navigate: NavigateFunction = useNavigate();
-  const immediateTime = new Date();
+  const immediateTime: Date = new Date();
 
-  const noteObj = new Note(
-    immediateTime,
-    noteContent,
-    noteTitle,
-    noteTags
-  );
+  const noteObj: Note = new Note(immediateTime, noteContent, noteTitle, noteTags);
 
-  const handleFormSubmit = (evt: React.FormEvent<HTMLFormElement>): void => {
+  const handleFormSubmit: React.FormEventHandler<HTMLFormElement> = (evt) => {
     evt.preventDefault();
 
     if (noteObj.content.trim()) {
@@ -85,8 +83,8 @@ const NewNote: React.FC = () => {
   };
 
   const triggerSubmit = (): void => {
-    const submitEvt: Event = new Event('submit', {
-      bubbles: true
+    const submitEvt: Event = new Event("submit", {
+      bubbles: true,
     });
     formElt.current?.dispatchEvent(submitEvt);
   };
@@ -102,7 +100,7 @@ const NewNote: React.FC = () => {
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">
       <div className="pb-14 pt-4 md:pt-12">
-        <Nav 
+        <Nav
           triggerSubmit={checkPinned}
           currentNote={noteObj}
         />
@@ -113,7 +111,7 @@ const NewNote: React.FC = () => {
         ref={formElt}
       >
         <div>
-          <textarea 
+          <textarea
             className="bg-transparent font-newsreader font-medium h-full outline-none overflow-hidden resize-none text-3xl md:text-4xl w-full"
             onChange={handleTitleChange}
             onKeyDown={handleTitleComplete}
@@ -126,7 +124,7 @@ const NewNote: React.FC = () => {
 
         <p className="pb-5 pt-3.5 text-neutral-500">
           <span className="pr-1">🗓️</span>
-          { noteObj.dateString }
+          {noteObj.dateString}
         </p>
 
         <TagInput

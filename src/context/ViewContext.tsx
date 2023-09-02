@@ -1,26 +1,30 @@
-import React, { createContext, useState } from 'react';
-import { ViewType } from '../types';
+import React, { createContext, useState } from "react";
+import { ViewType } from "../types";
 
-const ViewContext = createContext<{
-  notesView: ViewType,
-  updateView: (newView: ViewType) => void
-}>({
-  notesView: 'list',
-  updateView: () => {}
-});
-
-interface ViewProviderProps {
-  children: React.ReactNode
+interface ViewContextTYpe {
+  notesView: ViewType;
+  updateView: (newView: ViewType) => void;
 }
 
-export const ViewProvider: React.FC<ViewProviderProps> = ({ children }: ViewProviderProps) => {
+interface ViewProviderProps {
+  children: React.ReactNode;
+}
+
+const ViewContext = createContext<ViewContextTYpe>({
+  notesView: "list",
+  updateView: () => {},
+});
+
+export const ViewProvider: React.FC<ViewProviderProps> = ({
+  children,
+}: ViewProviderProps) => {
   let localView: ViewType;
   const isLocal: string | null = localStorage.getItem("localView");
 
-  if (!isLocal || !['grid', 'list'].includes(isLocal)) localView = "list";
+  if (!isLocal || !["grid", "list"].includes(isLocal)) localView = "list";
   else localView = isLocal as ViewType;
 
-  const [ notesView, setNotesView ] = useState<ViewType>(localView);
+  const [notesView, setNotesView] = useState<ViewType>(localView);
 
   const updateView = (newView: ViewType): void => {
     localStorage.setItem("localView", newView);
@@ -28,13 +32,13 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }: ViewProv
   };
 
   return (
-    <ViewContext.Provider 
+    <ViewContext.Provider
       value={{
         notesView,
-        updateView
+        updateView,
       }}
     >
-      { children }
+      {children}
     </ViewContext.Provider>
   );
 };

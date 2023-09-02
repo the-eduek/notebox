@@ -2,13 +2,13 @@ import { Weekdays } from "../../utils";
 import { NoteItem } from "../index";
 
 class Note implements NoteItem {
-  content: string;
-  title?: string;
-  tags?: Array<string>;
-  readonly createdAt: Date;
-  readonly id: number;
+  public content: string;
+  public title?: string;
+  public tags?: Array<string>;
+  public readonly createdAt: Date;
+  public readonly id: number;
 
-  constructor (
+  constructor(
     createdAt: Date,
     content: string,
     title?: string,

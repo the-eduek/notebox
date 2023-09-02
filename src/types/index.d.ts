@@ -7,6 +7,6 @@ export interface NoteItem {
   readonly id: number;
 }
 
-export type ViewType = 'grid' | 'list';
+export type ViewType = "grid" | "list";
 
 export type ModalAction = 0 | 1;
