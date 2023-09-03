@@ -85,34 +85,35 @@ const TagInput: React.FC<TagInputProps> = ({
     <ul className="flex flex-wrap items-center">
       {tags.map((tag: string, index: number) => (
         <li
-          className="bg-neutral-200/60 font-medium inline-flex items-center mr-2 last:mr-0 my-1 px-2 py-1 rounded-full text-neutral-600"
+          className="bg-neutral-200/40 inline-flex items-center mr-3 last:mr-0 my-1.5 px-2.5 py-1 rounded-full shadow-inner text-neutral-600/90 transition-all"
           key={index}
         >
-          <span className="text-neutral-500/80">#</span>
-          <span>{tag}</span>
-          <button
-            className={`${!canEdit && "hover:cursor-not-allowed"} 
-              bg-neutral-500/25 inline-flex h-5 items-center justify-center ml-2 p-[3px] rounded-full w-5`}
-            onClick={deleteTag}
-            title="Delete Tag"
-            type="button"
-            value={tag}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2.5}
-              stroke="#636363"
-              className="w-full h-full"
+          <span>#</span>
+          <span className="font-medium">{tag}</span>
+          {canEdit && (
+            <button
+              className="inline-flex h-4 items-center justify-center ml-1.5 rounded-full w-4"
+              onClick={deleteTag}
+              title="Delete Tag"
+              type="button"
+              value={tag}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+                stroke="#636363"
+                className="w-full h-full"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          )}
         </li>
       ))}
 

@@ -37,22 +37,23 @@ const NotePreview: React.FC<NoteProps> = ({ note }: NoteProps) => {
             {note.tags.slice(0, 2).map((tag: string, index: number) => (
               <li
                 key={index}
-                className="bg-neutral-200/80 break-all flex font-medium mr-2 last:mr-0 my-1 px-2 py-1.5 rounded-full text-sm text-neutral-600/[0.8625]"
+                className="bg-neutral-200/80 break-all flex mr-2 last:mr-0 my-1 px-2 py-1 rounded-full shadow-inner text-sm text-neutral-600/[0.8625]"
               >
-                <span className="text-neutral-600/60">#</span>
-                <span>{tag}</span>
+                <span>#</span>
+                <span className="font-medium">{tag}</span>
               </li>
             ))}
+
             {!note.tags?.slice(2).length ? (
               <></>
             ) : note.tags?.slice(2).length > 1 ? (
-              <li className="bg-neutral-200/80 flex font-medium items-center my-1 px-2 py-1.5 rounded-full text-sm text-neutral-600/80">
+              <li className="bg-neutral-200/80 flex font-medium items-center my-1 px-2 py-1.5 rounded-full shadow-inner text-sm text-neutral-600/80">
                 <span>+{note.tags.slice(2).length}</span>
               </li>
             ) : (
-              <li className="bg-neutral-200/80 break-all flex font-medium mr-2 last:mr-0 my-1 px-2 py-1.5 rounded-full text-sm text-neutral-600/[0.8625]">
-                <span className="text-neutral-600/60">#</span>
-                <span>{note.tags.slice(2)[0]} </span>
+              <li className="bg-neutral-200/80 break-all flex mr-2 last:mr-0 my-1 px-2 py-1 rounded-full shadow-inner text-sm text-neutral-600/[0.8625]">
+                <span>#</span>
+                <span className="font-medium">{note.tags.slice(2)[0]} </span>
               </li>
             )}
           </ul>
