@@ -1,19 +1,17 @@
 import React, { useContext, useRef, useState } from "react";
 import { NoteItem } from "../types";
 import { Link } from "react-router-dom";
-import ViewContext from "../context/ViewContext";
 import NoteContext from "../context/NoteContext";
-import BottomNav from "../components/BottomNav";
+import MenuOptions from "../components/MenuOptions";
 import NotesList from "../components/NotesList";
 import Notepad from "../components/images/Notepad";
 import TagsMenu from "../components/TagsMenu";
 import SearchComponent from "../components/SearchComponent";
+import SwitchView from "../components/SwitchView";
 
 const HomePage: React.FC = () => {
   const { allNotes, pinnedNotes } = useContext(NoteContext);
 
-  // grid / list view
-  const { notesView, updateView } = useContext(ViewContext);
 
   // sorting
   const notes: Array<NoteItem> = allNotes
@@ -93,7 +91,7 @@ const HomePage: React.FC = () => {
           </span>
         </h1>
 
-        <BottomNav triggerTagsModal={toggleModal} />
+        <MenuOptions triggerTagsModal={toggleModal} />
       </div>
 
       <div className="flex py-8 md:py-10">
@@ -102,63 +100,21 @@ const HomePage: React.FC = () => {
           ref={searchRef}
         />
 
-        <button
-          className="border border-neutral-300 flex items-center ml-2.5 outline-none focus:outline-blue-300 p-1.5 rounded-md transition"
-          onClick={() => (notesView === "list" ? updateView("grid") : updateView("list"))}
-          title={notesView === "grid" ? "List View" : "Grid View"}
-          type="button"
-        >
-          {notesView === "grid" ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="h-8 lg:h-9 w-8 lg:w-9"
-            >
-              <g
-                stroke="#737373"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={0.625}
-              >
-                <path d="M3.5 20.5v-7h17v7h-17ZM3.5 10.5v-7h17v7h-17Z" />
-              </g>
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              className="h-8 lg:h-9 w-8 lg:w-9"
-            >
-              <g
-                stroke="#737373"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={0.625}
-              >
-                <path d="M3.5 3.5h7v7h-7v-7ZM3.5 13.5h7v7h-7v-7ZM13.5 3.5h7v7h-7v-7ZM13.5 13.5h7v7h-7v-7Z" />
-              </g>
-            </svg>
-          )}
-        </button>
+        <SwitchView />
       </div>
 
       {!!pinnedNotesArray.length && (
-        <div className="pb-10">
-          <p className="flex font-medium items-center pb-4">📌 pinned notes</p>
-
-          <NotesList notesArray={pinnedNotesArray} />
-        </div>
+        <NotesList
+          notesArray={pinnedNotesArray}
+          listTitle={"📌 pinned notes"}
+        />
       )}
 
-      <div className="pb-16">
-        {!!(pinned.length && notesArray.length) && (
-          <p className="flex font-medium items-center pb-4">📁 other notes</p>
-        )}
-
-        <NotesList notesArray={notesArray} />
-      </div>
+      <NotesList
+        notesArray={notesArray}
+        listTitle={"📁 other notes"}
+        showListTitle={!!(pinned.length) && !!(notesArray.length)}
+      />
 
       {!allNotes.length && (
         <div className="md:flex md:justify-center">

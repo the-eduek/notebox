@@ -4,14 +4,22 @@ import ViewContext from "../context/ViewContext";
 import NotePreview from "./NotePreview";
 
 interface NotesListProps {
+  listTitle: string;
+  showListTitle?: boolean;
   notesArray: Array<NoteItem>;
 }
 
-const NotesList: React.FC<NotesListProps> = ({ notesArray }: NotesListProps) => {
+const NotesList: React.FC<NotesListProps> = ({
+  listTitle,
+  showListTitle = true,
+  notesArray,
+}: NotesListProps) => {
   const { notesView } = useContext(ViewContext);
 
   return (
-    <>
+    <section className="pb-10">
+      {showListTitle && <p className="flex font-medium items-center pb-4">{listTitle}</p>}
+
       {notesView === "grid" ? (
         <div className="gap-4 grid grid-cols-[repeat(2,minmax(0,1fr))]">
           <div>
@@ -52,7 +60,7 @@ const NotesList: React.FC<NotesListProps> = ({ notesArray }: NotesListProps) => 
           ))}
         </div>
       )}
-    </>
+    </section>
   );
 };
 

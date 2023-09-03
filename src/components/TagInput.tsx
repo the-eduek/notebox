@@ -85,7 +85,7 @@ const TagInput: React.FC<TagInputProps> = ({
     <ul className="flex flex-wrap items-center">
       {tags.map((tag: string, index: number) => (
         <li
-          className="bg-neutral-200/40 inline-flex items-center mr-3 last:mr-0 my-1.5 px-2.5 py-1 rounded-full shadow-inner text-neutral-600/90 transition-all"
+          className="bg-neutral-200/50 inline-flex items-center mr-3 last:mr-0 my-1.5 px-2.5 py-1 rounded-full text-neutral-600/90 transition-all"
           key={index}
         >
           <span>#</span>

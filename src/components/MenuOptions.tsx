@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import Tag from "./images/Tag";
 import WritingHand from "./images/WritingHand";
 
-interface MainButtonProps {
+interface MenuOptionsProps {
   triggerTagsModal(): void;
 }
 
-const MainButton: React.FC<MainButtonProps> = ({ triggerTagsModal }: MainButtonProps) => {
+const MenuOptions: React.FC<MenuOptionsProps> = ({ triggerTagsModal }: MenuOptionsProps) => {
   return (
     <section className="bg-[#ed4c5c] md:bg-transparent bottom-0 fixed md:relative left-0 px-4 md:px-0 py-3 text-neutral-50 w-full">
       <div className="flex justify-between md:justify-end mx-auto max-w-2xl w-full">
@@ -37,4 +37,4 @@ const MainButton: React.FC<MainButtonProps> = ({ triggerTagsModal }: MainButtonP
   );
 };
 
-export default MainButton;
+export default MenuOptions;
