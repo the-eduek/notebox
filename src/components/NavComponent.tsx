@@ -11,7 +11,7 @@ interface NavProps {
 const Nav: React.FC<NavProps> = ({ triggerSubmit, currentNote }: NavProps) => {
   const { pinnedNotes, togglePinNote } = useContext(NoteContext);
 
-  const pin: number | undefined = pinnedNotes.find((noteId) => noteId === currentNote.id);
+  const pin = pinnedNotes.find((noteId) => noteId === currentNote.id);
   const [isPinned, setIsPinned] = useState<boolean>(!!pin);
 
   const handlePinNote = (pinAction: boolean): void => {

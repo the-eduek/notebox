@@ -4,7 +4,7 @@ import Tag from "./images/Tag";
 import WritingHand from "./images/WritingHand";
 
 interface MenuOptionsProps {
-  triggerTagsModal(): void;
+  triggerTagsModal: () => void;
 }
 
 const MenuOptions: React.FC<MenuOptionsProps> = ({ triggerTagsModal }: MenuOptionsProps) => {

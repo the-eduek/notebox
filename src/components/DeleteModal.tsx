@@ -10,19 +10,19 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
 }: DeleteModalProps) => {
   const handleClose: React.MouseEventHandler<HTMLElement> = (evt) => {
     evt.preventDefault();
-
     if (evt.target === evt.currentTarget) setModalAction();
   };
 
   return (
     <section
-      className="bg-neutral-700/80 backdrop-blur-sm fixed flex h-screen left-0 items-center justify-between p-10 top-0 w-screen"
+      className="fixed flex h-screen left-0 items-center justify-between p-10 top-0 w-screen"
       onClick={handleClose}
     >
-      <div className="bg-neutral-50 flex flex-col min-h-[33.3%] items-center justify-center max-w-xl mx-auto px-6 py-10 rounded-lg w-full">
+      <div className="bg-neutral-50 flex flex-col min-h-[33.3%] items-center justify-center max-w-xl mx-auto px-6 py-10 rounded-lg shadow-[0,0,10pxrgba(0,0,0,0.5)] w-full">
         <h1 className="font-medium pb-6 md:pb-10 text-lg md:text-xl">
           Confirm Delete? 👀
         </h1>
+
         <div className="flex items-center justify-between">
           <button
             className="border border-neutral-400 font-medium mr-2 px-6 md:px-10 py-3 md:py-4 outline-none focus:outline-neutral-400 hover:outline-neutral-400 rounded-full text-red-500 transition"

@@ -2,12 +2,11 @@ import React, { useContext } from "react";
 import ViewContext from "../context/ViewContext";
 
 const SwitchView: React.FC = () => {
-  // grid / list view
   const { notesView, updateView } = useContext(ViewContext);
 
   return (
     <button
-      className="border border-neutral-300 flex items-center ml-2.5 outline-none focus:outline-blue-300 p-1.5 rounded-md transition"
+      className="border border-neutral-300 flex items-center ml-2.5 md:ml-3 outline-none focus:outline-blue-300 p-1 md:p-1.5 rounded-md transition"
       onClick={() => (notesView === "list" ? updateView("grid") : updateView("list"))}
       title={notesView === "grid" ? "List View" : "Grid View"}
       type="button"
@@ -17,7 +16,7 @@ const SwitchView: React.FC = () => {
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          className="h-8 lg:h-9 w-8 lg:w-9"
+          className="h-9 lg:h-10 w-9 lg:w-11"
         >
           <g
             stroke="#737373"
@@ -33,7 +32,7 @@ const SwitchView: React.FC = () => {
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          className="h-8 lg:h-9 w-8 lg:w-9"
+          className="h-9 lg:h-10 w-9 lg:w-11"
         >
           <g
             stroke="#737373"

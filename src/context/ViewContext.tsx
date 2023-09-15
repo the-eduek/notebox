@@ -1,7 +1,7 @@
 import React, { createContext, useState } from "react";
 import { ViewType } from "../types";
 
-interface ViewContextTYpe {
+interface ViewContextType {
   notesView: ViewType;
   updateView: (newView: ViewType) => void;
 }
@@ -10,7 +10,7 @@ interface ViewProviderProps {
   children: React.ReactNode;
 }
 
-const ViewContext = createContext<ViewContextTYpe>({
+const ViewContext = createContext<ViewContextType>({
   notesView: "list",
   updateView: () => {},
 });

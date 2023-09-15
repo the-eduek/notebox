@@ -5,14 +5,14 @@ import NotePreview from "./NotePreview";
 
 interface NotesListProps {
   listTitle: string;
-  showListTitle?: boolean;
   notesArray: Array<NoteItem>;
+  showListTitle?: boolean;
 }
 
 const NotesList: React.FC<NotesListProps> = ({
   listTitle,
-  showListTitle = true,
   notesArray,
+  showListTitle = true,
 }: NotesListProps) => {
   const { notesView } = useContext(ViewContext);
 

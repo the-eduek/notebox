@@ -12,71 +12,59 @@ const TagInput: React.FC<TagInputProps> = ({
   updateTags,
 }: TagInputProps) => {
   const [tagInput, setTagInput] = useState<string>("");
-  const keysToCreate: Array<string> = [",", "enter", " "];
+  const keysToCreate: readonly string[] = [" ", ",", "enter"];
 
-  const createTag = (
-    tagText: string,
-    canCreate: boolean,
-    tagHook?: () => Array<string> | undefined
-  ): void => {
-    let newTagsArray: Array<string> = tags;
+  const createTag = (tagText: string, canCreate: boolean): void => {
+    if (canCreate) {
+      if (tagText.trim().startsWith("#")) tagText = tagText.slice(1);
 
-    if (tagText.trim().startsWith("#")) tagText = tagText.slice(1);
-    const validLength: boolean = tagText.trim().length > 1 && tagText.trim().length < 21;
-    const tagExists: boolean = tags
-      .filter((tag) => tag.toLowerCase())
-      .includes(tagText.trim().toLowerCase());
+      let newTagsArray = tags;
+      const validLength = tagText.trim().length > 1 && tagText.trim().length < 21;
+      const tagExists = tags
+        .filter((tag) => tag.toLowerCase())
+        .includes(tagText.trim().toLowerCase());
 
-    if (canCreate && validLength && !tagExists) {
-      newTagsArray = [...tags.concat(tagText)];
+      if (validLength && !tagExists) newTagsArray = [...tags, tagText];
+
+      updateTags(newTagsArray);
       setTagInput("");
     }
-
-    if (tagHook) newTagsArray = tagHook() ?? newTagsArray;
-    updateTags(newTagsArray);
   };
 
   const deleteTag: React.MouseEventHandler<HTMLButtonElement> = (evt): void => {
-    evt.preventDefault();
-
-    if (!canEdit) return;
-
-    const tag: string = evt.currentTarget.value;
-    const newTagsArray: Array<string> = [...tags.filter((tagParam) => tagParam !== tag)];
-    updateTags(newTagsArray);
+    if (canEdit) {
+      evt.preventDefault();
+      const tag = evt.currentTarget.value;
+      const newTagsArray = [...tags.filter((tagParam) => tagParam !== tag)];
+      updateTags(newTagsArray);
+    }
   };
 
   const handleTagInput: React.FormEventHandler<HTMLInputElement> = (evt) => {
     evt.preventDefault();
-
-    let currentText: string = evt.currentTarget.value;
-    const currentKey: string = currentText.charAt(currentText.length - 1);
-    const canCreate: boolean = keysToCreate.includes(currentKey.toLowerCase());
+    let currentText = evt.currentTarget.value;
+    const currentKey = currentText.charAt(currentText.length - 1).toLowerCase();
+    const canCreate = keysToCreate.includes(currentKey);
 
     if (currentKey === ",") currentText = currentText.slice(0, currentText.length - 1);
-
     setTagInput(currentText.trim());
     createTag(currentText, canCreate);
   };
 
   const handleTagKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (evt) => {
-    const currentText: string = evt.currentTarget.value;
-    const currentKey: string = evt.key.toLowerCase();
-    const canCreate: boolean = keysToCreate.includes(currentKey.toLowerCase());
+    const currentText = evt.currentTarget.value;
+    const currentKey = evt.key.toLowerCase();
+    const canCreate = keysToCreate.includes(currentKey);
 
-    createTag(currentText, canCreate, (): Array<string> | undefined => {
-      if (currentKey === "backspace" && tags.length && !tagInput.length) {
-        evt.preventDefault();
-        const newTagsArray: Array<string> = [...tags];
-        setTagInput(newTagsArray.pop()!);
-        return newTagsArray;
-      }
-    });
+    if (currentKey === "backspace" && tags.length && !tagInput.length) {
+      const newTagsArray = [...tags];
+      setTagInput(newTagsArray.pop()!);
+      updateTags(newTagsArray);
+    } else createTag(currentText, canCreate);
   };
 
   const handleBlur: React.FocusEventHandler<HTMLInputElement> = (evt) => {
-    const currentText: string = evt.target.value;
-
+    const currentText = evt.target.value;
     createTag(currentText, true);
     setTagInput("");
   };

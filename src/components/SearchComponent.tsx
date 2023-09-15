@@ -13,7 +13,7 @@ const SearchComponent = forwardRef<HTMLInputElement, SearchComponentProps>(
     const [searchText, setSearchText] = useState<string>("");
 
     const updateSearchText: React.ChangeEventHandler<HTMLInputElement> = (evt) => {
-      const newText: string = evt.target.value;
+      const newText = evt.target.value;
       setSearchText(newText);
       handleSearch(newText);
     };

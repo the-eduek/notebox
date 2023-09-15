@@ -3,8 +3,8 @@ import { NoteItem } from "../index";
 
 class Note implements NoteItem {
   public content: string;
-  public title?: string;
-  public tags?: Array<string>;
+  public title: string;
+  public tags: Array<string>;
   public readonly createdAt: Date;
   public readonly id: number;
 
