@@ -1,6 +1,6 @@
-import React from "react";
+import React, { memo } from "react";
 
-const Notepad: React.FC = () => (
+const Notepad: React.FC = memo(() => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -54,6 +54,6 @@ const Notepad: React.FC = () => (
       d="m19.865 9.088 1.414 1.414-7.778 7.778-1.414-1.414z"
     />
   </svg>
-);
+));
 
 export default Notepad;

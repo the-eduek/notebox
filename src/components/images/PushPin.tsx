@@ -1,6 +1,6 @@
-import React from "react";
+import React, { memo } from "react";
 
-const PushPin: React.FC = () => (
+const PushPin: React.FC = memo(() => (
   <svg
     viewBox="0 0 24 24"
     fill="none"
@@ -12,6 +12,6 @@ const PushPin: React.FC = () => (
       <path d="M1.47 21.47a.75.75 0 0 0 1.06 1.06l-1.06-1.06Zm5.714-3.598a.75.75 0 0 0-1.061-1.06l1.06 1.06ZM2.53 22.53l4.653-4.658-1.061-1.06-4.654 4.658 1.062 1.06Z" />
     </g>
   </svg>
-);
+));
 
 export default PushPin;

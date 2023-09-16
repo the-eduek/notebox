@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
 import { NoteItem } from "../types";
 
 interface NoteContextType {
@@ -25,7 +25,7 @@ const NoteContext = createContext<NoteContextType>({
   allTags: [],
 });
 
-function createLocalArray<T extends number | NoteItem>(localName: string): Array<T> {
+function getLocalArray<T extends number | NoteItem>(localName: string): Array<T> {
   const local = localStorage.getItem(localName);
   let localArray: Array<T> = [];
 
@@ -35,15 +35,15 @@ function createLocalArray<T extends number | NoteItem>(localName: string): Array
   return localArray;
 }
 
-function setLocalArray<T extends Array<number> | Array<NoteItem>>(
+function setLocalArray<T extends number | NoteItem>(
   variableName: string,
-  newValue: T
+  newValue: Array<T>
 ): void {
   localStorage.setItem(variableName, JSON.stringify(newValue));
 }
 
 function validateNoteItem(noteParam: NoteItem): boolean {
-  const isValid: boolean =
+  const isValid =
     "content" in noteParam &&
     typeof noteParam.content === "string" &&
     "createdAt" in noteParam &&
@@ -67,21 +67,19 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({
   children,
 }: NoteProviderProps) => {
   // get and validate notes
-  const localNotes = createLocalArray<NoteItem>("localNotes");
+  const localNotes = getLocalArray<NoteItem>("localNotes");
   let validatedLocalNotes: Array<NoteItem> = [];
 
-  const localPinnedNotes = createLocalArray<number>("localPinnedNotes");
+  const localPinnedNotes = getLocalArray<number>("localPinnedNotes");
   let validatedPinnedNotes: Array<number> = [];
 
   if (localNotes.length) {
     validatedLocalNotes = localNotes.filter((note) => validateNoteItem(note));
-    setLocalArray("localNotes", validatedLocalNotes);
-
     validatedPinnedNotes = localPinnedNotes.filter((noteId) => {
       if (typeof noteId === "number")
         return validatedLocalNotes.find((note) => note.id === noteId);
     });
-
+    setLocalArray("localNotes", validatedLocalNotes);
     setLocalArray("localPinnedNotes", validatedPinnedNotes);
   }
 
@@ -89,53 +87,44 @@ export const NoteProvider: React.FC<NoteProviderProps> = ({
   const [allNotes, setAllNotes] = useState<Array<NoteItem>>(validatedLocalNotes);
 
   const addNote = (noteParam: NoteItem): void => {
-    const newAllNotes = [...allNotes, noteParam];
-    setAllNotes(newAllNotes);
-    setLocalArray("localNotes", newAllNotes);
+    setAllNotes((prevAllNotes) => [...prevAllNotes, noteParam]);
+    setLocalArray("localNotes", [...allNotes, noteParam]);
   };
 
   // pinning notes
   const [pinnedNotes, setPinnedNotes] = useState<Array<number>>(validatedPinnedNotes);
 
-  const togglePinNote = (note: NoteItem, pin: boolean): void => {
-    // do not process pinning if not isn't created, i.e. in new note page
-    if (!note.content && !!allNotes.find((noteParam) => noteParam.id === note.id)) return;
+  const togglePinNote = (note: NoteItem, currPinState: boolean): void => {
+    function getNewArray(arr: Array<number>): Array<number> {
+      return currPinState
+        ? arr.filter((noteId) => noteId !== note.id)
+        : [...arr, note.id];
+    }
 
-    // toggle pinning
-    let newPinnedNotes: Array<number> = [];
-
-    if (pin) newPinnedNotes = pinnedNotes.filter((noteId) => noteId !== note.id);
-    else newPinnedNotes = [...pinnedNotes, note.id];
-
-    setPinnedNotes(newPinnedNotes);
-    setLocalArray("localPinnedNotes", newPinnedNotes);
+    if (allNotes.find((noteParam) => noteParam.id === note.id) || note.content) {
+      setPinnedNotes((prevPinnedNotes) => getNewArray(prevPinnedNotes));
+      setLocalArray("localPinnedNotes", getNewArray(pinnedNotes));
+    }
   };
 
   // editing note
   const editNote = (note: NoteItem): void => {
-    const canEditIndex: number = allNotes.findIndex(
-      (noteParam) => noteParam.id === note.id
-    );
-
-    if (canEditIndex !== -1) {
-      const newAllNotes = [...allNotes];
-      newAllNotes.splice(canEditIndex, 1, note);
-
-      setAllNotes(newAllNotes);
-      setLocalArray("localNotes", newAllNotes);
+    function getNewArray(arr: Array<NoteItem>): Array<NoteItem> {
+      return [...arr.filter((item) => item.id !== note.id), note];
     }
+
+    setAllNotes((prevAllNotes) => getNewArray(prevAllNotes));
+    setLocalArray("localNotes", getNewArray(allNotes));
   };
 
   // deleting notes
   const deleteNote = (noteParam: NoteItem) => {
-    const newAllNotes = allNotes.filter((note) => {
-      return (
-        new Date(note.createdAt).getTime() !== new Date(noteParam.createdAt).getTime()
-      );
-    });
+    function getNewArray(arr: Array<NoteItem>): Array<NoteItem> {
+      return arr.filter((note) => note.id !== noteParam.id);
+    }
 
-    setAllNotes(newAllNotes);
-    localStorage.setItem("localNotes", JSON.stringify(newAllNotes));
+    setAllNotes((prevAllNotes) => getNewArray(prevAllNotes));
+    setLocalArray("localNotes", getNewArray(allNotes));
   };
 
   // all tags

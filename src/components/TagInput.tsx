@@ -27,13 +27,13 @@ const TagInput: React.FC<TagInputProps> = ({
       if (validLength && !tagExists) newTagsArray = [...tags, tagText];
 
       updateTags(newTagsArray);
-      setTagInput("");
+      setTagInput(() => "");
     }
   };
 
   const deleteTag: React.MouseEventHandler<HTMLButtonElement> = (evt): void => {
+    evt.preventDefault();
     if (canEdit) {
-      evt.preventDefault();
       const tag = evt.currentTarget.value;
       const newTagsArray = [...tags.filter((tagParam) => tagParam !== tag)];
       updateTags(newTagsArray);
@@ -47,26 +47,25 @@ const TagInput: React.FC<TagInputProps> = ({
     const canCreate = keysToCreate.includes(currentKey);
 
     if (currentKey === ",") currentText = currentText.slice(0, currentText.length - 1);
-    setTagInput(currentText.trim());
+    setTagInput(() => currentText.trim());
     createTag(currentText, canCreate);
   };
 
   const handleTagKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (evt) => {
-    const currentText = evt.currentTarget.value;
+    if (evt.key.toLowerCase() === "enter") evt.preventDefault();
+
     const currentKey = evt.key.toLowerCase();
     const canCreate = keysToCreate.includes(currentKey);
 
-    if (currentKey === "backspace" && tags.length && !tagInput.length) {
-      const newTagsArray = [...tags];
-      setTagInput(newTagsArray.pop()!);
-      updateTags(newTagsArray);
-    } else createTag(currentText, canCreate);
+    if (currentKey === "backspace" && !!tags.length && !tagInput.length) {
+      setTagInput(() => `${tags[tags.length - 1]} `);
+      updateTags(tags.slice(0, tags.length - 1));
+    } else createTag(evt.currentTarget.value, canCreate);
   };
 
   const handleBlur: React.FocusEventHandler<HTMLInputElement> = (evt) => {
-    const currentText = evt.target.value;
-    createTag(currentText, true);
-    setTagInput("");
+    createTag(evt.target.value, true);
+    setTagInput(() => "");
   };
 
   return (

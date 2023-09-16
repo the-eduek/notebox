@@ -1,5 +1,4 @@
 import React, { createContext, useState } from "react";
-import { ViewType } from "../types";
 
 interface ViewContextType {
   notesView: ViewType;
@@ -9,6 +8,8 @@ interface ViewContextType {
 interface ViewProviderProps {
   children: React.ReactNode;
 }
+ 
+type ViewType = "grid" | "list";
 
 const ViewContext = createContext<ViewContextType>({
   notesView: "list",
@@ -19,16 +20,17 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({
   children,
 }: ViewProviderProps) => {
   let localView: ViewType;
-  const isLocal: string | null = localStorage.getItem("localView");
+  const isLocal = localStorage.getItem("localView");
 
-  if (!isLocal || !["grid", "list"].includes(isLocal)) localView = "list";
-  else localView = isLocal as ViewType;
+  isLocal && ["grid", "list"].includes(isLocal as ViewType)
+    ? (localView = isLocal as ViewType)
+    : (localView = "list");
 
   const [notesView, setNotesView] = useState<ViewType>(localView);
 
   const updateView = (newView: ViewType): void => {
     localStorage.setItem("localView", newView);
-    setNotesView(newView);
+    setNotesView(() => newView);
   };
 
   return (

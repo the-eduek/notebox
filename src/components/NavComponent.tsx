@@ -4,18 +4,18 @@ import NoteContext from "../context/NoteContext";
 import PushPin from "./images/PushPin";
 
 interface NavProps {
-  triggerSubmit: (checkPinned?: boolean) => void;
+  triggerSubmit: (pinStatus?: boolean) => void;
   currentNote: NoteItem;
 }
 
 const Nav: React.FC<NavProps> = ({ triggerSubmit, currentNote }: NavProps) => {
   const { pinnedNotes, togglePinNote } = useContext(NoteContext);
 
-  const pin = pinnedNotes.find((noteId) => noteId === currentNote.id);
-  const [isPinned, setIsPinned] = useState<boolean>(!!pin);
+  const pinStatus = !!pinnedNotes.find((noteId) => noteId === currentNote.id);
+  const [isPinned, setIsPinned] = useState<boolean>(pinStatus);
 
-  const handlePinNote = (pinAction: boolean): void => {
-    setIsPinned(!pinAction);
+  const handlePinNote: React.MouseEventHandler<HTMLButtonElement> = () => {
+    setIsPinned((prevPinState) => !prevPinState);
     togglePinNote(currentNote, isPinned);
   };
 
@@ -46,8 +46,10 @@ const Nav: React.FC<NavProps> = ({ triggerSubmit, currentNote }: NavProps) => {
       </div>
 
       <button
-        className={`${isPinned && "bg-neutral-500/[0.25]"} ${!currentNote && "cursor-not-allowed opacity-50"} h-10 ml-5 p-1.5 rounded-full transition w-10`}
-        onClick={() => handlePinNote(isPinned)}
+        className={`${isPinned && "bg-neutral-500/[0.25]"} ${
+          !currentNote && "cursor-not-allowed opacity-50"
+        } h-10 ml-5 p-1.5 rounded-full transition w-10`}
+        onClick={handlePinNote}
         disabled={!currentNote}
         title="Pin Note"
         type="button"

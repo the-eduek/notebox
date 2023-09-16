@@ -1,6 +1,6 @@
-import React from "react";
+import React, { memo } from "react";
 
-const WritingHand: React.FC = () => (
+const WritingHand: React.FC = memo(() => (
   <svg
     viewBox="0 0 24 24"
     fill="none"
@@ -18,6 +18,6 @@ const WritingHand: React.FC = () => (
       fill="currentColor"
     />
   </svg>
-);
+));
 
 export default WritingHand;

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Note from "../types/classes/note";
 import NoteContext from "../context/NoteContext";
 import Nav from "../components/NavComponent";
@@ -13,17 +13,16 @@ const NewNote: React.FC = () => {
   const noteTitleRef = useRef<HTMLTextAreaElement | null>(null);
 
   const handleTitleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
-    let newTitle: string = evt.target.value;
-    if (
+    let newTitle = evt.target.value;
+    const isTrimmed =
       noteTitle.charAt(noteTitle.length - 1) === " " &&
-      newTitle.charAt(newTitle.length - 1) === " "
-    ) {
-      newTitle = noteTitle;
-    }
+      newTitle.charAt(newTitle.length - 1) === " ";
 
     if (newTitle.length > 100) newTitle = newTitle.slice(0, 101);
+    if (isTrimmed) newTitle = noteTitle;
+
     noteObj.title = newTitle;
-    setNoteTitle(newTitle);
+    setNoteTitle(() => newTitle);
   };
 
   const handleTitleComplete: React.KeyboardEventHandler<HTMLTextAreaElement> = (evt) => {
@@ -33,7 +32,7 @@ const NewNote: React.FC = () => {
   useEffect(() => {
     if (noteTitleRef.current) {
       noteTitleRef.current.style.height = `0px`;
-      const scrollHeight: number = noteTitleRef.current.scrollHeight;
+      const scrollHeight = noteTitleRef.current.scrollHeight;
       if (scrollHeight)
         noteTitleRef.current.style.setProperty("height", `${scrollHeight}px`);
     }
@@ -44,14 +43,13 @@ const NewNote: React.FC = () => {
   const noteContentRef = useRef<HTMLTextAreaElement>(null);
 
   const handleContentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
-    const newText: string = evt.target.value;
-    noteObj.content = newText;
-    setNoteContent(newText);
+    noteObj.content = evt.target.value;
+    setNoteContent(evt.target.value);
   };
 
   useEffect(() => {
     if (noteContentRef.current) {
-      const scrollHeight: number = noteContentRef.current.scrollHeight;
+      const scrollHeight = noteContentRef.current.scrollHeight;
       if (scrollHeight)
         noteContentRef.current.style.setProperty("height", `${scrollHeight}px`);
     }
@@ -62,15 +60,15 @@ const NewNote: React.FC = () => {
 
   const updateNoteTags = (newNoteTags: Array<string>) => {
     noteObj.tags = newNoteTags;
-    setNoteTags(newNoteTags);
+    setNoteTags(() => newNoteTags);
   };
 
   // creating note and note object
   const formElt = useRef<HTMLFormElement | null>(null);
-  const navigate: NavigateFunction = useNavigate();
-  const immediateTime: Date = new Date();
+  const navigate = useNavigate();
+  const immediateTime = new Date();
 
-  const noteObj: Note = new Note(immediateTime, noteContent, noteTitle, noteTags);
+  const noteObj = new Note(immediateTime, noteContent, noteTitle, noteTags);
 
   const handleFormSubmit: React.FormEventHandler<HTMLFormElement> = (evt) => {
     evt.preventDefault();
@@ -89,11 +87,11 @@ const NewNote: React.FC = () => {
     formElt.current?.dispatchEvent(submitEvt);
   };
 
-  const checkPinned = (checkPinned?: boolean): void => {
+  const handlePinned = (pinStatus?: boolean): void => {
     triggerSubmit();
 
-    // pin note if pin was clicked
-    if (checkPinned) togglePinNote(noteObj, false);
+    // pin note if 'pin note' was selected, i,e current pin state is false
+    if (pinStatus) togglePinNote(noteObj, false);
     navigate("/");
   };
 
@@ -101,7 +99,7 @@ const NewNote: React.FC = () => {
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">
       <div className="pb-14 pt-4 md:pt-12">
         <Nav
-          triggerSubmit={checkPinned}
+          triggerSubmit={handlePinned}
           currentNote={noteObj}
         />
       </div>

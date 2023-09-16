@@ -8,7 +8,7 @@ const SwitchView: React.FC = () => {
     <button
       className="border border-neutral-300 flex items-center ml-2.5 md:ml-3 outline-none focus:outline-blue-300 p-1 md:p-1.5 rounded-md transition"
       onClick={() => (notesView === "list" ? updateView("grid") : updateView("list"))}
-      title={notesView === "grid" ? "List View" : "Grid View"}
+      title={notesView === "list" ? "Grid View" : "List View"}
       type="button"
     >
       {notesView === "grid" ? (

@@ -13,7 +13,7 @@ const TagsMenu: React.FC<TagsMenuProps> = ({
 }: TagsMenuProps) => {
   const { allTags } = useContext(NoteContext);
 
-  // closing moadal
+  // closing modal
   const handleClose: React.MouseEventHandler<HTMLElement> = (evt) => {
     if (evt.target === evt.currentTarget) toggleModal();
   };
@@ -27,8 +27,7 @@ const TagsMenu: React.FC<TagsMenuProps> = ({
   const [tagsArray, setTagsArray] = useState<Array<string>>(allTags);
 
   const handleSearch = (searchText: string): void => {
-    const filteredTags = allTags.filter((tags) => tags.includes(searchText.trim()));
-    setTagsArray(filteredTags);
+    setTagsArray(() => allTags.filter((tags) => tags.includes(searchText.trim())));
   };
 
   return (
