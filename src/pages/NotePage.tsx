@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ModalAction, NoteItem } from "../types";
 import Note from "../types/classes/note";
 import NoteContext from "../context/NoteContext";
 import Bin from "../components/images/Bin";
@@ -16,21 +15,17 @@ const NotePage: React.FC = () => {
   const [noteTitle, setNoteTitle] = useState<string>("");
   const noteTitleRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const handleTitleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
-    evt
-  ): void => {
-    let newTitle: string = evt.target.value;
-    if (
+  const handleTitleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
+    let newTitle = evt.target.value;
+    const isTrimmed =
       noteTitle.charAt(noteTitle.length - 1) === " " &&
-      newTitle.charAt(newTitle.length - 1) === " "
-    ) {
-      newTitle = noteTitle;
-    }
+      newTitle.charAt(newTitle.length - 1) === " ";
 
     if (newTitle.length > 100) newTitle = newTitle.slice(0, 101);
-    noteObj.title = newTitle;
-    setNoteTitle(newTitle);
+    if (isTrimmed) newTitle = noteTitle;
 
+    noteObj.title = newTitle;
+    setNoteTitle(() => newTitle);
     if (editing === true) triggerSubmit();
   };
 
@@ -41,7 +36,7 @@ const NotePage: React.FC = () => {
   useEffect(() => {
     if (noteTitleRef.current) {
       noteTitleRef.current.style.height = `0px`;
-      const scrollHeight: number = noteTitleRef.current.scrollHeight;
+      const scrollHeight = noteTitleRef.current.scrollHeight;
       if (scrollHeight)
         noteTitleRef.current.style.setProperty("height", `${scrollHeight}px`);
     }
@@ -52,17 +47,17 @@ const NotePage: React.FC = () => {
   const noteContentRef = useRef<HTMLTextAreaElement | null>(null);
 
   const handleContentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
-    const newText = evt.target.value;
-    noteObj.content = newText;
-    setNoteContent(newText);
+    noteObj.content = evt.target.value;
+    setNoteContent(() => evt.target.value);
     if (editing === true) triggerSubmit();
   };
 
   useEffect(() => {
     if (noteContentRef) {
-      const scrollHeight: number | undefined = noteContentRef.current?.scrollHeight;
-      if (scrollHeight)
-        noteContentRef.current?.style.setProperty("height", `${scrollHeight}px`);
+      const scrollHeight = noteContentRef.current?.scrollHeight;
+      scrollHeight
+        ? noteContentRef.current?.style.setProperty("height", `${scrollHeight}px`)
+        : null;
     }
   }, [noteContent]);
 
@@ -71,8 +66,7 @@ const NotePage: React.FC = () => {
 
   const updateNoteTags = (newNoteTags: Array<string>): void => {
     noteObj.tags = newNoteTags;
-    setNoteTags(newNoteTags);
-
+    setNoteTags(() => newNoteTags);
     if (editing === true) triggerSubmit();
   };
 
@@ -80,27 +74,57 @@ const NotePage: React.FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const toggleModal = (): void => {
-    setShowModal(!showModal);
-
-    if (!showModal) document.body.classList.add("overflow-hidden");
-    else document.body.classList.remove("overflow-hidden");
+    setShowModal((prevShowModal) => !prevShowModal);
   };
 
-  const setModalAction = (action?: ModalAction): void => {
-    if (action === 1) {
-      document.body.classList.remove("overflow-hidden");
-      deleteNote(noteObj);
-      navigate("/");
-    } else toggleModal();
+  const setDeleteAction = (action: boolean): void => {
+    action ? (deleteNote(noteObj), navigate("/")) : toggleModal();
   };
+
+  useEffect(() => {
+    showModal
+      ? document.body.classList.add("overflow-hidden")
+      : document.body.classList.remove("overflow-hidden");
+  }, [showModal]);
+
+  useEffect(() => {
+    const handleDelKey: EventListener = (evt) => {
+      const isKeyboardEvent = evt instanceof KeyboardEvent;
+
+      if (isKeyboardEvent && evt.key.toLowerCase() === "delete") {
+        if (showModal === false) toggleModal();
+      }
+    };
+
+    const handleEscKey: EventListener = (evt) => {
+      const isKeyboardEvent = evt instanceof KeyboardEvent;
+
+      if (isKeyboardEvent && evt.key.toLowerCase() === "escape") {
+        if (showModal === true) toggleModal();
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("keydown", handleDelKey);
+      window.addEventListener("keydown", handleEscKey);
+
+      return () => {
+        window.removeEventListener("keydown", handleDelKey);
+        window.removeEventListener("keydown", handleEscKey);
+      };
+    }
+  }, [showModal]);
 
   // toggle editing state
   const [editing, setEditing] = useState<boolean>(false);
 
-  const editPage = (): void => {
-    setEditing(!editing);
-    if (!editing) noteTitleRef.current?.focus();
+  const toggleEdit: React.MouseEventHandler<HTMLButtonElement> = () => {
+    setEditing((prevEditState) => !prevEditState);
   };
+
+  useEffect(() => {
+    editing ? noteTitleRef.current?.focus() : null;
+  }, [editing]);
 
   // edit note
   const formElt = useRef<HTMLFormElement | null>(null);
@@ -112,7 +136,7 @@ const NotePage: React.FC = () => {
     formElt.current?.dispatchEvent(submitEvt);
   };
 
-  const triggerSubmitAndClose = (): void => {
+  const handleExitNote = (): void => {
     triggerSubmit();
     navigate("/");
   };
@@ -129,30 +153,29 @@ const NotePage: React.FC = () => {
   const { noteId } = useParams();
   const navigate = useNavigate();
 
-  const note: NoteItem | undefined = allNotes.find(
-    (noteParam) => noteId === noteParam.id.toString()
-  );
+  const note = allNotes.find((noteParam) => noteId === noteParam.id.toString());
 
   useEffect(() => {
     if (!note) navigate("/notes/error");
     else {
-      setNoteTitle(noteObj.title!);
+      setNoteTitle(noteObj.title);
       setNoteContent(noteObj.content);
-      setNoteTags(noteObj.tags!);
+      setNoteTags(noteObj.tags);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!note) return null;
 
   // note object
-  const noteObj: Note = new Note(note.createdAt, note.content, note.title, note.tags);
+  const noteObj = new Note(note.createdAt, note.content, note.title, note.tags);
 
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">
       <div className="flex items-center pb-14 pt-6 md:pt-12">
         <div className="flex-grow">
           <Nav
-            triggerSubmit={triggerSubmitAndClose}
+            triggerSubmit={handleExitNote}
             currentNote={noteObj}
           />
         </div>
@@ -160,7 +183,7 @@ const NotePage: React.FC = () => {
         <button
           className={`${editing && "bg-neutral-500/[0.25]"}
             h-10 ml-5 p-1.5 rounded-full transition w-10`}
-          onClick={editPage}
+          onClick={toggleEdit}
           title="Edit Note"
           type="button"
         >
@@ -170,7 +193,7 @@ const NotePage: React.FC = () => {
         <button
           className={`${showModal && "bg-neutral-500/[0.25]"}
             h-10 ml-5 p-1.5 rounded-full transition w-10`}
-          onClick={toggleModal}
+          onClick={() => toggleModal()}
           title="Delete Note"
           type="button"
         >
@@ -234,7 +257,7 @@ const NotePage: React.FC = () => {
         </div>
       </form>
 
-      {showModal && <DeleteModal setModalAction={setModalAction} />}
+      {showModal && <DeleteModal setDeleteAction={setDeleteAction} />}
     </section>
   );
 };
