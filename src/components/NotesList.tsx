@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { NoteItem } from "../types";
-import ViewContext from "../context/ViewContext";
 import NotePreview from "./NotePreview";
+import useViewContext from "../context/ViewContext/hooks/useViewContext";
 
 interface NotesListProps {
   listTitle: string;
@@ -14,7 +14,7 @@ const NotesList: React.FC<NotesListProps> = ({
   notesArray,
   showListTitle = true,
 }: NotesListProps) => {
-  const { notesView } = useContext(ViewContext);
+  const { notesView } = useViewContext();
 
   return (
     <section className="pb-10">
