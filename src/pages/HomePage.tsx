@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NoteItem } from "../types";
-import NoteContext from "../context/NoteContext";
 import EmptyNotes from "../components/EmptyNotes";
 import MenuOptions from "../components/MenuOptions";
 import NotesList from "../components/NotesList";
@@ -8,21 +7,22 @@ import Notepad from "../components/images/Notepad";
 import TagsMenu from "../components/TagsMenu";
 import SearchComponent from "../components/SearchComponent";
 import SwitchView from "../components/SwitchView";
+import useNoteContext from "../context/NoteContext/hooks/useNoteContext";
 
 const HomePage: React.FC = () => {
-  const { allNotes, pinnedNotes } = useContext(NoteContext);
+  const { allNotes, pinnedNotes } = useNoteContext();
 
   // sorting
-  const notes = allNotes
+  const sortedNotes = allNotes
     .filter((note) => !pinnedNotes.includes(note.id))
     .sort((noteX, noteY) => noteY.id - noteX.id);
 
-  const pinned = allNotes
+  const sortedPinned = allNotes
     .filter((note) => pinnedNotes.includes(note.id))
     .sort((noteX, noteY) => noteY.id - noteX.id);
 
-  const [notesArray, setNotesArray] = useState<Array<NoteItem>>(notes);
-  const [pinnedNotesArray, setPinnedNotesArray] = useState<Array<NoteItem>>(pinned);
+  const [notesArray, setNotesArray] = useState<Array<NoteItem>>(sortedNotes);
+  const [pinnedNotesArray, setPinnedNotesArray] = useState<Array<NoteItem>>(sortedPinned);
 
   // searching
   const searchRef = useRef<HTMLInputElement | null>(null);
@@ -42,19 +42,19 @@ const HomePage: React.FC = () => {
 
     if (searchText.startsWith("#")) {
       setNotesArray(() => {
-        return notes.filter((note) => {
+        return sortedNotes.filter((note) => {
           return !!note.tags?.filter((tag) => tag.includes(searchText.slice(1))).length;
         });
       });
 
       setPinnedNotesArray(() => {
-        return pinned.filter((note) => {
+        return sortedPinned.filter((note) => {
           return !!note.tags?.find((tag) => tag.includes(searchText.slice(1)));
         });
       });
     } else {
-      setNotesArray(() => searchFn(searchText, notes));
-      setPinnedNotesArray(() => searchFn(searchText, pinned));
+      setNotesArray(() => searchFn(searchText, sortedNotes));
+      setPinnedNotesArray(() => searchFn(searchText, sortedPinned));
     }
   };
 
@@ -115,7 +115,7 @@ const HomePage: React.FC = () => {
       <NotesList
         notesArray={notesArray}
         listTitle={"📁 other notes"}
-        showListTitle={!!pinned.length && !!notesArray.length}
+        showListTitle={!!sortedPinned.length && !!notesArray.length}
       />
 
       {!allNotes.length && <EmptyNotes />}

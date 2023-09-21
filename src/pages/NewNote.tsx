@@ -1,12 +1,14 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Note from "../types/classes/note";
-import NoteContext from "../context/NoteContext";
 import Nav from "../components/NavComponent";
 import TagInput from "../components/TagInput";
+import useAddNote from "../context/NoteContext/hooks/useAddNote";
+import useTogglePinnedNote from "../context/NoteContext/hooks/useTogglePinnedNote";
 
 const NewNote: React.FC = () => {
-  const { addNote, togglePinNote } = useContext(NoteContext);
+  const addNote = useAddNote();
+  const togglePinnedNote = useTogglePinnedNote();
 
   // note title
   const [noteTitle, setNoteTitle] = useState<string>("");
@@ -91,7 +93,7 @@ const NewNote: React.FC = () => {
     triggerSubmit();
 
     // pin note if 'pin note' was selected, i,e current pin state is false
-    if (pinStatus) togglePinNote(noteObj, false);
+    if (pinStatus) togglePinnedNote(noteObj, false);
     navigate("/");
   };
 

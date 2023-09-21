@@ -1,15 +1,19 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Note from "../types/classes/note";
-import NoteContext from "../context/NoteContext";
 import Bin from "../components/images/Bin";
 import DeleteModal from "../components/DeleteModal";
 import Nav from "../components/NavComponent";
 import TagInput from "../components/TagInput";
 import WritingHand from "../components/images/WritingHand";
+import useNoteContext from "../context/NoteContext/hooks/useNoteContext";
+import useEditNote from "../context/NoteContext/hooks/useEditNote";
+import useDeleteNote from "../context/NoteContext/hooks/useDeleteNote";
 
 const NotePage: React.FC = () => {
-  const { allNotes, editNote, deleteNote } = useContext(NoteContext);
+  const { allNotes } = useNoteContext();
+  const editNote = useEditNote();
+  const deleteNote = useDeleteNote();
 
   // note title
   const [noteTitle, setNoteTitle] = useState<string>("");
@@ -162,7 +166,7 @@ const NotePage: React.FC = () => {
       setNoteContent(noteObj.content);
       setNoteTags(noteObj.tags);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!note) return null;

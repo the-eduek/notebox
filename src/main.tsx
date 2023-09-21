@@ -3,7 +3,7 @@ import App from "./App.tsx";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { NoteContextProvider } from "./context/NoteContext.tsx";
+import { NoteContextProvider } from "./context/NoteContext/NoteContext.tsx";
 import { ViewContextProvider } from "./context/ViewContext/ViewContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

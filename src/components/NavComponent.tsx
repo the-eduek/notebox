@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { NoteItem } from "../types";
-import NoteContext from "../context/NoteContext";
 import PushPin from "./images/PushPin";
+import useNoteContext from "../context/NoteContext/hooks/useNoteContext";
+import useTogglePinnedNote from "../context/NoteContext/hooks/useTogglePinnedNote";
 
 interface NavProps {
   triggerSubmit: (pinStatus?: boolean) => void;
@@ -9,14 +10,15 @@ interface NavProps {
 }
 
 const Nav: React.FC<NavProps> = ({ triggerSubmit, currentNote }: NavProps) => {
-  const { pinnedNotes, togglePinNote } = useContext(NoteContext);
+  const { pinnedNotes } = useNoteContext();
+  const togglePinnedNote = useTogglePinnedNote();
 
   const pinStatus = !!pinnedNotes.find((noteId) => noteId === currentNote.id);
   const [isPinned, setIsPinned] = useState<boolean>(pinStatus);
 
   const handlePinNote: React.MouseEventHandler<HTMLButtonElement> = () => {
     setIsPinned((prevPinState) => !prevPinState);
-    togglePinNote(currentNote, isPinned);
+    togglePinnedNote(currentNote, isPinned);
   };
 
   return (

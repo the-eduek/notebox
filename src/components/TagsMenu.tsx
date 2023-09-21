@@ -1,6 +1,6 @@
-import React, { useContext, useState } from "react";
-import NoteContext from "../context/NoteContext";
+import React, { useState } from "react";
 import SearchComponent from "./SearchComponent";
+import useNoteContext from "../context/NoteContext/hooks/useNoteContext";
 
 interface TagsMenuProps {
   toggleModal: () => void;
@@ -11,7 +11,7 @@ const TagsMenu: React.FC<TagsMenuProps> = ({
   toggleModal,
   triggerTagSearch,
 }: TagsMenuProps) => {
-  const { allTags } = useContext(NoteContext);
+  const { allTags } = useNoteContext();
 
   // closing modal
   const handleClose: React.MouseEventHandler<HTMLElement> = (evt) => {
