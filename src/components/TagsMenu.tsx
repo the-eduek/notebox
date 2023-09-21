@@ -27,7 +27,8 @@ const TagsMenu: React.FC<TagsMenuProps> = ({
   const [tagsArray, setTagsArray] = useState<Array<string>>(allTags);
 
   const handleSearch = (searchText: string): void => {
-    setTagsArray(() => allTags.filter((tags) => tags.includes(searchText.trim())));
+    searchText = searchText.trim().toLowerCase();
+    setTagsArray(() => allTags.filter((tag) => tag.toLowerCase().includes(searchText)));
   };
 
   return (

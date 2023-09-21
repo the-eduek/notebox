@@ -29,9 +29,10 @@ const HomePage: React.FC = () => {
 
   const searchFn = (input: string, searchArray: Array<NoteItem>): Array<NoteItem> => {
     return searchArray.filter((note) => {
-      const matchBody: boolean = note.content.includes(input);
-      const matchTitle: boolean = !!note.title?.includes(input);
-      const matchTags: boolean = !!note.tags?.find((tag) => tag.includes(input));
+      input = input.toLowerCase();
+      const matchBody = note.content.toLowerCase().includes(input);
+      const matchTitle = !!note.title?.toLowerCase().includes(input);
+      const matchTags = !!note.tags?.find((tag) => tag.toLowerCase().includes(input));
 
       return matchBody || matchTitle || matchTags;
     });
@@ -60,7 +61,7 @@ const HomePage: React.FC = () => {
 
   const searchByTag = (tag: string): void => {
     if (searchRef.current) {
-      const inputEvt = new InputEvent("change", {
+      const inputEvt = new InputEvent("input", {
         bubbles: true,
       });
 

@@ -83,7 +83,7 @@ const NewNote: React.FC = () => {
   };
 
   const triggerSubmit = (): void => {
-    const submitEvt: Event = new Event("submit", {
+    const submitEvt = new Event("submit", {
       bubbles: true,
     });
     formElt.current?.dispatchEvent(submitEvt);
