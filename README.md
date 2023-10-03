@@ -1,7 +1,5 @@
 # notebox
 
-## about
-
    effortlessly create, edit, delete, and organize your notes with a user-friendly web app.s
 
 
