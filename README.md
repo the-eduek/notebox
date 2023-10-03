@@ -2,7 +2,7 @@
 
 ## about
 
-   notebox is a user-friendly note-taking web application. users can create, edit, delete, and tag notes.
+   effortlessly create, edit, delete, and organize your notes with a user-friendly web app.s
 
 
 ## live
