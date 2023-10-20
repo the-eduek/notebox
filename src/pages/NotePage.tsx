@@ -6,9 +6,7 @@ import DeleteModal from "../components/DeleteModal";
 import Nav from "../components/NavComponent";
 import TagInput from "../components/TagInput";
 import WritingHand from "../components/images/WritingHand";
-import useNoteContext from "../context/NoteContext/hooks/useNoteContext";
-import useEditNote from "../context/NoteContext/hooks/useEditNote";
-import useDeleteNote from "../context/NoteContext/hooks/useDeleteNote";
+import useNoteContext, { useDeleteNote, useEditNote } from "../context/NoteContext/hooks";
 
 const NotePage: React.FC = () => {
   const { allNotes } = useNoteContext();

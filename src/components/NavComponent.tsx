@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { NoteItem } from "../types";
 import PushPin from "./images/PushPin";
-import useNoteContext from "../context/NoteContext/hooks/useNoteContext";
-import useTogglePinnedNote from "../context/NoteContext/hooks/useTogglePinnedNote";
+import useNoteContext, {
+  useTogglePinnedNote,
+} from "../context/NoteContext/hooks";
 
 interface NavProps {
   triggerSubmit: (pinStatus?: boolean) => void;

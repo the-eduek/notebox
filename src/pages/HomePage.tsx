@@ -7,7 +7,7 @@ import Notepad from "../components/images/Notepad";
 import TagsMenu from "../components/TagsMenu";
 import SearchComponent from "../components/SearchComponent";
 import SwitchView from "../components/SwitchView";
-import useNoteContext from "../context/NoteContext/hooks/useNoteContext";
+import useNoteContext from "../context/NoteContext/hooks";
 
 const HomePage: React.FC = () => {
   const { allNotes, pinnedNotes } = useNoteContext();
@@ -22,17 +22,23 @@ const HomePage: React.FC = () => {
     .sort((noteX, noteY) => noteY.id - noteX.id);
 
   const [notesArray, setNotesArray] = useState<Array<NoteItem>>(sortedNotes);
-  const [pinnedNotesArray, setPinnedNotesArray] = useState<Array<NoteItem>>(sortedPinned);
+  const [pinnedNotesArray, setPinnedNotesArray] =
+    useState<Array<NoteItem>>(sortedPinned);
 
   // searching
   const searchRef = useRef<HTMLInputElement | null>(null);
 
-  const searchFn = (input: string, searchArray: Array<NoteItem>): Array<NoteItem> => {
+  const searchFn = (
+    input: string,
+    searchArray: Array<NoteItem>
+  ): Array<NoteItem> => {
     return searchArray.filter((note) => {
       input = input.toLowerCase();
       const matchBody = note.content.toLowerCase().includes(input);
       const matchTitle = !!note.title?.toLowerCase().includes(input);
-      const matchTags = !!note.tags?.find((tag) => tag.toLowerCase().includes(input));
+      const matchTags = !!note.tags?.find((tag) =>
+        tag.toLowerCase().includes(input)
+      );
 
       return matchBody || matchTitle || matchTags;
     });
@@ -44,7 +50,8 @@ const HomePage: React.FC = () => {
     if (searchText.startsWith("#")) {
       setNotesArray(() => {
         return sortedNotes.filter((note) => {
-          return !!note.tags?.filter((tag) => tag.includes(searchText.slice(1))).length;
+          return !!note.tags?.filter((tag) => tag.includes(searchText.slice(1)))
+            .length;
         });
       });
 

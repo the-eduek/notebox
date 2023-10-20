@@ -1,6 +1,5 @@
 import React from "react";
-import useViewContext from "../context/ViewContext/hooks/useViewContext";
-import { useUpdateView } from "../context/ViewContext/hooks/useUpdateView";
+import useViewContext, { useUpdateView } from "../context/ViewContext/hooks";
 
 const SwitchView: React.FC = () => {
   const { notesView } = useViewContext();

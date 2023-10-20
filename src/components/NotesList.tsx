@@ -1,7 +1,7 @@
 import React from "react";
 import { NoteItem } from "../types";
 import NotePreview from "./NotePreview";
-import useViewContext from "../context/ViewContext/hooks/useViewContext";
+import useViewContext from "../context/ViewContext/hooks";
 
 interface NotesListProps {
   listTitle: string;

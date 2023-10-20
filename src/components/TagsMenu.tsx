@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SearchComponent from "./SearchComponent";
-import useNoteContext from "../context/NoteContext/hooks/useNoteContext";
+import useNoteContext from "../context/NoteContext/hooks";
 
 interface TagsMenuProps {
   toggleModal: () => void;

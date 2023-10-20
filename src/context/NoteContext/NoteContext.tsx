@@ -14,9 +14,9 @@ interface NoteContextProviderProps {
   children: React.ReactNode;
 }
 
-const NoteContext = createContext<NoteContextType | null>(null);
+export const NoteContext = createContext<NoteContextType | null>(null);
 
-export const NoteContextProvider: React.FC<NoteContextProviderProps> = ({
+const NoteContextProvider: React.FC<NoteContextProviderProps> = ({
   children,
 }: NoteContextProviderProps) => {
   let localNotes = getLocalArray<NoteItem>("localNotes");
@@ -58,4 +58,4 @@ export const NoteContextProvider: React.FC<NoteContextProviderProps> = ({
   );
 };
 
-export default NoteContext;
+export default NoteContextProvider;

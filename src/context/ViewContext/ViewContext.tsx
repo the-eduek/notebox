@@ -11,9 +11,9 @@ interface ViewContextProviderProps {
   children: React.ReactNode;
 }
 
-const ViewContext = createContext<ViewContextType | null>(null);
+export const ViewContext = createContext<ViewContextType | null>(null);
 
-export const ViewContextProvider: React.FC<ViewContextProviderProps> = ({
+const ViewContextProvider: React.FC<ViewContextProviderProps> = ({
   children,
 }: ViewContextProviderProps) => {
   const [notesView, setNotesView] = useState<ViewType>("list");
@@ -33,4 +33,4 @@ export const ViewContextProvider: React.FC<ViewContextProviderProps> = ({
   );
 };
 
-export default ViewContext;
+export default ViewContextProvider;

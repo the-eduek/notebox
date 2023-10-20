@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Note from "../types/classes/note";
 import Nav from "../components/NavComponent";
 import TagInput from "../components/TagInput";
-import useAddNote from "../context/NoteContext/hooks/useAddNote";
-import useTogglePinnedNote from "../context/NoteContext/hooks/useTogglePinnedNote";
+import { useAddNote, useTogglePinnedNote } from "../context/NoteContext/hooks";
 
 const NewNote: React.FC = () => {
   const addNote = useAddNote();
@@ -14,7 +13,9 @@ const NewNote: React.FC = () => {
   const [noteTitle, setNoteTitle] = useState<string>("");
   const noteTitleRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const handleTitleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
+  const handleTitleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    evt
+  ) => {
     let newTitle = evt.target.value;
     const isTrimmed =
       noteTitle.charAt(noteTitle.length - 1) === " " &&
@@ -27,7 +28,9 @@ const NewNote: React.FC = () => {
     setNoteTitle(() => newTitle);
   };
 
-  const handleTitleComplete: React.KeyboardEventHandler<HTMLTextAreaElement> = (evt) => {
+  const handleTitleComplete: React.KeyboardEventHandler<HTMLTextAreaElement> = (
+    evt
+  ) => {
     if (evt.key.toLowerCase() === "enter") noteContentRef.current?.focus();
   };
 
@@ -44,7 +47,9 @@ const NewNote: React.FC = () => {
   const [noteContent, setNoteContent] = useState<string>("");
   const noteContentRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleContentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
+  const handleContentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    evt
+  ) => {
     noteObj.content = evt.target.value;
     setNoteContent(evt.target.value);
   };
@@ -107,7 +112,9 @@ const NewNote: React.FC = () => {
       </div>
 
       <form
-        onSubmit={(evt: React.FormEvent<HTMLFormElement>) => handleFormSubmit(evt)}
+        onSubmit={(evt: React.FormEvent<HTMLFormElement>) =>
+          handleFormSubmit(evt)
+        }
         ref={formElt}
       >
         <div>
