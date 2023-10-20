@@ -1,6 +1,6 @@
 # notebox
 
-   effortlessly create, edit, delete, and organize your notes with a user-friendly web app.s
+   effortlessly create, edit, delete, and organize your notes with a user-friendly web app.
 
 
 ## live
@@ -17,7 +17,7 @@
 - sorting by newly created: notes are displayed in a list (with a grid view also available), and are sorted by default with the most recently created. notes can also be sorted into a pinned folder to easily access relevant notes.
 
 
-## additional Features
+## additional features
 
 - [x]  **user-friendly ui**: prioritized an aesthetically pleasing and user-friendly design, a clean and intuitive interface enhances the user experience, including cta texts and empty states.
 - [x]  **responsive design**: the app is fully responsive to various screen sizes, from desktops to mobile devices.
