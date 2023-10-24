@@ -7,7 +7,7 @@ interface DeleteModalProps {
 const DeleteModal: React.FC<DeleteModalProps> = ({
   setDeleteAction,
 }: DeleteModalProps) => {
-  const handleClose: React.MouseEventHandler<HTMLElement> = (evt) => {
+  const closeModal: React.MouseEventHandler<HTMLElement> = (evt) => {
     evt.preventDefault();
     if (evt.target === evt.currentTarget) setDeleteAction(false);
   };
@@ -15,7 +15,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   return (
     <section
       className="bg-neutral-700/80 backdrop-blur-sm fixed flex h-screen left-0 items-center justify-between p-10 top-0 w-screen"
-      onClick={handleClose}
+      onClick={closeModal}
     >
       <div className="bg-neutral-50 flex flex-col min-h-[33.3%] items-center justify-center max-w-xl mx-auto px-6 py-10 rounded-lg shadow-[0,0,10pxrgba(0,0,0,0.5)] w-full">
         <h1 className="font-medium pb-6 md:pb-10 text-lg md:text-xl">

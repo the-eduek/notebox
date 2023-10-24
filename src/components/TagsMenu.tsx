@@ -14,11 +14,11 @@ const TagsMenu: React.FC<TagsMenuProps> = ({
   const { allTags } = useNoteContext();
 
   // closing modal
-  const handleClose: React.MouseEventHandler<HTMLElement> = (evt) => {
+  const closeModal: React.MouseEventHandler<HTMLElement> = (evt) => {
     if (evt.target === evt.currentTarget) toggleModal();
   };
 
-  const handleClick = (tag: string): void => {
+  const selectTag = (tag: string): void => {
     triggerTagSearch(tag);
     toggleModal();
   };
@@ -35,7 +35,7 @@ const TagsMenu: React.FC<TagsMenuProps> = ({
     <section className="fixed h-screen left-0 top-0 w-screen">
       <div
         className="bg-neutral-800/20 flex h-full md:items-center md:justify-center"
-        onClick={handleClose}
+        onClick={closeModal}
       >
         <div className="overflow-y-scroll sm:w-3/5 md:h-4/5 md:rounded">
           <div className="bg-neutral-50 flex-col min-h-full px-8 sm:px-12 py-16 sm:py-20 md:pt-32 md:rounded-lg">
@@ -85,7 +85,7 @@ const TagsMenu: React.FC<TagsMenuProps> = ({
                   >
                     <button
                       className="border border-neutral-300/75 font-normal pl-6 pr-12 py-3 rounded-lg text-left text-lg w-full"
-                      onClick={() => handleClick(tag)}
+                      onClick={() => selectTag(tag)}
                       title={`${tag.charAt(0).toUpperCase()}${tag.slice(1)} Tag`}
                     >
                       <span className="font-medium text-neutral-500/80">#</span>
