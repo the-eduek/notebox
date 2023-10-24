@@ -12,7 +12,9 @@ const SearchComponent = forwardRef<HTMLInputElement, SearchComponentProps>(
   ) => {
     const [searchText, setSearchText] = useState<string>("");
 
-    const handleSearchInput: React.ChangeEventHandler<HTMLInputElement> = (evt) => {
+    const handleSearchInput: React.ChangeEventHandler<HTMLInputElement> = (
+      evt
+    ) => {
       setSearchText(() => evt.target.value);
       handleSearch(evt.target.value);
     };
@@ -34,19 +36,8 @@ const SearchComponent = forwardRef<HTMLInputElement, SearchComponentProps>(
           htmlFor="searchInput"
           className="absolute left-3 top-[calc(50%-0.65rem)]"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="h-5 w-5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-            />
+          <svg className="h-5 w-5">
+            <use xlinkHref="/sprites.svg#search"></use>
           </svg>
         </label>
       </div>

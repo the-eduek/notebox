@@ -19,7 +19,8 @@ const TagInput: React.FC<TagInputProps> = ({
       if (tagText.trim().startsWith("#")) tagText = tagText.slice(1);
 
       let newTagsArray = tags;
-      const validLength = tagText.trim().length > 1 && tagText.trim().length < 21;
+      const validLength =
+        tagText.trim().length > 1 && tagText.trim().length < 21;
       const tagExists = tags
         .filter((tag) => tag.toLowerCase())
         .includes(tagText.trim().toLowerCase());
@@ -46,12 +47,15 @@ const TagInput: React.FC<TagInputProps> = ({
     const currentKey = currentText.charAt(currentText.length - 1).toLowerCase();
     const canCreate = keysToCreate.includes(currentKey);
 
-    if (currentKey === ",") currentText = currentText.slice(0, currentText.length - 1);
+    if (currentKey === ",")
+      currentText = currentText.slice(0, currentText.length - 1);
     setTagInput(() => currentText.trim());
     createTag(currentText, canCreate);
   };
 
-  const handleTagKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (evt) => {
+  const handleTagKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (
+    evt
+  ) => {
     if (evt.key.toLowerCase() === "enter") evt.preventDefault();
 
     const currentKey = evt.key.toLowerCase();
@@ -85,19 +89,8 @@ const TagInput: React.FC<TagInputProps> = ({
               type="button"
               value={tag}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2.5}
-                stroke="#636363"
-                className="w-full h-full"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+              <svg className="w-full h-full">
+                <use xlinkHref="/sprites.svg#x"></use>
               </svg>
             </button>
           )}

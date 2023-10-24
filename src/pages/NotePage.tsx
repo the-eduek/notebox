@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Note from "../types/classes/note";
-import Bin from "../components/images/Bin";
 import DeleteModal from "../components/DeleteModal";
 import Nav from "../components/NavComponent";
 import TagInput from "../components/TagInput";
-import WritingHand from "../components/images/WritingHand";
-import useNoteContext, { useDeleteNote, useEditNote } from "../context/NoteContext/hooks";
+import useNoteContext, {
+  useDeleteNote,
+  useEditNote,
+} from "../context/NoteContext/hooks";
 
 const NotePage: React.FC = () => {
   const { allNotes } = useNoteContext();
@@ -17,7 +18,9 @@ const NotePage: React.FC = () => {
   const [noteTitle, setNoteTitle] = useState<string>("");
   const noteTitleRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const handleTitleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
+  const handleTitleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    evt
+  ) => {
     let newTitle = evt.target.value;
     const isTrimmed =
       noteTitle.charAt(noteTitle.length - 1) === " " &&
@@ -31,7 +34,9 @@ const NotePage: React.FC = () => {
     if (editing === true) triggerSubmit();
   };
 
-  const handleTitleComplete: React.KeyboardEventHandler<HTMLTextAreaElement> = (evt) => {
+  const handleTitleComplete: React.KeyboardEventHandler<HTMLTextAreaElement> = (
+    evt
+  ) => {
     if (evt.key.toLowerCase() === "enter") noteContentRef.current?.focus();
   };
 
@@ -48,7 +53,9 @@ const NotePage: React.FC = () => {
   const [noteContent, setNoteContent] = useState<string>("");
   const noteContentRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const handleContentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
+  const handleContentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    evt
+  ) => {
     noteObj.content = evt.target.value;
     setNoteContent(() => evt.target.value);
     if (editing === true) triggerSubmit();
@@ -58,7 +65,10 @@ const NotePage: React.FC = () => {
     if (noteContentRef) {
       const scrollHeight = noteContentRef.current?.scrollHeight;
       scrollHeight
-        ? noteContentRef.current?.style.setProperty("height", `${scrollHeight}px`)
+        ? noteContentRef.current?.style.setProperty(
+            "height",
+            `${scrollHeight}px`
+          )
         : null;
     }
   }, [noteContent]);
@@ -189,7 +199,9 @@ const NotePage: React.FC = () => {
           title="Edit Note"
           type="button"
         >
-          <WritingHand />
+          <svg className="h-full w-full">
+            <use xlinkHref="/sprites.svg#writinghand"></use>
+          </svg>
         </button>
 
         <button
@@ -199,7 +211,9 @@ const NotePage: React.FC = () => {
           title="Delete Note"
           type="button"
         >
-          <Bin />
+          <svg className="h-full w-full">
+            <use xlinkHref="/sprites.svg#bin"></use>
+          </svg>
         </button>
       </div>
 
@@ -222,19 +236,8 @@ const NotePage: React.FC = () => {
 
         <p className="flex items-center pb-5 pt-3.5">
           <span className="mb-1 pr-1">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-[1.375rem] w-[1.375rem]"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="#404040"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.75}
-                d="M3 10h18M7 3v2m10-2v2M6.2 21h11.6c1.12 0 1.68 0 2.108-.218a2 2 0 0 0 .874-.874C21 19.48 21 18.92 21 17.8V8.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 5 18.92 5 17.8 5H6.2c-1.12 0-1.68 0-2.108.218a2 2 0 0 0-.874.874C3 6.52 3 7.08 3 8.2v9.6c0 1.12 0 1.68.218 2.108a2 2 0 0 0 .874.874C4.52 21 5.08 21 6.2 21Z"
-              />
+            <svg className="h-[1.375rem] w-[1.375rem]">
+              <use xlinkHref="/sprites.svg#calendar"></use>
             </svg>
           </span>
           <span className="text-neutral-500">{noteObj.dateString}</span>

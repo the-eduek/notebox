@@ -28,7 +28,9 @@ const TagsMenu: React.FC<TagsMenuProps> = ({
 
   const handleSearch = (searchText: string): void => {
     searchText = searchText.trim().toLowerCase();
-    setTagsArray(() => allTags.filter((tag) => tag.toLowerCase().includes(searchText)));
+    setTagsArray(() =>
+      allTags.filter((tag) => tag.toLowerCase().includes(searchText))
+    );
   };
 
   return (
@@ -50,19 +52,8 @@ const TagsMenu: React.FC<TagsMenuProps> = ({
                 title="Close Tags"
                 type="button"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2.5}
-                  stroke="currentColor"
-                  className="w-full h-full"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                <svg className="w-full h-full">
+                  <use xlinkHref="/sprites.svg#x"></use>
                 </svg>
               </button>
             </div>

@@ -3,7 +3,6 @@ import { NoteItem } from "../types";
 import EmptyNotes from "../components/EmptyNotes";
 import MenuOptions from "../components/MenuOptions";
 import NotesList from "../components/NotesList";
-import Notepad from "../components/images/Notepad";
 import TagsMenu from "../components/TagsMenu";
 import SearchComponent from "../components/SearchComponent";
 import SwitchView from "../components/SwitchView";
@@ -97,7 +96,9 @@ const HomePage: React.FC = () => {
         <h1 className="flex font-bold font-bricolage md:my-[13.5px] text-2xl md:text-[2rem]">
           notebox
           <span className="h-6 md:h-7 ml-2 w-6 md:w-7">
-            <Notepad />
+            <svg className="h-full w-full">
+              <use xlinkHref="/sprites.svg#notepad"></use>
+            </svg>
           </span>
         </h1>
 

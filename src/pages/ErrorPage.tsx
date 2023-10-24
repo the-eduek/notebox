@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Notepad from "../components/images/Notepad";
 
 const NotFound: React.FC = () => {
   return (
@@ -8,7 +7,9 @@ const NotFound: React.FC = () => {
       <h1 className="flex font-bold font-bricolage md:my-[13.5px] text-2xl md:text-[2rem]">
         notebox
         <span className="h-6 md:h-7 ml-2 w-6 md:w-7">
-          <Notepad />
+          <svg className="h-full w-full">
+            <use xlinkHref="/sprites.svg#notepad"></use>
+          </svg>
         </span>
       </h1>
 
