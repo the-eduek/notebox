@@ -54,10 +54,10 @@ export function useEditNote() {
   return editNote;
 }
 
-export function useTogglePinnedNote() {
+export function useTogglePinNote() {
   const { allNotes, pinnedNotes, setPinnedNotes } = useNoteContext();
 
-  const togglePinnedNote = (note: NoteItem, currPinState: boolean): void => {
+  const togglePinNote = (note: NoteItem, currPinState: boolean): void => {
     function getNewArray(arr: Array<number>): Array<number> {
       return currPinState
         ? arr.filter((noteId) => noteId !== note.id)
@@ -73,5 +73,5 @@ export function useTogglePinnedNote() {
     }
   };
 
-  return togglePinnedNote;
+  return togglePinNote;
 }

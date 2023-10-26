@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Note from "../types/classes/note";
 import Nav from "../components/NavComponent";
 import TagInput from "../components/TagInput";
-import { useAddNote, useTogglePinnedNote } from "../context/NoteContext/hooks";
+import { useAddNote, useTogglePinNote } from "../context/NoteContext/hooks";
 
 const NewNote: React.FC = () => {
   const addNote = useAddNote();
-  const togglePinnedNote = useTogglePinnedNote();
+  const togglePinNote = useTogglePinNote();
 
   // note title
   const [noteTitle, setNoteTitle] = useState<string>("");
@@ -72,13 +71,12 @@ const NewNote: React.FC = () => {
 
   // creating note and note object
   const formElt = useRef<HTMLFormElement | null>(null);
-  const navigate = useNavigate();
   const immediateTime = new Date();
 
   const noteObj = new Note(immediateTime, noteContent, noteTitle, noteTags);
 
-  const handleFormSubmit: React.FormEventHandler<HTMLFormElement> = (evt) => {
-    evt.preventDefault();
+  const createNewNote: React.FormEventHandler<HTMLFormElement> = (evt) => {
+    evt.preventDefault();    
 
     if (noteObj.content.trim()) {
       noteObj.title = noteObj.title?.trim();
@@ -87,34 +85,30 @@ const NewNote: React.FC = () => {
     }
   };
 
-  const triggerSubmit = (): void => {
+  const triggerSubmitEvt = (): void => {
     const submitEvt = new Event("submit", {
       bubbles: true,
+      cancelable: true
     });
-    formElt.current?.dispatchEvent(submitEvt);
+    if (formElt.current) formElt.current.dispatchEvent(submitEvt);
   };
 
-  const handlePinned = (pinStatus?: boolean): void => {
-    triggerSubmit();
-
-    // pin note if 'pin note' was selected, i,e current pin state is false
-    if (pinStatus) togglePinnedNote(noteObj, false);
-    navigate("/");
+  const handlePinStatus = (pinStatus?: boolean): void => {
+    triggerSubmitEvt();
+    if (pinStatus) togglePinNote(noteObj, false);
   };
 
   return (
     <section className="max-w-4xl mx-auto min-h-screen pb-20 px-8 sm:px-10 md:px-20 pt-16">
       <div className="pb-14 pt-4 md:pt-12">
         <Nav
-          triggerSubmit={handlePinned}
           currentNote={noteObj}
+          beforeLeaveFn={handlePinStatus}
         />
       </div>
 
       <form
-        onSubmit={(evt: React.FormEvent<HTMLFormElement>) =>
-          handleFormSubmit(evt)
-        }
+        onSubmit={createNewNote}
         ref={formElt}
       >
         <div>

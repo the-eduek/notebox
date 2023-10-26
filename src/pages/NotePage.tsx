@@ -142,15 +142,11 @@ const NotePage: React.FC = () => {
   const formElt = useRef<HTMLFormElement | null>(null);
 
   const triggerSubmit = (): void => {
-    const submitEvt: Event = new Event("submit", {
+    const submitEvt = new Event("submit", {
       bubbles: true,
+      cancelable: true
     });
     formElt.current?.dispatchEvent(submitEvt);
-  };
-
-  const handleExitNote = (): void => {
-    triggerSubmit();
-    navigate("/");
   };
 
   const handleFormSubmit: React.FormEventHandler<HTMLFormElement> = (evt) => {
@@ -187,7 +183,7 @@ const NotePage: React.FC = () => {
       <div className="flex items-center pb-14 pt-6 md:pt-12">
         <div className="flex-grow">
           <Nav
-            triggerSubmit={handleExitNote}
+            beforeLeaveFn={triggerSubmit}
             currentNote={noteObj}
           />
         </div>

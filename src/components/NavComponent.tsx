@@ -1,25 +1,30 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { NoteItem } from "../types";
-import PushPin from "./images/PushPin";
-import useNoteContext, {
-  useTogglePinnedNote,
-} from "../context/NoteContext/hooks";
+import useNoteContext, { useTogglePinNote } from "../context/NoteContext/hooks";
 
 interface NavProps {
-  triggerSubmit: (pinStatus?: boolean) => void;
+  beforeLeaveFn: (pinStatus?: boolean) => void;
   currentNote: NoteItem;
 }
 
-const Nav: React.FC<NavProps> = ({ triggerSubmit, currentNote }: NavProps) => {
+const Nav: React.FC<NavProps> = ({ beforeLeaveFn, currentNote }: NavProps) => {
   const { pinnedNotes } = useNoteContext();
-  const togglePinnedNote = useTogglePinnedNote();
+  const togglePinNote = useTogglePinNote();
 
   const pinStatus = !!pinnedNotes.find((noteId) => noteId === currentNote.id);
   const [isPinned, setIsPinned] = useState<boolean>(pinStatus);
 
   const handlePinNote: React.MouseEventHandler<HTMLButtonElement> = () => {
     setIsPinned((prevPinState) => !prevPinState);
-    togglePinnedNote(currentNote, isPinned);
+    togglePinNote(currentNote, isPinned);
+  };
+
+  const navigate = useNavigate();
+
+  const handleLeavePage: React.MouseEventHandler<HTMLButtonElement> = () => {
+    beforeLeaveFn(isPinned);
+    navigate("/");
   };
 
   return (
@@ -27,9 +32,9 @@ const Nav: React.FC<NavProps> = ({ triggerSubmit, currentNote }: NavProps) => {
       <div className="flex">
         <button
           className="bg-neutral-800 flex font-medium items-center px-2.5 py-2.5 rounded-full text-neutral-50"
-          onClick={() => triggerSubmit(isPinned)}
+          onClick={handleLeavePage}
           title="Go Back"
-          type="button"
+          type="submit"
         >
           <svg className="h-4 w-4">
             <use xlinkHref="/sprites.svg#leftchevron"></use>
